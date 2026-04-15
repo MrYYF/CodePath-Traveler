@@ -15,3 +15,12 @@ public readonly struct InteractionChangedEvent : IEvent
     }
 
 }
+
+public readonly struct InteractionMenuRequestEvent : IEvent
+{
+    public readonly InteractionBase target;
+
+    public InteractionMenuRequestEvent(InteractionBase target) {
+        this.target = target;
+    }
+}

@@ -14,6 +14,9 @@ public abstract class ActionBase : MonoBehaviour
     public virtual bool CanShow(AllyDefinitionSO inteactor) {
         return isJobMatch(inteactor);
     }
+    public virtual bool CanExecute(AllyDefinitionSO inteactor) {
+        return true;
+    }
     public virtual void TriggerAction(AllyDefinitionSO inteactor) {
         // 需要二级面板确认的操作在这里触发
         Execute(inteactor);

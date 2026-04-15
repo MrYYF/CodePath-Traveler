@@ -27,7 +27,7 @@ public class InteractionBase : MonoBehaviour
     }
 
     public void Interact(AllyDefinitionSO interactor) {
-        PublishEvent(true);
+        EventBus.Publish(new InteractionMenuRequestEvent(this));
     }
 
     // 当玩家靠近交互对象时，调用此方法来更新当前交互对象和可用指令列表，并发布交互状态变化事件
@@ -85,4 +85,19 @@ public class InteractionBase : MonoBehaviour
     private void PublishEvent(bool inRange) {
         EventBus.Publish(new InteractionChangedEvent(this, inRange));
     }
+
+    #region UI回调入口
+    public bool ExecuteCommandFromUI(int commandIndex) {
+        if (commandIndex < 0 || commandIndex >= _visibleActionEntries.Count)
+            return false;
+
+        ActionBase action = _visibleActionEntries[commandIndex].Action;
+
+        if (action.CanExecute(_currentInteractor))
+            return false;
+
+        action.TriggerAction(_currentInteractor);
+        return true;
+    }
+    #endregion
 }

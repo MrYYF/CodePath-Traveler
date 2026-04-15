@@ -38,7 +38,7 @@ public class InputSystemController : Singleton<InputSystemController>,IEventRece
         return _inputActions.Player.Move.ReadValue<Vector2>();
     }
 
-    public bool GetBodyDofInput() {
+    public bool GetPlayerConfirmPressed() {
         if (!_isInitialized || _currentActionMap != ActiveInputActionMap.Player) {
             return false; // 如果当前不是玩家输入模式，返回false
         }

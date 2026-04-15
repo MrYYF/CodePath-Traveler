@@ -1,18 +1,30 @@
 
 using Framework.Event;
+using System;
+using UnityEngine.EventSystems;
 using UnityEngine.Pool;
 using UnityEngine.UI;
 
 /// <summary>
 /// 交互UI控制器，负责监听交互状态变化事件，并根据当前交互对象的可用指令列表动态显示对应的头顶图标
 /// </summary>
-public class InteractionUIController : MonoBehaviour, IEventReceiver<InteractionChangedEvent> {
+public class InteractionUIController : MonoBehaviour, 
+    IEventReceiver<InteractionChangedEvent>,
+    IEventReceiver<InteractionMenuRequestEvent> {
+
     [Header("Head Icon")]
     [SerializeField] private RectTransform actionIconHolder;
     [SerializeField] private GameObject actionIconPrefab;
-
     private ObjectPool<GameObject> _iconPool;
     private readonly List<GameObject> _activeIcons = new(8);
+
+
+    [Header("Menu Button")]
+    [SerializeField] private RectTransform actionMenuHolder;
+    [SerializeField] private GameObject actionMenuButtonPrefab;
+    private ObjectPool<GameObject> _menuButtonPool;
+    private readonly List<GameObject> _activeButtons = new(8);
+
     private IReadOnlyList<ActionCommandInfo> _currentCommandList; // 当前显示的指令列表
     private Transform _headAnchor;
 
@@ -23,9 +35,11 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
     }
     private void OnEnable() {
         EventBus.Subscribe<InteractionChangedEvent>(this);
+        EventBus.Subscribe<InteractionMenuRequestEvent>(this);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<InteractionChangedEvent>(this);
+        EventBus.Unsubscribe<InteractionMenuRequestEvent>(this);
     }
     private void LateUpdate() {
         UpdateHeadIconPosition();
@@ -43,6 +57,19 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
             },
             actionOnRelease: icon => icon.SetActive(false),
             actionOnDestroy: icon => Destroy(icon),
+            collectionCheck: false,
+            defaultCapacity: 8,
+            maxSize: 16
+        );
+
+        _menuButtonPool = new ObjectPool<GameObject>(
+            createFunc: () => Instantiate(actionMenuButtonPrefab, actionMenuHolder),
+            actionOnGet: button => { 
+                button.SetActive(true);
+                button.transform.SetAsLastSibling(); // 确保新获取的按钮在最后面
+            },
+            actionOnRelease: button => button.SetActive(false),
+            actionOnDestroy: button => Destroy(button),
             collectionCheck: false,
             defaultCapacity: 8,
             maxSize: 16
@@ -73,6 +100,8 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
     #endregion
 
     #region 事件相关方法
+
+    // 启动头顶icon
     public void OnEvent(InteractionChangedEvent evt) {
         if (!evt.inRange || evt.target == null) {
             actionIconHolder.gameObject.SetActive(false);
@@ -84,6 +113,21 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
         _headAnchor = evt.target.HeadAnchor;
         ShowHeadIcons();
     }
+
+    // 启动指令菜单
+    public void OnEvent(InteractionMenuRequestEvent evt) {
+        if (evt.target == null)
+            return;
+
+        actionIconHolder.gameObject.SetActive(false);
+        ReleaseAllPool(_activeIcons, _iconPool);
+
+        actionMenuHolder.gameObject.SetActive(true);
+
+        OpenMenu(evt.target);
+    }
+
+    
     #endregion
 
     private void ShowHeadIcons() {
@@ -111,6 +155,27 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
             null, 
             out var localPos)) {
             actionIconHolder.anchoredPosition = localPos;
+        }
+    }
+
+    private void OpenMenu(InteractionBase target) {
+        GameModeManager.Inastance.RequestChangeGameMode(GameMode.InteractionMenu);
+
+        syncPool(_activeButtons, _menuButtonPool, _currentCommandList.Count);
+
+        Button firstButton = null;
+        // 按键绑定方法
+        for (int i = 0; i < _activeButtons.Count; i++) {
+            var button = _activeButtons[i].GetComponent<ActionMenuButton>();
+            var cmd = _currentCommandList[i];
+            button.SetButton(cmd, () => target.ExecuteCommandFromUI(i));
+
+            if (firstButton == null) firstButton = button.GetComponent<Button>();
+        }
+
+        if (firstButton != null) {
+            firstButton.Select();
+            EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
         }
     }
 }
