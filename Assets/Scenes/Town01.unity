@@ -860,13 +860,24 @@ MonoBehaviour:
     CommandName: "\u6253\u542C"
     Description: "\u6253\u542C\u4FE1\u606F"
     Icon: {fileID: 21300000, guid: a8d6591b29a0d449dbf7ca913dcd2cc7, type: 3}
-    RequiredJob: 2
+    RequiredJob: 3
     Order: 0
   inquireActionDatas:
-  - title: 111
-    personName: 222
-    message: 333
-    portraitOverride: {fileID: 0}
+  - title: "\u95F2\u8BDD"
+    personName: "\u91CC\u6602"
+    message: "\u4ECA\u5929\u5929\u6C14\u771F\u4E0D\u9519"
+    portraitOverride: {fileID: 463951968, guid: 7df3e2e8a1fb24977b31196b82d158a3,
+      type: 3}
+  - title: "\u6709\u8DA3\u7684\u6D88\u606F"
+    personName: "\u91CC\u6602"
+    message: "\u636E\u8BF4\u6700\u8FD1\u5468\u8FB9\u7684\u9B54\u7269\u53D8\u591A\u4E86"
+    portraitOverride: {fileID: 463951968, guid: 7df3e2e8a1fb24977b31196b82d158a3,
+      type: 3}
+  - title: "\u91CD\u8981\u7684\u6D88\u606F"
+    personName: "\u91CC\u6602"
+    message: "\u897F\u8FB9\u7684\u6C34\u6C60\u91CC\u603B\u662F\u6709\u95EA\u95EA\u53D1\u5149\u7684\u4E1C\u897F\uFF0C\u771F\u8BA9\u4EBA\u597D\u5947\u5462\uFF01"
+    portraitOverride: {fileID: 463951968, guid: 7df3e2e8a1fb24977b31196b82d158a3,
+      type: 3}
 --- !u!114 &1266707667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -879,12 +890,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc033cfe4236d124d9ca27e8a0be46b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchJob: 3
+  matchJob: 1
   CommandInfo:
     CommandName: "\u7948\u7977"
     Description: "\u4E3A\u4ED6\u7948\u7977"
     Icon: {fileID: 21300000, guid: 888ca067b11a249f7beada02a83d7ca1, type: 3}
-    RequiredJob: 2
+    RequiredJob: 1
     Order: 1
   inquireActionDatas:
   - title: 1

@@ -8,6 +8,13 @@ public class InquireAction : ActionBase
     [Header("打听消息数据列表")]
     [SerializeField] public List<InquireActionData> inquireActionDatas = new();
 
+    public int PickRandomMessageIndex() => UnityEngine.Random.Range(0, inquireActionDatas.Count);
+
+    public void GetInquireActionData(int index, out InquireActionData inquireActionData) => inquireActionData = inquireActionDatas[index];
+
+    public override void TriggerAction(AllyDefinitionSO inteactor) {
+        EventBus.Publish(new PanelRequestEvent(this));
+    }
 }
 
 [Serializable]

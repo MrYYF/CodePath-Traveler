@@ -93,7 +93,7 @@ public class InteractionBase : MonoBehaviour
 
         ActionBase action = _visibleActionEntries[commandIndex].Action;
 
-        if (action.CanExecute(_currentInteractor))
+        if (!action.CanExecute(_currentInteractor))
             return false;
 
         action.TriggerAction(_currentInteractor);

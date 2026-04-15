@@ -1,6 +1,5 @@
 
 using Framework.Event;
-using System;
 using UnityEngine.EventSystems;
 using UnityEngine.Pool;
 using UnityEngine.UI;
@@ -32,6 +31,7 @@ public class InteractionUIController : MonoBehaviour,
     private void Awake() {
         InitPool();
         actionIconHolder.gameObject.SetActive(false); // ³õÊ¼×´Ì¬Òþ²ØÍ¼±êÈÝÆ÷
+        actionMenuHolder.gameObject.SetActive(false); // ³õÊ¼×´Ì¬Òþ²ØÈÝÆ÷
     }
     private void OnEnable() {
         EventBus.Subscribe<InteractionChangedEvent>(this);
@@ -168,7 +168,11 @@ public class InteractionUIController : MonoBehaviour,
         for (int i = 0; i < _activeButtons.Count; i++) {
             var button = _activeButtons[i].GetComponent<ActionMenuButton>();
             var cmd = _currentCommandList[i];
-            button.SetButton(cmd, () => target.ExecuteCommandFromUI(i));
+            int index = i; // ±ÜÃâ±Õ°üÎÊÌâ
+            button.SetButton(cmd, () => {
+                target.ExecuteCommandFromUI(index);
+                CloseMenu();
+            });
 
             if (firstButton == null) firstButton = button.GetComponent<Button>();
         }
@@ -177,5 +181,10 @@ public class InteractionUIController : MonoBehaviour,
             firstButton.Select();
             EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
         }
+    }
+
+    private void CloseMenu() {
+        actionMenuHolder.gameObject.SetActive(false);
+        ReleaseAllPool(_activeButtons, _menuButtonPool);
     }
 }
