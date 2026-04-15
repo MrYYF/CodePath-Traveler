@@ -728,6 +728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b3d770e3bd1805449f99ea703d8db5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HeadAnchor: {fileID: 699108212}
 --- !u!136 &1266707662
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -859,7 +860,7 @@ MonoBehaviour:
     CommandName: "\u6253\u542C"
     Description: "\u6253\u542C\u4FE1\u606F"
     Icon: {fileID: 21300000, guid: a8d6591b29a0d449dbf7ca913dcd2cc7, type: 3}
-    RequiredJob: 3
+    RequiredJob: 2
     Order: 0
   inquireActionDatas:
   - title: 111
@@ -883,7 +884,7 @@ MonoBehaviour:
     CommandName: "\u7948\u7977"
     Description: "\u4E3A\u4ED6\u7948\u7977"
     Icon: {fileID: 21300000, guid: 888ca067b11a249f7beada02a83d7ca1, type: 3}
-    RequiredJob: 3
+    RequiredJob: 2
     Order: 1
   inquireActionDatas:
   - title: 1

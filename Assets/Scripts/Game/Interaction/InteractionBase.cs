@@ -7,7 +7,7 @@
 public class InteractionBase : MonoBehaviour
 {
     [Header("Sign Trans")]
-    public Transform HeadAnchor; // 头顶图标的锚点
+    public Transform HeadAnchor; // 头顶可互动图标的锚点
 
     private AllyDefinitionSO _currentInteractor; // 当前交互对象
     private ActionBase[] _actionsCache; // 当前交互对象的可用指令列表缓存
@@ -23,6 +23,7 @@ public class InteractionBase : MonoBehaviour
 
     private void Awake() {
         CacheActions();
+        HeadAnchor = transform.GetChild(0);
     }
 
     public void Interact(AllyDefinitionSO interactor) {
@@ -37,7 +38,8 @@ public class InteractionBase : MonoBehaviour
         RebuildCommands();
         PublishEvent(true);
     }
-    
+
+    // 当玩家远离交互对象时，调用此方法来清除当前交互对象和可用指令列表，并发布交互状态变化事件
     public void OnLoseFocus(AllyDefinitionSO interactor) {
         _currentInteractor = null;
         _cachedCommandInfo.Clear();
@@ -45,6 +47,7 @@ public class InteractionBase : MonoBehaviour
         Debug.Log("LoseFocused on " + interactor.Name + interactor.Job);
 
         PublishEvent(false);
+        HeadAnchor.gameObject.SetActive(true);
     }
 
     // 获取当前交互对象的可用指令列表
@@ -74,6 +77,9 @@ public class InteractionBase : MonoBehaviour
             _cachedCommandInfo.Add(_visibleActionEntries[i].CommandInfo);
             Debug.Log("Added command: " + _visibleActionEntries[i].CommandInfo.CommandName);
         }
+
+        if (_visibleActionEntries.Count > 0)
+            HeadAnchor.gameObject.SetActive(false);
     }
 
     private void PublishEvent(bool inRange) {

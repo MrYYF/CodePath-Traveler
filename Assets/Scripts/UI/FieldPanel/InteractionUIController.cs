@@ -14,11 +14,11 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
     private ObjectPool<GameObject> _iconPool;
     private readonly List<GameObject> _activeIcons = new(8);
     private IReadOnlyList<ActionCommandInfo> _currentCommandList; // 当前显示的指令列表
+    private Transform _headAnchor;
 
     #region Unity生命周期
     private void Awake() {
         InitPool();
-
         actionIconHolder.gameObject.SetActive(false); // 初始状态隐藏图标容器
     }
     private void OnEnable() {
@@ -26,6 +26,9 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
     }
     private void OnDisable() {
         EventBus.Unsubscribe<InteractionChangedEvent>(this);
+    }
+    private void LateUpdate() {
+        UpdateHeadIconPosition();
     }
 
     #endregion
@@ -60,12 +63,25 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
         }
     }
 
+    private void ReleaseAllPool(List<GameObject> activeList, ObjectPool<GameObject> pool) {
+        for (int i = activeList.Count - 1; i >= 0; i--) {
+            pool.Release(activeList[i]);
+        }
+        activeList.Clear();
+    }
+
     #endregion
 
     #region 事件相关方法
     public void OnEvent(InteractionChangedEvent evt) {
-        _currentCommandList = evt.target.CachedCommandInfo;
+        if (!evt.inRange || evt.target == null) {
+            actionIconHolder.gameObject.SetActive(false);
+            ReleaseAllPool(_activeIcons, _iconPool);
+            return;
+        }
 
+        _currentCommandList = evt.target.CachedCommandInfo;
+        _headAnchor = evt.target.HeadAnchor;
         ShowHeadIcons();
     }
     #endregion
@@ -79,6 +95,22 @@ public class InteractionUIController : MonoBehaviour, IEventReceiver<Interaction
             var commandInfo = _currentCommandList[i];
 
             icon.GetComponent<Image>().sprite = commandInfo.Icon;
+        }
+    }
+
+    // 更新头顶图标的位置，使其始终跟随交互对象
+    private void UpdateHeadIconPosition() {
+        if (_headAnchor == null || !actionIconHolder.gameObject.activeSelf || _activeIcons.Count == 0)
+            return;
+        var worldPos = _headAnchor.position;
+        var screenPos = Camera.main.WorldToScreenPoint(_headAnchor.position);
+
+        if(RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            transform as RectTransform, 
+            screenPos, 
+            null, 
+            out var localPos)) {
+            actionIconHolder.anchoredPosition = localPos;
         }
     }
 }

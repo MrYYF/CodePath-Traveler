@@ -23,7 +23,7 @@ public abstract class ActionBase : MonoBehaviour
     }
 
     private bool isJobMatch(AllyDefinitionSO inteactor) {
-        return matchJob == Job.Any || inteactor.Job == matchJob;
+        return matchJob == Job.Any || inteactor.Job == CommandInfo.RequiredJob;
     }
 }
 
