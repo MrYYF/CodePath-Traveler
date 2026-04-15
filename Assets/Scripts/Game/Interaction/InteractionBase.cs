@@ -1,0 +1,82 @@
+
+
+/// <summary>
+/// 交互基类，负责管理当前交互对象、可用指令列表缓存，以及发布交互状态变化事件
+/// 决定被挂载对象是否可以被交互
+/// </summary>
+public class InteractionBase : MonoBehaviour
+{
+    [Header("Sign Trans")]
+    public Transform HeadAnchor; // 头顶图标的锚点
+
+    private AllyDefinitionSO _currentInteractor; // 当前交互对象
+    private ActionBase[] _actionsCache; // 当前交互对象的可用指令列表缓存
+    private readonly List<ActionCommandInfo> _cachedCommandInfo = new(8); // 当前交互对象的可用指令列表缓存
+    private readonly List<VisibleActionEntry> _visibleActionEntries = new(8); // 当前交互对象的可见指令列表缓存
+    public IReadOnlyList<ActionCommandInfo> CachedCommandInfo => _cachedCommandInfo;
+
+    // 用于将指令和对应的指令信息关联起来，方便后续构建可用指令列表
+    private struct VisibleActionEntry {
+        public ActionBase Action;
+        public ActionCommandInfo CommandInfo;
+    }
+
+    private void Awake() {
+        CacheActions();
+    }
+
+    public void Interact(AllyDefinitionSO interactor) {
+        PublishEvent(true);
+    }
+
+    // 当玩家靠近交互对象时，调用此方法来更新当前交互对象和可用指令列表，并发布交互状态变化事件
+    public void OnFocus(AllyDefinitionSO interactor) {
+        CacheActions();
+        _currentInteractor = interactor;
+        Debug.Log("Focused on " + interactor.Name + interactor.Job);
+        RebuildCommands();
+        PublishEvent(true);
+    }
+    
+    public void OnLoseFocus(AllyDefinitionSO interactor) {
+        _currentInteractor = null;
+        _cachedCommandInfo.Clear();
+        _visibleActionEntries.Clear();
+        Debug.Log("LoseFocused on " + interactor.Name + interactor.Job);
+
+        PublishEvent(false);
+    }
+
+    // 获取当前交互对象的可用指令列表
+    private void CacheActions() => _actionsCache = GetComponents<ActionBase>();
+
+    // 根据当前交互对象和指令列表，构建可用指令信息列表
+    private void RebuildCommands() {
+        _cachedCommandInfo.Clear();
+        _visibleActionEntries.Clear();
+
+        for (int i = 0; i < _actionsCache.Length; i++) {
+            var action = _actionsCache[i];
+
+            if (!action.CanShow(_currentInteractor))
+                continue;
+
+            _visibleActionEntries.Add(new VisibleActionEntry {
+                Action = action,
+                CommandInfo = action.CommandInfo
+            });
+        }
+
+        if (_visibleActionEntries.Count > 1)
+            _visibleActionEntries.Sort((a, b) => a.CommandInfo.Order.CompareTo(b.CommandInfo.Order));
+
+        for (int i = 0; i < _visibleActionEntries.Count; i++) {
+            _cachedCommandInfo.Add(_visibleActionEntries[i].CommandInfo);
+            Debug.Log("Added command: " + _visibleActionEntries[i].CommandInfo.CommandName);
+        }
+    }
+
+    private void PublishEvent(bool inRange) {
+        EventBus.Publish(new InteractionChangedEvent(this, inRange));
+    }
+}
