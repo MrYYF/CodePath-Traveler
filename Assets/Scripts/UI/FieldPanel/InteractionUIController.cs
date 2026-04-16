@@ -9,7 +9,8 @@ using UnityEngine.UI;
 /// </summary>
 public class InteractionUIController : MonoBehaviour, 
     IEventReceiver<InteractionChangedEvent>,
-    IEventReceiver<InteractionMenuRequestEvent> {
+    IEventReceiver<InteractionMenuRequestEvent>,
+    IEventReceiver<GameModeChangedEvent> {
 
     [Header("Head Icon")]
     [SerializeField] private RectTransform actionIconHolder;
@@ -36,10 +37,23 @@ public class InteractionUIController : MonoBehaviour,
     private void OnEnable() {
         EventBus.Subscribe<InteractionChangedEvent>(this);
         EventBus.Subscribe<InteractionMenuRequestEvent>(this);
+        EventBus.Subscribe<GameModeChangedEvent>(this);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<InteractionChangedEvent>(this);
         EventBus.Unsubscribe<InteractionMenuRequestEvent>(this);
+        EventBus.Unsubscribe<GameModeChangedEvent>(this);
+    }
+    private void Update() {
+        if(GameModeManager.Inastance.CurrentGameMode != GameMode.InteractionMenu)
+            return;
+
+        var input = InputSystemController.Inastance;
+        if (input.GetUICancelPressed()) {
+            CloseMenu(true);
+            GameModeManager.Inastance.RequestChangeGameMode(GameMode.Explore);
+        }
+
     }
     private void LateUpdate() {
         UpdateHeadIconPosition();
@@ -127,11 +141,23 @@ public class InteractionUIController : MonoBehaviour,
         OpenMenu(evt.target);
     }
 
-    
+    public void OnEvent(GameModeChangedEvent evt) {
+        if(evt.NewGameMode == GameMode.InteractionMenu) 
+            return;
+        
+
+        if(evt.NewGameMode == GameMode.Explore) {
+            Debug.Log("切换回探索模式，恢复头顶图标显示");
+            ShowHeadIcons();
+        }
+    }
     #endregion
 
     private void ShowHeadIcons() {
-        actionIconHolder.gameObject.SetActive(_currentCommandList.Count > 0);
+        if (_currentCommandList is null || _currentCommandList.Count <= 0)
+            return;
+
+        actionIconHolder.gameObject.SetActive(true);
         syncPool(_activeIcons, _iconPool, _currentCommandList.Count);
 
         for (int i = 0; i < _currentCommandList.Count; i++) {
@@ -171,7 +197,7 @@ public class InteractionUIController : MonoBehaviour,
             int index = i; // 避免闭包问题
             button.SetButton(cmd, () => {
                 target.ExecuteCommandFromUI(index);
-                CloseMenu();
+                CloseMenu(false);
             });
 
             if (firstButton == null) firstButton = button.GetComponent<Button>();
@@ -183,8 +209,25 @@ public class InteractionUIController : MonoBehaviour,
         }
     }
 
-    private void CloseMenu() {
-        actionMenuHolder.gameObject.SetActive(false);
+    private void CloseMenu(bool restoreHeadIcons) {
+        HideAcitonMenu();
+        if(restoreHeadIcons) {
+            ShowHeadIcons();
+        }
+        else {
+            HideHeadIcons();
+        }
+    }
+
+    private void HideHeadIcons() {
+        actionIconHolder?.gameObject.SetActive(false);
+        ReleaseAllPool(_activeIcons, _iconPool);
+    }
+
+    private void HideAcitonMenu() {
+        actionMenuHolder?.gameObject.SetActive(false);
         ReleaseAllPool(_activeButtons, _menuButtonPool);
     }
+
+    
 }

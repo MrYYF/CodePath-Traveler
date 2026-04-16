@@ -17,6 +17,11 @@ public class PanelController : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    protected virtual void OnCancel() {
+        GameModeManager.Inastance.RequestChangeGameMode(GameMode.Explore);
+        ClosePanel();
+    }
+
     // 设置默认选中按钮，确保在面板打开时有一个按钮被选中，方便使用键盘或手柄导航
     protected void SetDefaultSelection() {
         if (FirstSelectedButton != null) {

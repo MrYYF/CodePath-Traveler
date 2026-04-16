@@ -22,6 +22,7 @@ public class InquireActionData {
     [Header("消息显示信息")]
     public string title;
     public string personName;
+    [TextArea(2,6)]
     public string message;
     public Sprite portraitOverride;
 }

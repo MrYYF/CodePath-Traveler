@@ -39,6 +39,6 @@ public class InquirePanelController : PanelController
 
     private void BindButtons() {
         confirmButton.onClick.RemoveAllListeners();
-        confirmButton.onClick.AddListener(ClosePanel);
+        confirmButton.onClick.AddListener(OnCancel);
     }
 }
