@@ -19,7 +19,7 @@ public class InquirePanelController : PanelController
         base.SetupPanel(action);
         FirstSelectedButton = confirmButton;
 
-        BindButtons();
+        ReBindButtons(confirmButton, OnCancel);
         SetDefaultSelection();
 
         _currentAction = action as InquireAction;
@@ -35,10 +35,5 @@ public class InquirePanelController : PanelController
         avatar.sprite = data.portraitOverride;
         messageTitleText.text = data.title;
         messageContentText.text = data.message;
-    }
-
-    private void BindButtons() {
-        confirmButton.onClick.RemoveAllListeners();
-        confirmButton.onClick.AddListener(OnCancel);
     }
 }

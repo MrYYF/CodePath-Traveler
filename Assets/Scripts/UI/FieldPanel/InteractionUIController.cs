@@ -50,6 +50,7 @@ public class InteractionUIController : MonoBehaviour,
 
         var input = InputSystemController.Inastance;
         if (input.GetUICancelPressed()) {
+            //TODO: 如果在Action二级面板打开时按下会有BUG
             CloseMenu(true);
             GameModeManager.Inastance.RequestChangeGameMode(GameMode.Explore);
         }
@@ -190,7 +191,7 @@ public class InteractionUIController : MonoBehaviour,
         syncPool(_activeButtons, _menuButtonPool, _currentCommandList.Count);
 
         Button firstButton = null;
-        // 按键绑定方法
+        // 按钮绑定方法
         for (int i = 0; i < _activeButtons.Count; i++) {
             var button = _activeButtons[i].GetComponent<ActionMenuButton>();
             var cmd = _currentCommandList[i];

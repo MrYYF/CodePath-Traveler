@@ -708,7 +708,8 @@ GameObject:
   - component: {fileID: 1266707662}
   - component: {fileID: 1266707661}
   - component: {fileID: 1266707666}
-  - component: {fileID: 1266707667}
+  - component: {fileID: 1266707669}
+  - component: {fileID: 1266707668}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -878,7 +879,7 @@ MonoBehaviour:
     message: "\u897F\u8FB9\u7684\u6C34\u6C60\u91CC\u603B\u662F\u6709\u95EA\u95EA\u53D1\u5149\u7684\u4E1C\u897F\uFF0C\u771F\u8BA9\u4EBA\u597D\u5947\u5462\uFF01"
     portraitOverride: {fileID: 463951968, guid: 7df3e2e8a1fb24977b31196b82d158a3,
       type: 3}
---- !u!114 &1266707667
+--- !u!114 &1266707668
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -887,21 +888,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1266707660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc033cfe4236d124d9ca27e8a0be46b9, type: 3}
+  m_Script: {fileID: 11500000, guid: d530a7557833b0144b557e3ee2f877ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchJob: 1
+  _characterDefinitionSO: {fileID: 11400000, guid: c054dffa52af4d540bb219a3bc436d37,
+    type: 2}
+--- !u!114 &1266707669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266707660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ea8faabaaba7724f9ffe82a5ae9c708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matchJob: 3
   CommandInfo:
-    CommandName: "\u7948\u7977"
-    Description: "\u4E3A\u4ED6\u7948\u7977"
-    Icon: {fileID: 21300000, guid: 888ca067b11a249f7beada02a83d7ca1, type: 3}
-    RequiredJob: 1
-    Order: 1
-  inquireActionDatas:
-  - title: 1
-    personName: 2
-    message: 3
-    portraitOverride: {fileID: 0}
+    CommandName: "\u62DB\u52DF"
+    Description: "\u62DB\u52DF"
+    Icon: {fileID: 21300000, guid: 8f2fe2e6eb2564f459c2d2cfe22efbc8, type: 3}
+    RequiredJob: 3
+    Order: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
