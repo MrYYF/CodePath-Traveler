@@ -20,6 +20,7 @@ public class RecruitPanelController : PanelController
         base.SetupPanel(action);
         RecruitAction recruitAction = action as RecruitAction;
 
+        levelText.text = recruitAction.CurrentCharacter.BaseLevel.ToString();
         npcNameText.text = recruitAction.CurrentCharacter.Name;
         characterImage.sprite = recruitAction.CurrentCharacter.Portrait;
 

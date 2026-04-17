@@ -27,3 +27,11 @@ public enum Job {
     Archer, //¹­¼ıÊÖ
     Thief //µÁÔô
 }
+
+public enum GrowthRank {
+    S,
+    A,
+    B,
+    C,
+    D
+}
