@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ public class InquirePanelController : PanelController
 
     private InquireAction _currentAction;
     private int _currentIndex = -1;
+
+    public override Type PanelActionType => typeof(InquireAction);
 
     public override void SetupPanel(ActionBase action) {
         base.SetupPanel(action);

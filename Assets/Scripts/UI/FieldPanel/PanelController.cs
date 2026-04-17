@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,6 +12,8 @@ public class PanelController : MonoBehaviour {
 
     [Header("Action icon")]
     public Image ActionIcon; // 显示当前Action的图标
+
+    public virtual Type PanelActionType => null;
 
     public virtual void SetupPanel(ActionBase action) {
         CurrentAction = action;
