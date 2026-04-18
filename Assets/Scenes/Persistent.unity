@@ -1083,7 +1083,7 @@ GameObject:
   - component: {fileID: 761414156}
   - component: {fileID: 761414157}
   - component: {fileID: 761414158}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1449,7 +1449,7 @@ GameObject:
   - component: {fileID: 912247680}
   - component: {fileID: 912247681}
   - component: {fileID: 912247682}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1485,7 +1485,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1636,6 +1636,37 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 2.5, z: -8}
+--- !u!1 &1088434979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1088434980}
+  m_Layer: 0
+  m_Name: FollowerRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1088434980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1088434979}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1092191077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,6 +2833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1708207124}
   - component: {fileID: 1708207125}
+  - component: {fileID: 1708207126}
   m_Layer: 0
   m_Name: PartyManager
   m_TagString: Untagged
@@ -2838,6 +2870,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerDefinition: {fileID: 11400000, guid: 10b707fafd56d12488a87f0ddd82eedb, type: 2}
   partyMembers: []
+--- !u!114 &1708207126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708207123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5013e13e784f214a8403b5d9724baa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followersParent: {fileID: 1088434980}
+  fieldFollowerPrefab: {fileID: 2415736851893885146, guid: 1808fb73bff1806449b019437604fb72,
+    type: 3}
+  playerTrans: {fileID: 912247678}
+  followDistance: 1.2
+  followSpeed: 5
+  zOffset: 0.01
+  sampleMinDistance: 0.05
 --- !u!1 &1772619826
 GameObject:
   m_ObjectHideFlags: 0
@@ -3518,5 +3570,6 @@ SceneRoots:
   - {fileID: 894648319}
   - {fileID: 1708207124}
   - {fileID: 1092191079}
+  - {fileID: 1088434980}
   - {fileID: 912247678}
   - {fileID: 1635211278}

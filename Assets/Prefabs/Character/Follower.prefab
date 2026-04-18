@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7509587747599482440}
   - component: {fileID: 5440531025292281286}
   - component: {fileID: 2540000269702915672}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Follower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -72,6 +72,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56d58dbaecf48fd4cb437cad6b2f123b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterController: {fileID: 5440531025292281286}
+  animator: {fileID: 1256332445051170461}
+  isMovingParam: isMoving
+  moveXParam: moveX
+  moveYParam: moveY
+  movementThreshold: 0.001
+  gravity: -9.81
+  groundSnapForce: -1
+  maxVelocity: -20
 --- !u!1 &7167131753695353350
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,8 +91,8 @@ GameObject:
   m_Component:
   - component: {fileID: 120089546417482117}
   - component: {fileID: 3959488347875339870}
-  - component: {fileID: 5129639737206870731}
-  m_Layer: 0
+  - component: {fileID: 1256332445051170461}
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +166,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &5129639737206870731
+--- !u!95 &1256332445051170461
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0

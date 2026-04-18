@@ -26,11 +26,22 @@ public class PartyManager : Singleton<PartyManager>
 
     private void AddMember(CharacterDefinitionSO characterDefinition) {
         partyMembers.Add(new CharacterRuntimeData(characterDefinition));
+        RefreshFieldFollowers();
     }
 
     public void RecruitMember(CharacterDefinitionSO newCharacter) {
         AddMember(newCharacter);
 
         GameModeManager.Inastance.RequestChangeGameMode(GameMode.Explore);
+    }
+
+    private void RefreshFieldFollowers() {
+        List<CharacterDefinitionSO> defs = new(partyMembers.Count);
+
+        foreach (var member in partyMembers) {
+            defs.Add(member.Definition);
+        }
+
+        fieldController.UpdateFollowers(defs);
     }
 }

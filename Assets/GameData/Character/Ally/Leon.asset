@@ -28,7 +28,7 @@ MonoBehaviour:
     Accuracy: 0
     Evasion: 0
   FieldAnimator: {fileID: 22100000, guid: 09a31225350e49b4890d1a59e2ad5f78, type: 2}
-  BattleAnimator: {fileID: 0}
+  BattleAnimator: {fileID: 22100000, guid: 09a31225350e49b4890d1a59e2ad5f78, type: 2}
   globalGrowthConfigSO: {fileID: 11400000, guid: 2a22ed6ff1be6be46b207d84a466b190,
     type: 2}
   growthProfile:
