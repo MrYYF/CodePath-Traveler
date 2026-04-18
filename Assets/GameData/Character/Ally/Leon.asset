@@ -16,3 +16,26 @@ MonoBehaviour:
   Name: "\u91CC\u6602"
   Portrait: {fileID: -1365205660, guid: 7df3e2e8a1fb24977b31196b82d158a3, type: 3}
   Job: 2
+  BaseLevel: 1
+  BaseStats:
+    MaxHP: 0
+    MaxSP: 0
+    PAtk: 0
+    PDef: 0
+    MAtk: 0
+    MDef: 0
+    Speed: 0
+    Accuracy: 0
+    Evasion: 0
+  FieldAnimator: {fileID: 22100000, guid: 09a31225350e49b4890d1a59e2ad5f78, type: 2}
+  BattleAnimator: {fileID: 0}
+  globalGrowthConfigSO: {fileID: 11400000, guid: 2a22ed6ff1be6be46b207d84a466b190,
+    type: 2}
+  growthProfile:
+    HP: 0
+    SP: 0
+    Patk: 0
+    Pdef: 0
+    Matk: 0
+    Mdef: 0
+    Speed: 0

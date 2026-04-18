@@ -13,6 +13,11 @@ public abstract class CharacterDefinitionSO : ScriptableObject
     [Header("Stats")]
     public int BaseLevel = 1; // 基础等级
     public StatBlock BaseStats; // 基础属性
+
+    [Header("Animator")]
+    public AnimatorOverrideController FieldAnimator;
+    public AnimatorOverrideController BattleAnimator;
+
 }
 
 [Serializable]
