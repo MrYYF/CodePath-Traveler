@@ -27,6 +27,7 @@ public class InteractionUIController : MonoBehaviour,
 
     private IReadOnlyList<ActionCommandInfo> _currentCommandList; // 当前显示的指令列表
     private Transform _headAnchor;
+    private InteractionBase _target;
 
     #region Unity生命周期
     private void Awake() {
@@ -118,14 +119,14 @@ public class InteractionUIController : MonoBehaviour,
 
     // 启动头顶icon
     public void OnEvent(InteractionChangedEvent evt) {
-        if (!evt.inRange || evt.target == null) {
-            actionIconHolder.gameObject.SetActive(false);
-            ReleaseAllPool(_activeIcons, _iconPool);
+        _target = evt.target;
+        if (!evt.inRange || _target == null) {
+            HideHeadIcons();
             return;
         }
 
-        _currentCommandList = evt.target.CachedCommandInfo;
-        _headAnchor = evt.target.HeadAnchor;
+        _currentCommandList = _target.CachedCommandInfo;
+        _headAnchor = _target.HeadAnchor;
         ShowHeadIcons();
     }
 
@@ -134,9 +135,7 @@ public class InteractionUIController : MonoBehaviour,
         if (evt.target == null)
             return;
 
-        actionIconHolder.gameObject.SetActive(false);
-        ReleaseAllPool(_activeIcons, _iconPool);
-
+        HideHeadIcons();
         actionMenuHolder.gameObject.SetActive(true);
 
         OpenMenu(evt.target);
@@ -171,6 +170,10 @@ public class InteractionUIController : MonoBehaviour,
 
     // 更新头顶图标的位置，使其始终跟随交互对象
     private void UpdateHeadIconPosition() {
+        if(_target == null || !_target.isActiveAndEnabled) {
+            HideHeadIcons();
+            return;
+        }
         if (_headAnchor == null || !actionIconHolder.gameObject.activeSelf || _activeIcons.Count == 0)
             return;
         var worldPos = _headAnchor.position;

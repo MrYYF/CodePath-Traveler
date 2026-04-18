@@ -14,7 +14,11 @@ public class RecruitAction : ActionBase
     }
 
     public override void Execute(object context = null) {
-        base.Execute(context);
+        PartyManager.Inastance.RecruitMember(CurrentCharacter);
+        HideSceneNPC();
+    }
 
+    private void HideSceneNPC() {
+        gameObject.SetActive(false);
     }
 }

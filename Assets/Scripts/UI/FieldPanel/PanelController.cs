@@ -31,7 +31,7 @@ public class PanelController : MonoBehaviour {
 
     protected virtual void OnConfirm() {
         CurrentAction.Execute();
-        //ClosePanel();
+        ClosePanel();
     }
 
     // 设置默认选中按钮，确保在面板打开时有一个按钮被选中，方便使用键盘或手柄导航
