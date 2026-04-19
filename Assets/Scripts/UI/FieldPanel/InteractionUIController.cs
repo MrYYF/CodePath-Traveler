@@ -122,6 +122,8 @@ public class InteractionUIController : MonoBehaviour,
         _target = evt.target;
         if (!evt.inRange || _target == null) {
             HideHeadIcons();
+            _currentCommandList = null;
+            _target = null;
             return;
         }
 

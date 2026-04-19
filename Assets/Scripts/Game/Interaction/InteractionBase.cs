@@ -26,6 +26,12 @@ public class InteractionBase : MonoBehaviour
         HeadAnchor = transform.GetChild(0);
     }
 
+    private void OnDisable() {
+        _currentInteractor = null;
+        _cachedCommandInfo.Clear();
+        _visibleActionEntries.Clear();
+    }
+
     public void Interact(AllyDefinitionSO interactor) {
         EventBus.Publish(new InteractionMenuRequestEvent(this));
     }
@@ -61,7 +67,7 @@ public class InteractionBase : MonoBehaviour
         for (int i = 0; i < _actionsCache.Length; i++) {
             var action = _actionsCache[i];
 
-            if (!action.CanShow(_currentInteractor))
+            if (!CanAnyPartyMemberExecute(action))
                 continue;
 
             _visibleActionEntries.Add(new VisibleActionEntry {
@@ -80,6 +86,21 @@ public class InteractionBase : MonoBehaviour
 
         if (_visibleActionEntries.Count > 0)
             HeadAnchor.gameObject.SetActive(false);
+    }
+
+    private bool CanAnyPartyMemberExecute(ActionBase action) {
+        var partyMembers = PartyManager.Inastance.PartyMembers;
+        if(partyMembers == null || partyMembers.Count == 0)
+            return false;
+
+        foreach (var member in partyMembers) {
+            if(member.Definition == null)
+                continue;
+            if(action.CanShow(member.Definition as AllyDefinitionSO))
+                return true;
+        }
+
+        return false;
     }
 
     private void PublishEvent(bool inRange) {

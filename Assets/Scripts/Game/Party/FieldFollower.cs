@@ -53,7 +53,7 @@ public class FieldFollower : MonoBehaviour {
     #endregion
 
     private void UpdateAnimation(Vector3 step) {
-        bool isMoving = step.magnitude > movementThreshold * movementThreshold;
+        bool isMoving = step.sqrMagnitude > movementThreshold * movementThreshold;
 
         animator.SetBool(isMovingParam, isMoving);
 

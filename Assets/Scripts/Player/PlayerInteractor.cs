@@ -12,8 +12,12 @@ public class PlayerInteractor : MonoBehaviour
     }
 
     private void Update() {
+        if (_target == null || _target.CachedCommandInfo.Count == 0) return;
+
         InputSystemController inastance = InputSystemController.Inastance;
-        if(inastance != null && inastance.GetPlayerConfirmPressed() && _target != null) {
+        if(inastance == null) return;
+
+        if ( inastance.GetPlayerConfirmPressed() && _target != null) {
             _target.Interact(_characterIdentity.CharacterDefinitionSO as AllyDefinitionSO);
         }
     }
@@ -28,7 +32,7 @@ public class PlayerInteractor : MonoBehaviour
     private void OnTriggerExit(Collider other) {
         if(other.TryGetComponent(out InteractionBase interactable)) {
             interactable.OnLoseFocus(_characterIdentity.CharacterDefinitionSO as AllyDefinitionSO);
-            _target = null;
         }
+        _target = null;
     }
 }

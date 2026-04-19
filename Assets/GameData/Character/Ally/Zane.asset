@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32967b8104ed8cf43be17228b3b8f3b6, type: 3}
+  m_Name: Zane
+  m_EditorClassIdentifier: 
+  ID: Zane
+  Name: "\u8D5E\u6069"
+  Portrait: {fileID: -1365205660, guid: 1aa3939c061aa44f7875021bed33998a, type: 3}
+  Job: 6
+  BaseLevel: 1
+  BaseStats:
+    MaxHP: 0
+    MaxSP: 0
+    PAtk: 0
+    PDef: 0
+    MAtk: 0
+    MDef: 0
+    Speed: 0
+    Accuracy: 0
+    Evasion: 0
+  FieldAnimator: {fileID: 22100000, guid: 0dec882dc606bbf4b8f116c8efc43a89, type: 2}
+  BattleAnimator: {fileID: 22100000, guid: 0dec882dc606bbf4b8f116c8efc43a89, type: 2}
+  globalGrowthConfigSO: {fileID: 11400000, guid: 2a22ed6ff1be6be46b207d84a466b190,
+    type: 2}
+  growthProfile:
+    HP: 0
+    SP: 0
+    Patk: 0
+    Pdef: 0
+    Matk: 0
+    Mdef: 0
+    Speed: 0
