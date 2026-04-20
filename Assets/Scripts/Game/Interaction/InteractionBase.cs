@@ -88,6 +88,7 @@ public class InteractionBase : MonoBehaviour
             HeadAnchor.gameObject.SetActive(false);
     }
 
+    // 检查是否有任何队伍成员可以执行该指令，只有当至少有一个队伍成员可以执行时，才将该指令添加到可用指令列表中
     private bool CanAnyPartyMemberExecute(ActionBase action) {
         var partyMembers = PartyManager.Inastance.PartyMembers;
         if(partyMembers == null || partyMembers.Count == 0)
@@ -108,6 +109,7 @@ public class InteractionBase : MonoBehaviour
     }
 
     #region UI回调入口
+    // 当玩家在UI上选择一个指令时，调用此方法来执行对应的指令，并返回是否成功执行
     public bool ExecuteCommandFromUI(int commandIndex) {
         if (commandIndex < 0 || commandIndex >= _visibleActionEntries.Count)
             return false;

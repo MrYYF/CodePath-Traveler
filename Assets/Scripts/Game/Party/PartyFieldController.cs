@@ -1,5 +1,8 @@
 
 
+/// <summary>
+/// 探索模式下的队伍跟随系统，负责管理跟随者的生成、位置更新和动画状态
+/// </summary>
 public class PartyFieldController : MonoBehaviour
 {
     [Header("References")]

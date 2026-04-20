@@ -1,6 +1,8 @@
 
 
-
+/// <summary>
+/// 招募指令，负责处理与NPC的交互，显示招募面板，并在玩家确认后将NPC添加到队伍中
+/// </summary>
 public class RecruitAction : ActionBase
 {
     public CharacterDefinitionSO CurrentCharacter { get; private set; }

@@ -1,6 +1,8 @@
 
 
-
+/// <summary>
+/// 探索模式下跟随者的控制组件，负责根据目标位置移动跟随者，并更新动画状态
+/// </summary>
 public class FieldFollower : MonoBehaviour {
     [SerializeField] private CharacterController characterController;
     [SerializeField] private Animator animator;
@@ -27,6 +29,7 @@ public class FieldFollower : MonoBehaviour {
         animator.runtimeAnimatorController = definition.FieldAnimator;
     }
 
+    // 移动到目标位置，考虑重力和地面贴合
     public void MoveTo(Vector3 targetPosition, float speed) {
         // 获得与目标的差值
         Vector3 toTarget = targetPosition - transform.position;
@@ -52,6 +55,7 @@ public class FieldFollower : MonoBehaviour {
     }
     #endregion
 
+    // 根据水平移动的步长更新动画参数
     private void UpdateAnimation(Vector3 step) {
         bool isMoving = step.sqrMagnitude > movementThreshold * movementThreshold;
 

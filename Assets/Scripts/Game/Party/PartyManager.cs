@@ -1,6 +1,9 @@
 
 
 
+/// <summary>
+/// 队伍管理器，负责管理玩家的队伍成员数据，并与探索模式下的跟随系统进行交互
+/// </summary>
 [RequireComponent(typeof(PartyFieldController))]
 public class PartyManager : Singleton<PartyManager>
 {
