@@ -5,6 +5,7 @@
 /// </summary>
 public class RecruitAction : ActionBase
 {
+    // 当前招募的NPC的角色定义，包含NPC的基本信息和属性
     public CharacterDefinitionSO CurrentCharacter { get; private set; }
 
     private void Awake() {
