@@ -1,6 +1,8 @@
 
 
-
+/// <summary>
+/// 物品定义类，包含物品的基本信息和属性
+/// </summary>
 public class ItemDefinitionSO : ScriptableObject
 {
     public string ItemName;

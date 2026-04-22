@@ -1,11 +1,10 @@
-
-
-
-
 using System;
 
-public class InventoryManager : Singleton<InventoryManager>
-{
+
+/// <summary>
+/// 物品库存管理类，负责管理玩家的物品库存，包括添加、移除和查询物品数量等功能
+/// </summary>
+public class InventoryManager : Singleton<InventoryManager> {
     [Header("Icon Set")]
     public ItemIconSetSO IconSet;
 
@@ -15,7 +14,7 @@ public class InventoryManager : Singleton<InventoryManager>
     #region 对外接口
     public void AddItem(ItemDefinitionSO itemDefinition, int quantity) {
         foreach (var item in CurrentInventory) {
-            if(item.ItemDefinition != itemDefinition) continue;
+            if (item.ItemDefinition != itemDefinition) continue;
 
             item.Quantity += quantity;
             return;
@@ -27,7 +26,7 @@ public class InventoryManager : Singleton<InventoryManager>
     public void RemoveItem(ItemDefinitionSO itemDefinition, int quantity) {
         for (int i = 0; i < CurrentInventory.Count; i++) {
             var item = CurrentInventory[i];
-            if(item.ItemDefinition != itemDefinition) continue;
+            if (item.ItemDefinition != itemDefinition) continue;
             item.Quantity -= quantity;
             if (item.Quantity <= 0) {
                 CurrentInventory.RemoveAt(i);
@@ -37,18 +36,22 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     public int GetItemQuantity(ItemDefinitionSO itemDefinition) {
-        if(itemDefinition == null) return 0;
+        if (itemDefinition == null) return 0;
 
         foreach (var item in CurrentInventory) {
-            if(item.ItemDefinition != itemDefinition) continue;
+            if (item.ItemDefinition != itemDefinition) continue;
             return item.Quantity;
         }
         return 0;
     }
 
     #endregion
+}
 
-    [Serializable]
+/// <summary>
+/// 库存物品类，包含物品定义和数量
+/// </summary>
+[Serializable]
 public class InventoryItem {
     public ItemDefinitionSO ItemDefinition;
 

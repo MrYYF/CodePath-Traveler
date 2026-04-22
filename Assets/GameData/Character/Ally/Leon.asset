@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: Leon
   Name: "\u91CC\u6602"
   Portrait: {fileID: -1365205660, guid: 7df3e2e8a1fb24977b31196b82d158a3, type: 3}
-  Job: 2
+  Job: 4
   BaseLevel: 1
   BaseStats:
     MaxHP: 0

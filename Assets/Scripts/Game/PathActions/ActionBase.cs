@@ -14,13 +14,28 @@ public abstract class ActionBase : MonoBehaviour
     public virtual bool CanShow(AllyDefinitionSO inteactor) {
         return isJobMatch(inteactor);
     }
+
+    /// <summary>
+    /// 判断指令是否可以被执行，默认只判断职业条件，特殊指令可以重写这个方法添加额外的条件
+    /// </summary>
+    /// <param name="inteactor">执行指令的角色信息</param>
+    /// <returns>指令是否可以被执行</returns>
     public virtual bool CanExecute(AllyDefinitionSO inteactor) {
         return true;
     }
+
+    /// <summary>
+    /// 需要二级面板确认的操作在这里触发
+    /// </summary>
+    /// <param name="inteactor">执行指令的角色信息</param>
     public virtual void TriggerAction(AllyDefinitionSO inteactor) {
-        // 需要二级面板确认的操作在这里触发
         Execute(inteactor);
     }
+
+    /// <summary>
+    /// 直接执行指令
+    /// </summary>
+    /// <param name="context">执行指令的上下文信息</param>
     public virtual void Execute(object context = null) {
         // Default implementation does nothing
     }

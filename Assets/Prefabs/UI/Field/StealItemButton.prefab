@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 6275226745919290097}
   - component: {fileID: 4127928345080014228}
   - component: {fileID: 7861257947550431251}
+  - component: {fileID: 3797681386541186685}
   m_Layer: 5
   m_Name: StealItemButton
   m_TagString: Untagged
@@ -383,6 +384,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3797681386541186685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4097065051033149709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe2a0f4b6624b84a9b24c96c87847c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 3338161061477167276}
+  itemName: {fileID: 4743350652993823485}
+  itemDescription: {fileID: 3726729635707093754}
+  itemQuantity: {fileID: 0}
+  itemTips: {fileID: 2271515262391630}
+  rateText: {fileID: 4338919846576465074}
 --- !u!1 &6751977859974124295
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,14 +650,62 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemTips
       objectReference: {fileID: 0}
+    - target: {fileID: 7528429030855082667, guid: 47482a5109dd5ae4492bd27ce2768521,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7528429030855082667, guid: 47482a5109dd5ae4492bd27ce2768521,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7528429030855082667, guid: 47482a5109dd5ae4492bd27ce2768521,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7528429030855082667, guid: 47482a5109dd5ae4492bd27ce2768521,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7528429030855082667, guid: 47482a5109dd5ae4492bd27ce2768521,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7528429030855082667, guid: 47482a5109dd5ae4492bd27ce2768521,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47482a5109dd5ae4492bd27ce2768521, type: 3}
+--- !u!1 &2271515262391630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3548644840164217743, guid: 47482a5109dd5ae4492bd27ce2768521,
+    type: 3}
+  m_PrefabInstance: {fileID: 3546373876815742657}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1746135639137933226 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2957956056957096299, guid: 47482a5109dd5ae4492bd27ce2768521,
     type: 3}
   m_PrefabInstance: {fileID: 3546373876815742657}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3726729635707093754 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 184437147136017467, guid: 47482a5109dd5ae4492bd27ce2768521,
+    type: 3}
+  m_PrefabInstance: {fileID: 3546373876815742657}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
