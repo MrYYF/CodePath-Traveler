@@ -26,20 +26,31 @@ public class UIManager : MonoBehaviour,
         EventBus.Unsubscribe<PanelRequestEvent>(this);
     }
     private void Update() {
-        var mode = GameModeManager.Inastance.CurrentGameMode;
+        var mode = GameModeManager.Instance.CurrentGameMode;
+        var input = InputSystemController.Instance;
         if (mode == GameMode.Battle) return;
-        if(mode == GameMode.InteractionMenu) {
-            if(IsAnyPanelOpen() && InputSystemController.Inastance.GetUICancelPressed()) {
-                TryHandleCancelByActivePanel();
-                return;
-            };
+        if (input.GetUICancelPressed()) {
+            HandleGlobalCancelInput(mode);
+            return;
         }
 
-        if(InputSystemController.Inastance.GetUICancelPressed()) {
-            CloseAllPanel();
-        }
     }
     #endregion
+
+    private void HandleGlobalCancelInput(GameMode currentMode) {
+        // 尝试通过当前打开的面板处理取消输入，如果面板处理了取消输入，则不执行后续逻辑
+        if (TryHandleCancelByActivePanel())
+            return;
+
+        // 如果没有任何面板处理取消输入，则执行全局的取消逻辑，这里是关闭所有面板
+        if (IsAnyPanelOpen()) 
+            CloseAllPanel();
+
+        // 切换回探索模式
+        if(currentMode == GameMode.InteractionMenu)
+            GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
+
+    }
 
     private void GetPanelsFromRoot(Transform root) {
         var panels = root.GetComponentsInChildren<PanelController>(true);
@@ -51,13 +62,16 @@ public class UIManager : MonoBehaviour,
         }
     }
 
-    private void TryHandleCancelByActivePanel() {
+    private bool TryHandleCancelByActivePanel() {
         foreach (var panel in _allPanelList) {
-            if (panel.gameObject.activeSelf) {
-                panel.gameObject.SetActive(false);
-                return;
+            if (panel.gameObject.activeSelf == false) {
+                continue;
+            }
+            if(panel.HandleCancelInput()) {
+                return true;
             }
         }
+        return false;
     }
     private bool IsAnyPanelOpen() {
         foreach (var panel in _allPanelList) {
@@ -79,8 +93,8 @@ public class UIManager : MonoBehaviour,
         var panelType = evt.actionBase.GetType();
         _panelControllerDict.TryGetValue(panelType, out var panel);
 
-        panel?.SetupPanel(evt.actionBase);
         panel?.gameObject.SetActive(true);
+        panel?.SetupPanel(evt.actionBase);
     }
     #endregion
 }

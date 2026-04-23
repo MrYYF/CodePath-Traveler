@@ -20,7 +20,7 @@ public class GameModeManager : Singleton<GameModeManager> {
 
     #region 外部调用入口
     public void RequestChangeGameMode(GameMode newMode) {
-        if (Inastance != this) return;
+        if (Instance != this) return;
         if (!CanSwitchMode(newMode)) return;
 
         ApplyMode(newMode);

@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Movement() {
-        var input = InputSystemController.Inastance;
+        var input = InputSystemController.Instance;
         if (input == null) return;
 
         movementInput = input.GetMovementInput();

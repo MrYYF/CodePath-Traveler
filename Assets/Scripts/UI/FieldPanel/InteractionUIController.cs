@@ -45,18 +45,6 @@ public class InteractionUIController : MonoBehaviour,
         EventBus.Unsubscribe<InteractionMenuRequestEvent>(this);
         EventBus.Unsubscribe<GameModeChangedEvent>(this);
     }
-    private void Update() {
-        if(GameModeManager.Inastance.CurrentGameMode != GameMode.InteractionMenu)
-            return;
-
-        var input = InputSystemController.Inastance;
-        if (input.GetUICancelPressed()) {
-            //TODO: 如果在Action二级面板打开时按下会有BUG
-            CloseMenu(true);
-            GameModeManager.Inastance.RequestChangeGameMode(GameMode.Explore);
-        }
-
-    }
     private void LateUpdate() {
         UpdateHeadIconPosition();
     }
@@ -147,11 +135,17 @@ public class InteractionUIController : MonoBehaviour,
         if(evt.NewGameMode == GameMode.InteractionMenu) 
             return;
         
+        if(actionMenuHolder.gameObject.activeSelf) {
+            HideAcitonMenu();
+        }
 
-        if(evt.NewGameMode == GameMode.Explore) {
+        if (evt.NewGameMode == GameMode.Explore) {
             Debug.Log("切换回探索模式，恢复头顶图标显示");
             ShowHeadIcons();
+            return;
         }
+
+        HideHeadIcons();
     }
     #endregion
 
@@ -191,7 +185,7 @@ public class InteractionUIController : MonoBehaviour,
     }
 
     private void OpenMenu(InteractionBase target) {
-        GameModeManager.Inastance.RequestChangeGameMode(GameMode.InteractionMenu);
+        GameModeManager.Instance.RequestChangeGameMode(GameMode.InteractionMenu);
 
         syncPool(_activeButtons, _menuButtonPool, _currentCommandList.Count);
 

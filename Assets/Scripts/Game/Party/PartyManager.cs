@@ -35,7 +35,7 @@ public class PartyManager : Singleton<PartyManager>
     public void RecruitMember(CharacterDefinitionSO newCharacter) {
         AddMember(newCharacter);
 
-        GameModeManager.Inastance.RequestChangeGameMode(GameMode.Explore);
+        GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
     }
 
     private void RefreshFieldFollowers() {

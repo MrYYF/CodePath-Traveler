@@ -25,7 +25,7 @@ public class PanelController : MonoBehaviour {
     }
 
     protected virtual void OnCancel() {
-        GameModeManager.Inastance.RequestChangeGameMode(GameMode.Explore);
+        GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
         ClosePanel();
     }
 
@@ -34,12 +34,15 @@ public class PanelController : MonoBehaviour {
         ClosePanel();
     }
 
+    public virtual bool HandleCancelInput() {
+        return false;
+    }
+
     // 设置默认选中按钮，确保在面板打开时有一个按钮被选中，方便使用键盘或手柄导航
     protected void SetDefaultSelection() {
-        if (FirstSelectedButton != null) {
-            FirstSelectedButton.Select();
-            EventSystem.current.SetSelectedGameObject(FirstSelectedButton.gameObject);
-        }
+        FirstSelectedButton.Select();
+        EventSystem.current.SetSelectedGameObject(FirstSelectedButton.gameObject);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
 
     protected void ReBindButtons(Button button, UnityAction unityAction) {

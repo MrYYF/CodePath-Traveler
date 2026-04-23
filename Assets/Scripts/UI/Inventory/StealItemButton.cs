@@ -10,9 +10,8 @@ public class StealItemButton : ItemButton
     [Header("Steal Item Button")]
     [SerializeField] private TMP_Text rateText; // 偷取成功率文本
 
-    protected override void SetupButton(InventoryItem inventoryItem, Action<ItemDefinitionSO> onItemClick) {
+    public override void SetupButton(InventoryItem inventoryItem, Action<ItemDefinitionSO> onItemClick) {
         base.SetupButton(inventoryItem, onItemClick);
-
         rateText.text = $"{CurrentItemDefinition.RarityWeight}%";
     }
 

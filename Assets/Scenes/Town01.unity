@@ -1217,12 +1217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc033cfe4236d124d9ca27e8a0be46b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchJob: 6
+  matchJob: 0
   CommandInfo:
     CommandName: "\u6253\u542C"
     Description: "\u6253\u542C\u4FE1\u606F"
     Icon: {fileID: 21300000, guid: a8d6591b29a0d449dbf7ca913dcd2cc7, type: 3}
-    RequiredJob: 6
+    RequiredJob: 0
     Order: 0
   inquireActionDatas:
   - title: "\u95F2\u8BDD"
@@ -1501,16 +1501,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 265db8772209d144bbc96ff7d2b3e6db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchJob: 6
+  matchJob: 0
   CommandInfo:
     CommandName: "\u5077\u7A83"
     Description: "\u76D7\u7A83"
     Icon: {fileID: 21300000, guid: 0b2ab670df29649b6b2c801c55abb9ec, type: 3}
-    RequiredJob: 6
+    RequiredJob: 0
     Order: 0
   stealableItems:
   - ItemDefinition: {fileID: 11400000, guid: ce4c3404266355c429d849219e664bf9, type: 2}
-    Quantity: 0
+    Quantity: 1
+  - ItemDefinition: {fileID: 11400000, guid: 5e19e470e7638ff449599fb6c341ffdb, type: 2}
+    Quantity: 1
 --- !u!114 &1725970069
 MonoBehaviour:
   m_ObjectHideFlags: 0

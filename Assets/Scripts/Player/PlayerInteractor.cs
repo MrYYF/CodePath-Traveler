@@ -14,7 +14,7 @@ public class PlayerInteractor : MonoBehaviour
     private void Update() {
         if (_target == null || _target.CachedCommandInfo.Count == 0) return;
 
-        InputSystemController inastance = InputSystemController.Inastance;
+        InputSystemController inastance = InputSystemController.Instance;
         if(inastance == null) return;
 
         if ( inastance.GetPlayerConfirmPressed() && _target != null) {

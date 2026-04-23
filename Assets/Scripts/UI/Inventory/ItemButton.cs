@@ -28,17 +28,23 @@ public class ItemButton : MonoBehaviour, ISelectHandler, IDeselectHandler {
         _button.onClick.AddListener(OnClick);
     }
 
-    protected virtual void OnClick() {
-
+    public void GetCurrentButton() {
+        _button = GetComponent<Button>();
     }
 
-    protected virtual void SetupButton(InventoryItem inventoryItem) => SetupButton(inventoryItem, null);
+    protected virtual void OnClick() {
+        if (_onItemClick != null) {
+            _onItemClick.Invoke(CurrentItemDefinition);
+        }
+    }
 
-    protected virtual void SetupButton(InventoryItem inventoryItem, Action<ItemDefinitionSO> onItemClick) {
+    public virtual void SetupButton(InventoryItem inventoryItem) => SetupButton(inventoryItem, null);
+
+    public virtual void SetupButton(InventoryItem inventoryItem, Action<ItemDefinitionSO> onItemClick) {
         _currentItem = inventoryItem;
         _onItemClick = onItemClick;
 
-        itemIcon.sprite = InventoryManager.Inastance.IconSet.GetIconForItem(inventoryItem.ItemDefinition.itemIconKey);
+        itemIcon.sprite = InventoryManager.Instance.IconSet.GetIconForItem(inventoryItem.ItemDefinition.itemIconKey);
         itemName.text = inventoryItem.ItemDefinition.ItemName;
         itemDescription.text = inventoryItem.ItemDefinition.ItemDescription;
         if(itemQuantity != null)
