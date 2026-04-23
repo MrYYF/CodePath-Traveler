@@ -41,6 +41,8 @@ public class StealPanelController : PanelController
             button.SetupButton(item, OpenConfirmPopup);
             _stealItemButtons.Add(button);
         }
+
+        if (_stealItemButtons.Count == 0) return;
         FirstSelectedButton = _stealItemButtons[0].CurrentButton;
 
         SetDefaultSelection();
@@ -54,6 +56,8 @@ public class StealPanelController : PanelController
         _pendingItem = itemDefinition;
         FirstSelectedButton = confirmButton;
         confirmPopup.gameObject.SetActive(true);
+        confirmButton.gameObject.SetActive(true);
+        cancelButton.gameObject.SetActive(true);
 
         popupText.text = $"{itemDefinition.ItemName} 成功率：{itemDefinition.RarityWeight}%";
 
@@ -62,6 +66,13 @@ public class StealPanelController : PanelController
         ReBindButtons(cancelButton, ClosePopup);
 
         SetDefaultSelection(); 
+    }
+
+    protected override void OnConfirm() {
+        bool success = CurrentStealAction.TrySteal(_pendingItem);
+        popupText.text = success ? "偷窃成功！" : "偷窃失败！";
+        cancelButton.gameObject.SetActive(false);
+        ReBindButtons(confirmButton, ClosePopup);
     }
 
     /// <summary>
