@@ -17,7 +17,11 @@ public class PanelController : MonoBehaviour {
 
     public virtual void SetupPanel(ActionBase action) {
         CurrentAction = action;
-        ActionIcon.sprite = action.CommandInfo.Icon;
+        if (ActionIcon != null)
+            ActionIcon.sprite = action.CommandInfo.Icon;
+        if (FirstSelectedButton != null)
+            SetDefaultSelection();
+
     }
 
     public virtual void ClosePanel() {

@@ -55,3 +55,10 @@ public enum ItemIconKey {
     Cure, // 状态异常治疗
     KeyItem, // 关键道具
 }
+
+public enum PanelType {
+    Item,
+    Sell,
+    Buy,
+    Equipment,
+}

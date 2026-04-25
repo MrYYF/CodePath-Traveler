@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 4439325993663832711}
   - component: {fileID: 4445937002914161549}
   - component: {fileID: 7509301151453186951}
+  - component: {fileID: 2777044245303742847}
   m_Layer: 5
   m_Name: ShopItemButton
   m_TagString: Untagged
@@ -287,6 +288,24 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2777044245303742847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2248378418781389673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8717956af04711a43a482622790bb817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 9118852469045602031}
+  itemName: {fileID: 5349735542657718152}
+  itemDescription: {fileID: 7104615081774891536}
+  itemQuantity: {fileID: 1564456836229165984}
+  itemTips: {fileID: 6762804661604385187}
+  priceText: {fileID: 6594522165017870696}
 --- !u!1 &6762804661604385187
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,7 +464,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 100
