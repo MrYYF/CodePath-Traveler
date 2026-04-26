@@ -43,7 +43,7 @@ public class PanelController : MonoBehaviour {
     }
 
     // 设置默认选中按钮，确保在面板打开时有一个按钮被选中，方便使用键盘或手柄导航
-    protected void SetDefaultSelection() {
+    public void SetDefaultSelection() {
         FirstSelectedButton.Select();
         EventSystem.current.SetSelectedGameObject(FirstSelectedButton.gameObject);
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
