@@ -79,4 +79,27 @@ public class ItemPanelController : PanelController
         itemButton.CurrentButton.interactable = interactable;
         _itemButtons.Add(itemButton);
     }
+
+    public void RefreshItemQuantity(ItemDefinitionSO itemDefinition) {
+        var itemButton = _itemButtons.Find(button => button.CurrentItemDefinition == itemDefinition);
+        if (itemButton == null) return;
+        int playerQuantity = InventoryManager.Instance.GetItemQuantity(itemDefinition);
+        itemButton.UpdateQuantity(playerQuantity);
+    }
+
+    internal void RemoveItemButton(ItemDefinitionSO pendingItem) {
+        var itemButtonIndex = _itemButtons.FindIndex(button => button.CurrentItemDefinition == pendingItem);
+        ItemButton itemButton = _itemButtons[itemButtonIndex];
+        _itemButtons.RemoveAt(itemButtonIndex);
+        Destroy(itemButton.gameObject);
+
+        FirstSelectedButton = _itemButtons.Count > 0 ? _itemButtons[0].CurrentButton : null;
+        if (_itemButtons.Count > 0) {
+            int nextIndex = Mathf.Min(itemButtonIndex, _itemButtons.Count - 1);
+            FirstSelectedButton = _itemButtons[nextIndex].CurrentButton;
+            SetDefaultSelection();
+        }
+
+
+    }
 }

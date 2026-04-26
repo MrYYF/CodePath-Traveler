@@ -19,7 +19,7 @@ public class ItemButton : MonoBehaviour, ISelectHandler, IDeselectHandler {
     public Button CurrentButton => _button;
 
     protected InventoryItem _currentItem;
-    protected ItemDefinitionSO CurrentItemDefinition => _currentItem?.ItemDefinition;
+    public ItemDefinitionSO CurrentItemDefinition => _currentItem?.ItemDefinition;
 
     private Action<ItemDefinitionSO> _onItemClick;
 
@@ -49,8 +49,12 @@ public class ItemButton : MonoBehaviour, ISelectHandler, IDeselectHandler {
         itemDescription.text = inventoryItem.ItemDefinition.ItemDescription;
         if(itemQuantity != null)
             itemQuantity.text = inventoryItem.Quantity.ToString();
+    }
 
-
+    public void UpdateQuantity(int newQuantity) {
+        if (itemQuantity != null) {
+            itemQuantity.text = newQuantity.ToString();
+        }
     }
 
     #region UI»Øµ÷

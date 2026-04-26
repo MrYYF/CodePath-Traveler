@@ -11,6 +11,11 @@ public class InventoryManager : Singleton<InventoryManager> {
     [Header("Inventory")]
     public List<InventoryItem> CurrentInventory = new();
 
+    [Header("Currency")]
+    public int Currency;
+
+    private int _initialCurrency; // 初始货币数量
+
     #region 对外接口
     public void AddItem(ItemDefinitionSO itemDefinition, int quantity) {
         foreach (var item in CurrentInventory) {
@@ -43,6 +48,17 @@ public class InventoryManager : Singleton<InventoryManager> {
             return item.Quantity;
         }
         return 0;
+    }
+
+    public bool TrySpendCurrency(int amount) {
+        if (Currency < amount) 
+            return false;
+        Currency -= amount;
+        return true;
+    }
+
+    public void AddCurrency(int amount) {
+        Currency += amount;
     }
 
     #endregion
