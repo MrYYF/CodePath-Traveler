@@ -8,8 +8,21 @@ public class AllyDefinitionSO : CharacterDefinitionSO
     public GlobalGrowthConfigSO globalGrowthConfigSO;
     public GrowthProfile growthProfile;
 
-    #region 属性成长
+    [Header("Equipment Capability")]
+    public List<WeaponType> EquipableWeaponTypes = new();
 
+    [Header("Initial Equipment")]
+    public List<InitialEquipmentEntry> InitialEquipment = new();
+
+    [Serializable]
+    public struct InitialEquipmentEntry {
+        public EquipSlot equipSlot;
+        public EquipmentItemSO equiptmentItem;
+    }
+
+
+
+    #region 属性成长
     public StatBlock GetStatForLevel(int level) {
         float hpMult = globalGrowthConfigSO.GetGrowthByRank(growthProfile.HP).Evaluate(level);
         float spMult = globalGrowthConfigSO.GetGrowthByRank(growthProfile.SP).Evaluate(level);

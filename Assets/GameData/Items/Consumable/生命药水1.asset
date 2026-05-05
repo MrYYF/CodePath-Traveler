@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 557d31371db09074e830c4f33c79b5d5, type: 3}
-  m_Name: "\u751F\u547D\u836F\u6C34"
+  m_Name: "\u751F\u547D\u836F\u6C341"
   m_EditorClassIdentifier: 
-  ItemName: "\u751F\u547D\u836F\u6C34"
+  ItemName: "\u751F\u547D\u836F\u6C341"
   ItemDescription: "\u7528\u4E8E\u6062\u590D\u751F\u547D\u7684\u836F\u6C34"
   itemType: 1
   itemIconKey: 3

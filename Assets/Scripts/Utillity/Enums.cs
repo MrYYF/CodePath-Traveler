@@ -62,3 +62,31 @@ public enum PanelType {
     Buy,
     Equipment,
 }
+
+public enum EquipmentCategory {
+    Weapon,
+    Shield,
+    Head,
+    Body,
+    Accessory
+}
+
+public enum EquipSlot {
+    None,
+    Weapon,
+    Shield,
+    Head,
+    Body,
+    Accessory1,
+    Accessory2
+}
+
+public enum WeaponType {
+    None = 0,
+    Sword,
+    Dagger,
+    Axe,
+    Spear,
+    Bow,
+    Staff
+}

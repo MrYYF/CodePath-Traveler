@@ -19,3 +19,15 @@ MonoBehaviour:
   BuyPrice: 100
   MaxStack: 1
   RarityWeight: 79
+  equipmentCategory: 0
+  weaponType: 2
+  statBlock:
+    MaxHP: 0
+    MaxSP: 0
+    PAtk: 10
+    PDef: 0
+    MAtk: 0
+    MDef: 0
+    Speed: 1
+    Accuracy: 0
+    Evasion: 0
