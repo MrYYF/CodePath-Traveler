@@ -21,7 +21,7 @@ MonoBehaviour:
   RarityWeight: 79
   equipmentCategory: 0
   weaponType: 2
-  statBlock:
+  statBouns:
     MaxHP: 0
     MaxSP: 0
     PAtk: 10

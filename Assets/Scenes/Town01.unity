@@ -592,7 +592,7 @@ PrefabInstance:
     - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
         type: 3}
       propertyPath: itemsBag.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
         type: 3}
@@ -606,15 +606,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
         type: 3}
+      propertyPath: itemsBag.Array.data[2].Quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
+        type: 3}
+      propertyPath: itemsBag.Array.data[3].Quantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
+        type: 3}
       propertyPath: itemsBag.Array.data[0].ItemDefinition
       value: 
-      objectReference: {fileID: 11400000, guid: ce4c3404266355c429d849219e664bf9,
+      objectReference: {fileID: 11400000, guid: 3991fafba4221944598574310a0e0d66,
         type: 2}
     - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
         type: 3}
       propertyPath: itemsBag.Array.data[1].ItemDefinition
       value: 
+      objectReference: {fileID: 11400000, guid: ce4c3404266355c429d849219e664bf9,
+        type: 2}
+    - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
+        type: 3}
+      propertyPath: itemsBag.Array.data[2].ItemDefinition
+      value: 
       objectReference: {fileID: 11400000, guid: 5e19e470e7638ff449599fb6c341ffdb,
+        type: 2}
+    - target: {fileID: 4804717601343865350, guid: 91052e9abb96c7f4bb40313f1f9493a1,
+        type: 3}
+      propertyPath: itemsBag.Array.data[3].ItemDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: 8ea69d882bd57d745b65d0c0bb8cf4ea,
         type: 2}
     - target: {fileID: 8039625274357776941, guid: 91052e9abb96c7f4bb40313f1f9493a1,
         type: 3}
