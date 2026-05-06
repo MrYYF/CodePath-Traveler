@@ -31,6 +31,10 @@ public class EquipmentCharacterTabButton : MonoBehaviour, ISelectHandler {
         portraitImage.sprite = member.Definition.Portrait;
     }
 
+    /// <summary>
+    /// 设置标签是否被选中
+    /// </summary>
+    /// <param name="isSelected">标签是否被选中</param>
     public void SetSelectedVisual(bool isSelected) {
         canvasGroup.alpha = isSelected ? 1f : 0.5f;
     }

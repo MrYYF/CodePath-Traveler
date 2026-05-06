@@ -72,6 +72,7 @@ public class MainPanelController : PanelController
 
     private void OpenEquipmentPanel() {
         OpenPanel(equipmentPanelController.gameObject, equipmentButton);
+        equipmentPanelController.SetupWithPartyMember(PartyManager.Instance != null ? PartyManager.Instance.PartyMembers : null);
     }
 
     /// <summary>
