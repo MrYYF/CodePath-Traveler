@@ -52,6 +52,13 @@ public class InputSystemController : Singleton<InputSystemController>,IEventRece
         return _inputActions.UI.Cancel.WasPressedThisFrame();
     }
 
+    public bool GetMenuPressed() {
+        if (!_isInitialized) {
+            return false; // 如果当前不是玩家输入模式，返回false
+        }
+        return _inputActions.UI.Menu.WasPressedThisFrame() || _inputActions.Player.Menu.WasPressedThisFrame();
+    }
+
     #region 事件系统
     // 监听游戏模式切换事件，根据当前游戏模式切换输入ActionMap
     public void OnEvent(GameModeChangedEvent evt) {

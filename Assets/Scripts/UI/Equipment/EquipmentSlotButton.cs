@@ -1,0 +1,80 @@
+using System;
+using TMPro;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+
+public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
+    [SerializeField] private TMP_Text slotNameText;
+
+    private CanvasGroup _canvasGroup;
+
+    private Button _button;
+
+    private int _index;
+
+    private Action<int> _onTabSelected;
+    private Action<int> _onTabClicked;
+
+    public Button Button {
+        get {
+            _button ??= GetComponent<Button>();
+            _defaultNavigation = _button.navigation;
+            return _button;
+        }
+    }
+
+    private bool _isSlotUsable = true;
+    private bool _isInputEnabled = false;
+
+    private Navigation _defaultNavigation;
+
+    private void Awake() {
+        _button.onClick.AddListener(HandleClicked);
+    }
+
+    private void OnDisable() {
+        _button.onClick.RemoveAllListeners();
+    }
+
+    public void Setup(
+        EquipmentItemSO equipmentItem, 
+        int index, Action<int> onTabSelected, 
+        Action<int> onTabClicked,
+        bool isSlotUsable) {
+        _index = index;
+        _onTabSelected = onTabSelected;
+        _onTabClicked = onTabClicked;
+        _isSlotUsable = isSlotUsable;
+
+        string displayName = equipmentItem != null ? equipmentItem.ItemName : "Î´×°±¸";
+        slotNameText.text = displayName;
+
+        ApplyButtonInteractableState();
+    }
+
+    private void ApplyButtonInteractableState() {
+        bool isInteractable = _isSlotUsable && _isInputEnabled;
+        Button.interactable = isInteractable;
+        _canvasGroup.interactable = isInteractable;
+        _canvasGroup.alpha = isInteractable ? 1f : 0.5f;
+
+        Navigation navigation = _defaultNavigation;
+
+        if(!isInteractable) {
+            navigation.mode = Navigation.Mode.None;
+        }
+        Button.navigation = navigation;
+    }
+
+    private void HandleClicked() {
+        if (_button == null || !_button.interactable) return;
+        _onTabClicked?.Invoke(_index);
+    }
+
+    public void OnSelect(BaseEventData eventData) {
+        if (_button == null || !_button.interactable) return;
+
+        _onTabSelected?.Invoke(_index);
+    }
+}
