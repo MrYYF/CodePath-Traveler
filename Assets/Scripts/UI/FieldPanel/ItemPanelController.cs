@@ -33,6 +33,9 @@ public class ItemPanelController : PanelController
             case PanelType.Sell:
                 BuildSellList(inventoryManager);
                 break;
+            case PanelType.Item:
+                BuildItemList(inventoryManager);
+                break;
             default:
                 break;
         }
@@ -80,6 +83,12 @@ public class ItemPanelController : PanelController
             AddItemButton(new InventoryItem(item.ItemDefinition, item.Quantity));
         }
 
+    }
+
+    private void BuildItemList(InventoryManager inventoryManager) {
+        foreach (InventoryItem item in inventoryManager.CurrentInventory) {
+            AddItemButton(item);
+        }
     }
 
     /// <summary>

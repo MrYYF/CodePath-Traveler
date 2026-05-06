@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentPanelController : MonoBehaviour
+public class EquipmentPanelController : PanelController
 {
     [Header("Character Tabs")]
     [SerializeField] private RectTransform tabRoot;

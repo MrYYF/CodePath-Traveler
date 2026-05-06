@@ -4,7 +4,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class MainPanelController : MonoBehaviour
+public class MainPanelController : PanelController
 {
     [Header("Main Panel")]
 
@@ -20,9 +20,50 @@ public class MainPanelController : MonoBehaviour
     private Button _currentSelectedButton;
 
     private void Awake() {
-        itemButton.onClick.AddListener(OpenItemPanel);
-        equipmentButton.onClick.AddListener(OpenEquipmentPanel);
+        ReBindButtons(itemButton, OpenItemPanel);
+        ReBindButtons(equipmentButton, OpenEquipmentPanel);
     }
+
+    private void OnEnable() {
+        FirstSelectedButton = itemButton;
+        SetDefaultSelection();
+        UpdateCurrencyDisplay();
+    }
+
+    private void OnDisable() {
+        if (_currentOpenPanel != null) {
+            _currentOpenPanel.SetActive(false);
+            _currentOpenPanel = null;
+        }
+        leftPartCanvasGroup.interactable = true;
+    }
+
+    public override bool HandleCancelInput() {
+        if(_currentOpenPanel == null || _currentOpenPanel.activeSelf == false) {
+            return false;
+        }
+
+        if(_currentOpenPanel != null && 
+            _currentOpenPanel == equipmentPanelController.gameObject &&
+            equipmentPanelController.HandleCancelInput()) {
+            return true;
+        }
+
+        CloseCurrentPanel();
+        return true;
+    }
+
+    /// <summary>
+    /// 关闭当前启动的二级面板
+    /// </summary>
+    private void CloseCurrentPanel() {
+        FirstSelectedButton = _currentSelectedButton;
+        _currentOpenPanel.SetActive(false);
+        _currentOpenPanel = null;
+        leftPartCanvasGroup.interactable = true;
+        SetDefaultSelection();
+    }
+
 
     private void OpenItemPanel() {
         OpenPanel(itemPanelController.gameObject, itemButton);
@@ -33,13 +74,26 @@ public class MainPanelController : MonoBehaviour
         OpenPanel(equipmentPanelController.gameObject, equipmentButton);
     }
 
+    /// <summary>
+    /// 打开指定面板的方法，接受一个面板对象和一个按钮对象作为参数。该方法将当前打开的面板和选中的按钮更新为传入的参数，并将面板设置为可见，同时禁用左侧部分的交互，以确保用户只能与当前打开的面板进行交互。
+    /// </summary>
+    /// <param name="panel">面板</param>
+    /// <param name="button">按钮</param>
     private void OpenPanel(GameObject panel, Button button) {
         _currentOpenPanel = panel;
         _currentSelectedButton = button;
 
         panel.SetActive(true);
         leftPartCanvasGroup.interactable = false;
+    }
 
+    /// <summary>
+    /// 更新货币显示文本
+    /// </summary>
+    public void UpdateCurrencyDisplay() {
+        if (currencyAmountText == null) return;
 
+        InventoryManager instance = InventoryManager.Instance;
+        currencyAmountText.text = $"{instance.Currency}";
     }
 }

@@ -30,7 +30,7 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
     private Navigation _defaultNavigation;
 
     private void Awake() {
-        _button.onClick.AddListener(HandleClicked);
+        Button.onClick.AddListener(HandleClicked);
     }
 
     private void OnDisable() {
