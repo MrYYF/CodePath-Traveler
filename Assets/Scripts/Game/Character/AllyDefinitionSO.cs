@@ -20,7 +20,10 @@ public class AllyDefinitionSO : CharacterDefinitionSO
         public EquipmentItemSO equiptmentItem;
     }
 
-
+    public bool CanEquipWeaponType(WeaponType weaponType) {
+        if(weaponType == WeaponType.None) return false;
+        return EquipableWeaponTypes.Contains(weaponType);
+    }
 
     #region  Ù–‘≥…≥§
     public StatBlock GetStatForLevel(int level) {

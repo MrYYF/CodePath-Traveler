@@ -571,8 +571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 987205255}
+  modifyValueText: {fileID: 873560478}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &16319160
@@ -1246,8 +1246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 346160938}
+  modifyValueText: {fileID: 841726600}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &82189768
@@ -2361,10 +2361,34 @@ MonoBehaviour:
   CurrentAction: {fileID: 0}
   FirstSelectedButton: {fileID: 0}
   ActionIcon: {fileID: 0}
+  memberNameText: {fileID: 235712367}
   tabRoot: {fileID: 1777529689}
   tabPrefab: {fileID: 5855221258895072202, guid: 67101b1da4cdf55469516656b87f1ae0,
     type: 3}
   tabCanvasGroup: {fileID: 1777529692}
+  slotButtons:
+  - {fileID: 1795659440}
+  - {fileID: 1932152204}
+  - {fileID: 633811849}
+  - {fileID: 1736613875}
+  - {fileID: 979946458}
+  - {fileID: 1111113347}
+  - {fileID: 1503427482}
+  - {fileID: 813282630}
+  - {fileID: 1495607073}
+  - {fileID: 248849018}
+  - {fileID: 1160480027}
+  slotListCanvasGroup: {fileID: 1888962910}
+  leftCategoryNameTexts:
+  - {fileID: 956431262}
+  - {fileID: 1883411454}
+  - {fileID: 978343946}
+  - {fileID: 1608600555}
+  - {fileID: 1797342734}
+  - {fileID: 154732702}
+  leftCategoryEnableColor: {r: 0, g: 0, b: 0, a: 1}
+  leftCategoryDisableColor: {r: 0.72, g: 0.72, b: 0.72, a: 1}
+  statPreviewPanel: {fileID: 927098929}
 --- !u!1 &154732700
 GameObject:
   m_ObjectHideFlags: 0
@@ -5781,8 +5805,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 76584798}
+  modifyValueText: {fileID: 1337514988}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &380559096
@@ -8963,8 +8987,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 1066105984}
+  modifyValueText: {fileID: 1169449596}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &633918531
@@ -11259,8 +11283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 263156347}
+  modifyValueText: {fileID: 1397992031}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &835462395
@@ -12443,6 +12467,7 @@ GameObject:
   m_Component:
   - component: {fileID: 927098927}
   - component: {fileID: 927098928}
+  - component: {fileID: 927098929}
   m_Layer: 5
   m_Name: StatusPart
   m_TagString: Untagged
@@ -12502,6 +12527,37 @@ MonoBehaviour:
   m_Spacing: {x: 50, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &927098929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927098926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa21b2e1dbb13c43b44f94f8ba99285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statRows:
+  - statType: 0
+    row: {fileID: 380559095}
+  - statType: 1
+    row: {fileID: 1825316226}
+  - statType: 2
+    row: {fileID: 1080162649}
+  - statType: 3
+    row: {fileID: 835462394}
+  - statType: 4
+    row: {fileID: 82189767}
+  - statType: 5
+    row: {fileID: 2123857275}
+  - statType: 7
+    row: {fileID: 16319159}
+  - statType: 6
+    row: {fileID: 633918530}
+  - statType: 8
+    row: {fileID: 1145705463}
 --- !u!1 &929646526
 GameObject:
   m_ObjectHideFlags: 0
@@ -14505,8 +14561,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 1693815426}
+  modifyValueText: {fileID: 808290538}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1080162650
@@ -15192,8 +15248,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 1965021902}
+  modifyValueText: {fileID: 2084828760}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1145705464
@@ -16802,7 +16858,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -38.3, y: -75.6}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1330641382
@@ -24126,8 +24182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 1219368015}
+  modifyValueText: {fileID: 1777222570}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1825316227
@@ -24812,6 +24868,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1888962908}
   - component: {fileID: 1888962909}
+  - component: {fileID: 1888962910}
   m_Layer: 5
   m_Name: EquipmentSlot
   m_TagString: Untagged
@@ -24875,6 +24932,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &1888962910
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888962907}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1916381844
 GameObject:
   m_ObjectHideFlags: 0
@@ -26425,8 +26494,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e1f5041229f0944a3ee5fbe19212e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentValueText: {fileID: 0}
-  modifyValueText: {fileID: 0}
+  currentValueText: {fileID: 779099387}
+  modifyValueText: {fileID: 1697030544}
   positiveColor: {r: 0, g: 1, b: 0, a: 1}
   negativeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &2123857276

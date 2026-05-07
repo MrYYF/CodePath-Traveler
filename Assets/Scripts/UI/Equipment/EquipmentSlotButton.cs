@@ -25,11 +25,12 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
     }
 
     private bool _isSlotUsable = true;
-    private bool _isInputEnabled = false;
+    private bool _isInputEnabled = true;
 
     private Navigation _defaultNavigation;
 
     private void Awake() {
+        _canvasGroup = GetComponent<CanvasGroup>();
         Button.onClick.AddListener(HandleClicked);
     }
 
@@ -37,9 +38,18 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
         _button.onClick.RemoveAllListeners();
     }
 
-    public void Setup(
+    /// <summary>
+    /// 初始化按钮
+    /// </summary>
+    /// <param name="equipmentItem">装备数据</param>
+    /// <param name="index">对应槽位序列号</param>
+    /// <param name="onTabSelected">选中事件回调</param>
+    /// <param name="onTabClicked">点击事件回调</param>
+    /// <param name="isSlotUsable">槽位是否可用</param>
+    public void SetupButton(
         EquipmentItemSO equipmentItem, 
-        int index, Action<int> onTabSelected, 
+        int index, 
+        Action<int> onTabSelected, 
         Action<int> onTabClicked,
         bool isSlotUsable) {
         _index = index;
@@ -53,11 +63,14 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
         ApplyButtonInteractableState();
     }
 
+    /// <summary>
+    /// 根据按钮是否可以互动设置相关样式以及功能
+    /// </summary>
     private void ApplyButtonInteractableState() {
         bool isInteractable = _isSlotUsable && _isInputEnabled;
         Button.interactable = isInteractable;
         _canvasGroup.interactable = isInteractable;
-        _canvasGroup.alpha = isInteractable ? 1f : 0.5f;
+        _canvasGroup.alpha = isInteractable ? 1f : 0f;
 
         Navigation navigation = _defaultNavigation;
 

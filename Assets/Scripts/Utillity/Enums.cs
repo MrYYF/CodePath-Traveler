@@ -73,7 +73,12 @@ public enum EquipmentCategory {
 
 public enum EquipSlot {
     None,
-    Weapon,
+    Sword,
+    Dagger,
+    Axe,
+    Spear,
+    Bow,
+    Staff,
     Shield,
     Head,
     Body,
@@ -89,4 +94,19 @@ public enum WeaponType {
     Spear,
     Bow,
     Staff
+}
+
+public enum StatType {
+    MaxHP = 0,
+    MaxSP = 1,
+    PAtk = 2,
+    PDef = 3,
+    MAtk = 4,
+    MDef = 5,
+    Speed = 6,
+    Accuracy = 7,
+    Evasion = 8,
+    CurrentHP = 100,
+    CurrentSP = 101,
+    CurrentBP = 102,
 }
