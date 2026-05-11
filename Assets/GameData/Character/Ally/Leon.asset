@@ -39,3 +39,5 @@ MonoBehaviour:
     Matk: 0
     Mdef: 0
     Speed: 0
+  EquipableWeaponTypes: 01000000
+  InitialEquipment: []

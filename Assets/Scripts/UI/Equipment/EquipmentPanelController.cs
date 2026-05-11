@@ -27,6 +27,7 @@ public class EquipmentPanelController : PanelController
     private List<EquipmentCharacterTabButton> _tabButtons = new();
     private List<CharacterRuntimeData> _partyMembers = new();
     private int _memberIndex;
+    private int _slotIndex;
     private CharacterRuntimeData CurrentMember => 
         _memberIndex >=0 && _memberIndex<_partyMembers.Count ? 
         _partyMembers[_memberIndex] : 
@@ -56,36 +57,7 @@ public class EquipmentPanelController : PanelController
     };
     #endregion
 
-    /// <summary>
-    /// 刷新当前标签人物的装备页面
-    /// </summary>
-    private void RefreshCurrentMemberView() {
-        memberNameText.text = CurrentMember?.DisplayName;
-
-        for (int i = 0; i < FixedSlotOrder.Length; i++) {
-            EquipmentSlotButton equipmentSlotButton = slotButtons[i];
-            EquipSlot equipSlot = FixedSlotOrder[i];
-            EquipmentItemSO equipmentItem = CurrentMember?.GetEquippedItem(equipSlot);
-
-            equipmentSlotButton.gameObject.SetActive(true);
-            equipmentSlotButton.SetupButton(equipmentItem, i, null, null, IsSlotUsableForMember(CurrentMember, i));
-            Debug.Log($"{FixedSlotOrder[i].ToString()} 是否可以被装备：{IsSlotUsableForMember(CurrentMember, i)}");
-        }
-    }
-
-    /// <summary>
-    /// 判断人物能否装备某个槽位对应的装备类型
-    /// </summary>
-    /// <param name="member">成员数据</param>
-    /// <param name="slotIndex">槽位对应序列值</param>
-    /// <returns></returns>
-    private bool IsSlotUsableForMember(CharacterRuntimeData member,int slotIndex) {
-        //非武器槽位默认可以
-        if(slotIndex >= WeaponSlotTypes.Length) 
-            return true;
-
-        return member.Definition is AllyDefinitionSO ally && ally.CanEquipWeaponType(WeaponSlotTypes[slotIndex]);
-    } 
+    #region tab人物标签相关
 
     /// <summary>
     /// 用角色运行时数据初始化人物标签
@@ -104,6 +76,7 @@ public class EquipmentPanelController : PanelController
         BuildCharacterTabs();
         ClampMemberIndex();
         RefreshCurrentMemberView();
+        EnterCharacterTabLayer();
     }
 
     /// <summary>
@@ -114,18 +87,10 @@ public class EquipmentPanelController : PanelController
 
         for (int i = 0; i < _partyMembers.Count; i++) {
             EquipmentCharacterTabButton tab = Instantiate(tabPrefab, tabRoot);
-            tab.Setup(_partyMembers[i], i, onTabSelected, onTabClicked);
-            tab.SetSelectedVisual(i==_memberIndex); 
+            tab.Setup(_partyMembers[i], i, OnTabSelected, OnTabClicked);
+            tab.SetSelectedVisual(i == _memberIndex);
             _tabButtons.Add(tab);
         }
-    }
-
-    private void onTabClicked(int index) {
-        throw new NotImplementedException();
-    }
-
-    private void onTabSelected(int index) {
-        _memberIndex = index;
     }
 
     /// <summary>
@@ -148,5 +113,161 @@ public class EquipmentPanelController : PanelController
             0;
     }
 
-    
+    /// <summary>
+    /// 刷新当前标签人物的装备页面，同时更新人物可用装备槽位以及视觉显示效果
+    /// </summary>
+    private void RefreshCurrentMemberView() {
+        memberNameText.text = CurrentMember?.DisplayName;
+
+        for (int i = 0; i < FixedSlotOrder.Length; i++) {
+            EquipmentSlotButton equipmentSlotButton = slotButtons[i];
+            EquipSlot equipSlot = FixedSlotOrder[i];
+            EquipmentItemSO equipmentItem = CurrentMember?.GetEquippedItem(equipSlot);
+
+            equipmentSlotButton.gameObject.SetActive(true);
+            equipmentSlotButton.SetupButton(equipmentItem, i, OnSlotSelected, OnSlotClicked, IsSlotUsableForMember(CurrentMember, i));
+        }
+
+        OnSlotSelected(_memberIndex);
+        UpdateTabSelectionVisual();
+        RefreshLeftCategoryColors(CurrentMember);
+    }
+
+    private void RefreshLeftCategoryColors(CharacterRuntimeData member) {
+        for (int i = 0; i < leftCategoryNameTexts.Length; i++) {
+            leftCategoryNameTexts[i].color = IsSlotUsableForMember(member, i) ?
+                leftCategoryEnableColor :
+                leftCategoryDisableColor;
+        }
+    }
+
+    /// <summary>
+    /// 判断人物能否装备某个槽位对应的装备类型
+    /// </summary>
+    /// <param name="member">成员数据</param>
+    /// <param name="slotIndex">槽位对应序列值</param>
+    /// <returns></returns>
+    private bool IsSlotUsableForMember(CharacterRuntimeData member,int slotIndex) {
+        //非武器槽位默认可以
+        if(slotIndex >= WeaponSlotTypes.Length) 
+            return true;
+
+        return member.Definition is AllyDefinitionSO ally && ally.CanEquipWeaponType(WeaponSlotTypes[slotIndex]);
+    } 
+
+    /// <summary>
+    /// 进入角色标签层
+    /// </summary>
+    private void EnterCharacterTabLayer() {
+        SetCharacterTabInteractable(true);
+        UpdateTabSelectionVisual();
+        _memberIndex = Mathf.Clamp(_memberIndex, 0, _partyMembers.Count - 1);
+        FirstSelectedButton = _tabButtons[_memberIndex].Button;
+        SetDefaultSelection();
+    }
+
+    /// <summary>
+    /// 设置角色标签是否可互动
+    /// </summary>
+    /// <param name="interactable">是否可互动</param>
+    private void SetCharacterTabInteractable(bool interactable) {
+        tabCanvasGroup.interactable = interactable;
+
+        for (int i = 0; i < _tabButtons.Count; i++) {
+            _tabButtons[i].Button.interactable = interactable;
+        }
+    }
+
+    /// <summary>
+    /// 标签被点击时的回调函数
+    /// </summary>
+    /// <param name="index"></param>
+    private void OnTabClicked(int index) {
+        OnTabSelected(index);
+        EnterSlotLayer();
+    }
+
+    /// <summary>
+    /// 标签被选择时的回调函数
+    /// </summary>
+    /// <param name="index"></param>
+    private void OnTabSelected(int index) {
+        _memberIndex = index;
+        RefreshCurrentMemberView();
+    }
+
+    /// <summary>
+    /// 更新标签选中的视觉状态
+    /// </summary>
+    private void UpdateTabSelectionVisual() {
+        for (int i = 0; i < _tabButtons.Count; i++) {
+            _tabButtons[i].SetSelectedVisual(i == _memberIndex);
+        }
+    }
+    #endregion
+
+    #region 装备槽位相关
+    private void EnterSlotLayer() {
+        SetCharacterTabInteractable(false);
+        SetSlotListInteractable(true);
+        EnsureSelectedSlotValid();
+        if (_slotIndex >= slotButtons.Length) return;
+        FirstSelectedButton = slotButtons[_slotIndex].Button;
+        SetDefaultSelection();
+    }
+
+    private void SetSlotListInteractable(bool interactable) {
+        slotListCanvasGroup.interactable = interactable;
+
+        for (int i = 0; i < slotButtons.Length; i++) {
+            slotButtons[i].SetInputEnabled(interactable);
+        }
+    }
+
+    /// <summary>
+    /// 选择可用的装备槽位序列值
+    /// </summary>
+    private void EnsureSelectedSlotValid() {
+        if (IsSlotIndexUsabel(_slotIndex))
+            return;
+
+        for (int i = 0; i < FixedSlotOrder.Length; i++) {
+            if (IsSlotIndexUsabel(i)) {
+                _slotIndex = i;
+                return;
+            }
+        }
+
+        _slotIndex = -1;
+    }
+
+    /// <summary>
+    /// 判断指定序号的装备槽位是否可用
+    /// </summary>
+    /// <param name="index">装备槽位序列值</param>
+    /// <returns>是否可用</returns>
+    private bool IsSlotIndexUsabel(int index) =>
+        index >= 0 &&
+        index < slotButtons.Length &&
+        IsSlotUsableForMember(CurrentMember, index);
+
+    /// <summary>
+    /// 装备槽位选中回调函数
+    /// </summary>
+    /// <param name="index">装备槽位序列值</param>
+    private void OnSlotSelected(int index) {
+        if (CurrentMember == null || statPreviewPanel == null)
+            return;
+        statPreviewPanel.Refresh(CurrentMember.GetTotalStats(), CurrentMember.GetTotalStats(), false);
+    }
+
+    /// <summary>
+    /// 装备槽位点击回调函数
+    /// </summary>
+    /// <param name="index">装备槽位序列值</param>
+    private void OnSlotClicked(int index) {
+        OnSlotSelected(index);
+
+    }
+    #endregion
 }

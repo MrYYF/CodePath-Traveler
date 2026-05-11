@@ -18,8 +18,10 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
 
     public Button Button {
         get {
-            _button ??= GetComponent<Button>();
-            _defaultNavigation = _button.navigation;
+            if(_button == null) {
+                _button = GetComponent<Button>();
+                _defaultNavigation = _button.navigation;
+            }
             return _button;
         }
     }
@@ -60,6 +62,11 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
         string displayName = equipmentItem != null ? equipmentItem.ItemName : "Î´×°±¸";
         slotNameText.text = displayName;
 
+        ApplyButtonInteractableState();
+    }
+
+    public void SetInputEnabled(bool isEnabled) {
+        _isInputEnabled = isEnabled;
         ApplyButtonInteractableState();
     }
 

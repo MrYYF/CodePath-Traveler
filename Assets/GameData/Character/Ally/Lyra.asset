@@ -44,4 +44,4 @@ MonoBehaviour:
   - equipSlot: 8
     equiptmentItem: {fileID: 11400000, guid: 8ea69d882bd57d745b65d0c0bb8cf4ea, type: 2}
   - equipSlot: 6
-    equiptmentItem: {fileID: 11400000, guid: 5e19e470e7638ff449599fb6c341ffdb, type: 2}
+    equiptmentItem: {fileID: 11400000, guid: 3fbf1ffdfa8837245af1c20eed81e07a, type: 2}
