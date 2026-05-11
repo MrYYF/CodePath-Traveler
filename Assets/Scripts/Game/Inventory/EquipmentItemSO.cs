@@ -1,4 +1,8 @@
 
+
+/// <summary>
+/// 装备信息so文件，包含了装备的类别、数值
+/// </summary>
 [CreateAssetMenu(menuName = "Inventory/Equiptment Item")]
 public class EquipmentItemSO : ItemDefinitionSO
 {

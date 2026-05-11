@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8635739886209505875}
   - component: {fileID: 3806075794970466742}
   - component: {fileID: 1620688214689392070}
+  - component: {fileID: 6052188265460480162}
   m_Layer: 5
   m_Name: CandidateItemButton
   m_TagString: Untagged
@@ -151,6 +152,23 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6052188265460480162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762998129149714177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 741ba828b2a841848ab8466867a4a02e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 2750684661765473043}
+  itemNameText: {fileID: 1806942744250566009}
+  ownedCountText: {fileID: 1270864639228259461}
+  normalTextColor: {r: 0, g: 0, b: 0, a: 1}
+  disabledTextColor: {r: 0.72, g: 0.72, b: 0.72, a: 1}
 --- !u!1 &863866259619731945
 GameObject:
   m_ObjectHideFlags: 0

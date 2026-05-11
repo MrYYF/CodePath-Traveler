@@ -1,7 +1,7 @@
 
 
 /// <summary>
-/// 物品定义类，包含物品的基本信息和属性
+/// 物品定义类，包含物品的名称、图标等基本信息和属性
 /// </summary>
 public class ItemDefinitionSO : ScriptableObject
 {

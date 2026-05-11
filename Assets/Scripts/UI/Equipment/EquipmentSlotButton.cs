@@ -5,17 +5,15 @@ using UnityEngine.UI;
 
 
 public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
+
+    [SerializeField] private Image slotIconImage;
     [SerializeField] private TMP_Text slotNameText;
 
     private CanvasGroup _canvasGroup;
-
     private Button _button;
-
     private int _index;
-
     private Action<int> _onTabSelected;
     private Action<int> _onTabClicked;
-
     public Button Button {
         get {
             if(_button == null) {
@@ -28,8 +26,8 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
 
     private bool _isSlotUsable = true;
     private bool _isInputEnabled = true;
-
     private Navigation _defaultNavigation;
+    public Sprite SlotIconSprite => slotIconImage.sprite;
 
     private void Awake() {
         _canvasGroup = GetComponent<CanvasGroup>();

@@ -1,8 +1,7 @@
 using System;
 using TMPro;
 
-public class EquipmentPanelController : PanelController
-{
+public class EquipmentPanelController : PanelController {
     [Header("Title")]
     [SerializeField] private TMP_Text memberNameText;
 
@@ -23,14 +22,18 @@ public class EquipmentPanelController : PanelController
     [Header("Stat Preview")]
     [SerializeField] private EquipmentStatPreviewPanel statPreviewPanel;
 
+    [Header("Candidate Panel")]
+    [SerializeField] private GameObject candidatePanelRoot;
+    [SerializeField] private EquipmentCandidatePanelController candidatePanelController;
+
     #region 运行时缓存
     private List<EquipmentCharacterTabButton> _tabButtons = new();
     private List<CharacterRuntimeData> _partyMembers = new();
     private int _memberIndex;
     private int _slotIndex;
-    private CharacterRuntimeData CurrentMember => 
-        _memberIndex >=0 && _memberIndex<_partyMembers.Count ? 
-        _partyMembers[_memberIndex] : 
+    private CharacterRuntimeData CurrentMember =>
+        _memberIndex >= 0 && _memberIndex < _partyMembers.Count ?
+        _partyMembers[_memberIndex] :
         null;
     #endregion
     #region 固定槽位顺序
@@ -147,13 +150,13 @@ public class EquipmentPanelController : PanelController
     /// <param name="member">成员数据</param>
     /// <param name="slotIndex">槽位对应序列值</param>
     /// <returns></returns>
-    private bool IsSlotUsableForMember(CharacterRuntimeData member,int slotIndex) {
+    private bool IsSlotUsableForMember(CharacterRuntimeData member, int slotIndex) {
         //非武器槽位默认可以
-        if(slotIndex >= WeaponSlotTypes.Length) 
+        if (slotIndex >= WeaponSlotTypes.Length)
             return true;
 
         return member.Definition is AllyDefinitionSO ally && ally.CanEquipWeaponType(WeaponSlotTypes[slotIndex]);
-    } 
+    }
 
     /// <summary>
     /// 进入角色标签层
@@ -267,7 +270,19 @@ public class EquipmentPanelController : PanelController
     /// <param name="index">装备槽位序列值</param>
     private void OnSlotClicked(int index) {
         OnSlotSelected(index);
-
+        OpenCandidateList(index);
     }
+
+
+    #endregion
+
+    #region 可选装备面板
+    private void OpenCandidateList(int index) {
+        candidatePanelRoot.SetActive(true);
+        EquipSlot slot = FixedSlotOrder[index];
+        string slotName = leftCategoryNameTexts[index].text;
+        candidatePanelController.OpenForSlot(slot, CurrentMember, slotName, slotButtons[index].SlotIconSprite);
+    }
+
     #endregion
 }
