@@ -46,6 +46,6 @@ public class EquipmentCandidateItemButton : MonoBehaviour, ISelectHandler {
     }
 
     void ISelectHandler.OnSelect(BaseEventData eventData) {
-        throw new NotImplementedException();
+        
     }
 }

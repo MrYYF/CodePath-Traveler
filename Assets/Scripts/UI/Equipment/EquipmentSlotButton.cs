@@ -34,10 +34,6 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
         Button.onClick.AddListener(HandleClicked);
     }
 
-    private void OnDisable() {
-        _button.onClick.RemoveAllListeners();
-    }
-
     /// <summary>
     /// 初始化按钮
     /// </summary>
@@ -56,6 +52,7 @@ public class EquipmentSlotButton : MonoBehaviour, ISelectHandler {
         _onTabSelected = onTabSelected;
         _onTabClicked = onTabClicked;
         _isSlotUsable = isSlotUsable;
+        _isInputEnabled = true;
 
         string displayName = equipmentItem != null ? equipmentItem.ItemName : "未装备";
         slotNameText.text = displayName;

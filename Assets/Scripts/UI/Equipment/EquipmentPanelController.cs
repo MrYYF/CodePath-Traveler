@@ -36,7 +36,7 @@ public class EquipmentPanelController : PanelController {
         _partyMembers[_memberIndex] :
         null;
     #endregion
-    #region 固定槽位顺序
+    #region 固定属性
     private readonly WeaponType[] WeaponSlotTypes = {
         WeaponType.Dagger,
         WeaponType.Sword,
@@ -58,7 +58,13 @@ public class EquipmentPanelController : PanelController {
         EquipSlot.Accessory1,
         EquipSlot.Accessory2
     };
+    private enum FocusLayer {
+        CharacterTabs,
+        SlotList,
+        CandidateList
+    }
     #endregion
+    private FocusLayer _focusLayer = FocusLayer.CharacterTabs;
 
     #region tab人物标签相关
 
@@ -164,9 +170,11 @@ public class EquipmentPanelController : PanelController {
     private void EnterCharacterTabLayer() {
         SetCharacterTabInteractable(true);
         UpdateTabSelectionVisual();
+        SetSlotListInteractable(false);
         _memberIndex = Mathf.Clamp(_memberIndex, 0, _partyMembers.Count - 1);
         FirstSelectedButton = _tabButtons[_memberIndex].Button;
         SetDefaultSelection();
+        _focusLayer = FocusLayer.CharacterTabs;
     }
 
     /// <summary>
@@ -210,20 +218,29 @@ public class EquipmentPanelController : PanelController {
     #endregion
 
     #region 装备槽位相关
+    /// <summary>
+    /// 进入装备槽位选择层
+    /// </summary>
     private void EnterSlotLayer() {
+        CloseCandidateListInternal();
         SetCharacterTabInteractable(false);
         SetSlotListInteractable(true);
         EnsureSelectedSlotValid();
         if (_slotIndex >= slotButtons.Length) return;
         FirstSelectedButton = slotButtons[_slotIndex].Button;
         SetDefaultSelection();
+        _focusLayer = FocusLayer.SlotList;
     }
 
+    /// <summary>
+    /// 设置装备槽位是否可互动
+    /// </summary>
+    /// <param name="interactable"></param>
     private void SetSlotListInteractable(bool interactable) {
         slotListCanvasGroup.interactable = interactable;
 
         for (int i = 0; i < slotButtons.Length; i++) {
-            slotButtons[i].SetInputEnabled(interactable);
+            slotButtons[i].SetInputEnabled(IsSlotUsableForMember(CurrentMember,i));
         }
     }
 
@@ -277,12 +294,41 @@ public class EquipmentPanelController : PanelController {
     #endregion
 
     #region 可选装备面板
+    /// <summary>
+    /// 打开待选装备列表面板
+    /// </summary>
+    /// <param name="index"></param>
     private void OpenCandidateList(int index) {
+        SetSlotListInteractable(false);
+        SetCharacterTabInteractable(false);
+
         candidatePanelRoot.SetActive(true);
         EquipSlot slot = FixedSlotOrder[index];
         string slotName = leftCategoryNameTexts[index].text;
         candidatePanelController.OpenForSlot(slot, CurrentMember, slotName, slotButtons[index].SlotIconSprite);
+        _focusLayer = FocusLayer.CandidateList;
     }
 
+    /// <summary>
+    /// 关闭待选装备列表面板
+    /// </summary>
+    private void CloseCandidateListInternal() {
+        candidatePanelController.Close();
+        candidatePanelRoot.SetActive(false);
+    }
     #endregion
+
+    public override bool HandleCancelInput() {
+        if (candidatePanelRoot.activeInHierarchy) {
+            EnterSlotLayer();
+            return true;
+        }
+
+        if(_focusLayer == FocusLayer.SlotList) {
+            EnterCharacterTabLayer();
+            return true;
+        }
+
+        return false;
+    }
 }

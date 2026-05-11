@@ -2386,6 +2386,11 @@ MonoBehaviour:
   - {fileID: 1608600555}
   - {fileID: 1797342734}
   - {fileID: 154732702}
+  - {fileID: 430721949}
+  - {fileID: 1916381846}
+  - {fileID: 1558075764}
+  - {fileID: 238147388}
+  - {fileID: 233287988}
   leftCategoryEnableColor: {r: 0, g: 0, b: 0, a: 1}
   leftCategoryDisableColor: {r: 0.72, g: 0.72, b: 0.72, a: 1}
   statPreviewPanel: {fileID: 927098929}
@@ -3974,6 +3979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 1607187501}
   slotNameText: {fileID: 210908277}
 --- !u!225 &248849019
 CanvasGroup:
@@ -8923,6 +8929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 185985632}
   slotNameText: {fileID: 1424239126}
 --- !u!225 &633811850
 CanvasGroup:
@@ -11001,6 +11008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 489471292}
   slotNameText: {fileID: 133240952}
 --- !u!225 &813282631
 CanvasGroup:
@@ -11049,9 +11057,9 @@ RectTransform:
   - {fileID: 1381415329}
   m_Father: {fileID: 631277040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 270.72394, y: -252.5}
   m_SizeDelta: {x: 348, y: 57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &814772877
@@ -12595,9 +12603,9 @@ RectTransform:
   - {fileID: 81684869}
   m_Father: {fileID: 631277040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 270.72394, y: -78.5}
   m_SizeDelta: {x: 348, y: 57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &929646528
@@ -12870,6 +12878,12 @@ MonoBehaviour:
   IconSet: {fileID: 11400000, guid: 1bc2bd84201e0874687ba6bbae504fce, type: 2}
   CurrentInventory:
   - ItemDefinition: {fileID: 11400000, guid: ce4c3404266355c429d849219e664bf9, type: 2}
+    Quantity: 5
+  - ItemDefinition: {fileID: 11400000, guid: 3991fafba4221944598574310a0e0d66, type: 2}
+    Quantity: 5
+  - ItemDefinition: {fileID: 11400000, guid: 3fbf1ffdfa8837245af1c20eed81e07a, type: 2}
+    Quantity: 5
+  - ItemDefinition: {fileID: 11400000, guid: 8ea69d882bd57d745b65d0c0bb8cf4ea, type: 2}
     Quantity: 5
   Currency: 1000
 --- !u!4 &963267470
@@ -13233,6 +13247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 1411297492}
   slotNameText: {fileID: 1395493281}
 --- !u!225 &979946459
 CanvasGroup:
@@ -15184,6 +15199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 2017501746}
   slotNameText: {fileID: 1200275873}
 --- !u!225 &1111113348
 CanvasGroup:
@@ -15416,6 +15432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 1372609371}
   slotNameText: {fileID: 226001163}
 --- !u!225 &1160480028
 CanvasGroup:
@@ -16839,7 +16856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1330641381
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19440,6 +19457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 290550466}
   slotNameText: {fileID: 335134322}
 --- !u!225 &1495607074
 CanvasGroup:
@@ -19867,6 +19885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 1199146545}
   slotNameText: {fileID: 1061431698}
 --- !u!225 &1503427483
 CanvasGroup:
@@ -20958,6 +20977,7 @@ GameObject:
   - component: {fileID: 1570549879}
   - component: {fileID: 1570549883}
   - component: {fileID: 1570549882}
+  - component: {fileID: 1570549885}
   - component: {fileID: 1570549884}
   m_Layer: 5
   m_Name: CandidatePanel
@@ -20965,7 +20985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1570549879
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21044,6 +21064,18 @@ MonoBehaviour:
   candidateListRoot: {fileID: 450889603}
   candidateButtonPrefab: {fileID: 6052188265460480162, guid: 62a12b44550d271428ad54f1c16f5943,
     type: 3}
+--- !u!225 &1570549885
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570549878}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1578089665
 GameObject:
   m_ObjectHideFlags: 0
@@ -21979,9 +22011,9 @@ RectTransform:
   - {fileID: 644257716}
   m_Father: {fileID: 631277040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 270.72394, y: -165.5}
   m_SizeDelta: {x: 348, y: 57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1671583723
@@ -22810,6 +22842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 613381172}
   slotNameText: {fileID: 95865976}
 --- !u!225 &1736613876
 CanvasGroup:
@@ -23758,6 +23791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 1305341875}
   slotNameText: {fileID: 318832987}
 --- !u!225 &1795659441
 CanvasGroup:
@@ -25240,6 +25274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcdd45ae6ac96dc4987effbf9d9ca61d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIconImage: {fileID: 1952800488}
   slotNameText: {fileID: 1342572964}
 --- !u!225 &1932152205
 CanvasGroup:
