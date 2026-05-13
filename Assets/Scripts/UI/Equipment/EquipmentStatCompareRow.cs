@@ -17,7 +17,7 @@ public class EquipmentStatCompareRow : MonoBehaviour {
             return;
         }
 
-        modifyValueText.text = previewValue.ToString();
+        modifyValueText.text = " > " + previewValue.ToString();
 
         if(previewValue > currentValue) {
             modifyValueText.color = positiveColor;

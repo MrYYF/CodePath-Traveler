@@ -11,7 +11,7 @@ public class ShopAction : ActionBase
         EventBus.Publish(new PanelRequestEvent(this));
     }
 
-    public bool TryExcuteTransaction(PanelType panelType,ItemDefinitionSO itemDefinition) {
+    public bool TryExecuteTransaction(PanelType panelType,ItemDefinitionSO itemDefinition) {
         InventoryManager inventoryManager = InventoryManager.Instance;
         int playerCurrency = inventoryManager.Currency;
         switch (panelType) {

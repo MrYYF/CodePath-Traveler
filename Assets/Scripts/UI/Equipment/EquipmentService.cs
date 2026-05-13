@@ -10,7 +10,7 @@ public static class EquipmentService
     /// <param name="targetSlot">目标槽位</param>
     /// <returns></returns>
     public static List<EquipmentItemSO> BuildCandidates(InventoryManager inventory,EquipSlot targetSlot) {
-        List<EquipmentItemSO> result = new List<EquipmentItemSO>();
+        List<EquipmentItemSO> result = new List<EquipmentItemSO>() { null };
 
         for (int i = 0; i < inventory.CurrentInventory.Count; i++) {
             InventoryItem item = inventory.CurrentInventory[i];
@@ -19,7 +19,7 @@ public static class EquipmentService
             if (item == null || item.Quantity <= 0)
                 continue;
 
-            // 物品类型为装备
+            // 物品类型为非装备
             if (item.ItemDefinition is not EquipmentItemSO equipmentItem)
                 continue;
 
@@ -44,7 +44,7 @@ public static class EquipmentService
         if (item == null) return false;
 
         return item.equipmentCategory switch {
-            EquipmentCategory.Weapon => slot == (EquipSlot)((int)item.weaponType - 1),
+            EquipmentCategory.Weapon => slot == (EquipSlot)((int)item.weaponType),
             EquipmentCategory.Shield => slot == EquipSlot.Shield,
             EquipmentCategory.Head => slot == EquipSlot.Head,
             EquipmentCategory.Body => slot == EquipSlot.Body,
@@ -72,5 +72,32 @@ public static class EquipmentService
         }
 
         return totalQuantity;
+    }
+
+    /// <summary>
+    /// 构建角色属性预览信息
+    /// </summary>
+    /// <param name="member">角色运行时数据信息</param>
+    /// <param name="slot">装备槽位</param>
+    /// <param name="previewItem">预览的装备</param>
+    /// <returns></returns>
+    public static StatBlock BuildPreviewTotalStats(CharacterRuntimeData member,EquipSlot slot, EquipmentItemSO previewItem) {
+        if (member == null)
+            return StatBlock.Zero;
+
+        // 当前角色总属性
+        StatBlock previewTotal = member.GetTotalStats();
+        // 当前装备物品属性
+        EquipmentItemSO currentItem = member.GetEquippedItem(slot);
+
+        if(currentItem != null) {
+            previewTotal += currentItem.statBouns * -1;
+        }
+
+        if(previewItem != null) {
+            previewTotal += previewItem.statBouns;
+        }
+
+        return previewTotal;
     }
 }

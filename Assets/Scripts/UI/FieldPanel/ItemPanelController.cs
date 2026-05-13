@@ -1,7 +1,6 @@
 using System;
 
-public class ItemPanelController : PanelController
-{
+public class ItemPanelController : PanelController {
     [Header("Item Panel")]
     [SerializeField] private ItemButton itemButtonPrefab; // 物品按钮预制体
     [SerializeField] private RectTransform itemButtonParent; // 物品按钮的父对象
@@ -80,7 +79,17 @@ public class ItemPanelController : PanelController
     /// <param name="inventoryManager">库存管理器实例</param>
     private void BuildSellList(InventoryManager inventoryManager) {
         foreach (InventoryItem item in inventoryManager.CurrentInventory) {
-            AddItemButton(new InventoryItem(item.ItemDefinition, item.Quantity));
+            int availableForSell = EquipmentService.GetAvailableItemCount(inventoryManager, PartyManager.Instance, item.ItemDefinition);
+            if (availableForSell > 0) {
+                AddItemButton(new InventoryItem(item.ItemDefinition, availableForSell));
+                continue;
+            }
+            if (availableForSell == 0 &&
+                item.ItemDefinition != null &&
+                item.ItemDefinition.itemType == ItemType.Equipment) {
+
+                AddItemButton(new InventoryItem(item.ItemDefinition, item.Quantity), false, true);
+            }
         }
 
     }
@@ -104,6 +113,10 @@ public class ItemPanelController : PanelController
         }
         else {
             itemButton.SetupButton(inventoryItem, _onItemClick);
+        }
+
+        if (equippedNameFormat) {
+            itemButton.SetEquippedNameFormat();
         }
 
         itemButton.CurrentButton.interactable = interactable;

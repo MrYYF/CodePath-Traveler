@@ -73,10 +73,10 @@ public enum EquipmentCategory {
 
 public enum EquipSlot {
     None,
-    Sword,
     Dagger,
-    Axe,
+    Sword,
     Spear,
+    Axe,
     Bow,
     Staff,
     Shield,
@@ -88,10 +88,10 @@ public enum EquipSlot {
 
 public enum WeaponType {
     None = 0,
-    Sword,
     Dagger,
-    Axe,
+    Sword,
     Spear,
+    Axe,
     Bow,
     Staff
 }

@@ -2,15 +2,15 @@ using Framework.Event;
 using System;
 
 
-public class UIManager : MonoBehaviour, 
+public class UIManager : MonoBehaviour,
     IEventReceiver<PanelRequestEvent> {
 
     [Header("根节点与特殊面板引用")]
-    [SerializeField,Tooltip("探索模式下显示总体 UI 根节点")] 
+    [SerializeField, Tooltip("探索模式下显示总体 UI 根节点")]
     private GameObject fieldUIRoot;
     [SerializeField] private GameObject mainPanel;
 
-    private readonly Dictionary<Type,PanelController> _panelControllerDict = new();
+    private readonly Dictionary<Type, PanelController> _panelControllerDict = new();
     private readonly List<PanelController> _allPanelList = new();
 
     #region 生命周期函数
@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour,
             HandleGlobalCancelInput(mode);
             return;
         }
-        if(input.GetMenuPressed()) {
+        if (input.GetMenuPressed()) {
             HandleGlobalMenuInput(mode);
         }
     }
@@ -48,18 +48,25 @@ public class UIManager : MonoBehaviour,
     private void HandleGlobalMenuInput(GameMode currentMode) {
         // 如果主菜单面板已经打开，则关闭主菜单面板，并切换回探索模式
         if (mainPanel.activeInHierarchy) {
-            CloseAllPanel();
+            while (true) {
+                if (mainPanel.GetComponent<MainPanelController>().HandleCancelInput()) {
+                    continue;
+                }
+                break;
+            }
+            //CloseAllPanel();
+
             mainPanel.SetActive(false);
             GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
             return;
         }
 
         // 在战斗模式和交互菜单模式下，菜单键不应该打开主菜单面板，因此直接返回，不执行后续逻辑
-        if (currentMode == GameMode.Battle || currentMode == GameMode.InteractionMenu) 
+        if (currentMode == GameMode.Battle || currentMode == GameMode.InteractionMenu)
             return;
 
         // 如果当前有任何面板打开，则不处理菜单输入，避免与面板内的菜单键冲突
-        if (IsAnyPanelOpen()) 
+        if (IsAnyPanelOpen())
             return;
 
         mainPanel.SetActive(true);
@@ -77,7 +84,7 @@ public class UIManager : MonoBehaviour,
 
         // 如果没有任何面板打开，则不执行后续逻辑
         if (!IsAnyPanelOpen()) {
-            if(currentMode != GameMode.Explore)
+            if (currentMode != GameMode.Explore)
                 // 切换回探索模式
                 GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
             return;
@@ -104,7 +111,7 @@ public class UIManager : MonoBehaviour,
             if (panel.gameObject.activeSelf == false) {
                 continue;
             }
-            if(panel.HandleCancelInput()) {
+            if (panel.HandleCancelInput()) {
                 return true;
             }
         }
@@ -115,7 +122,7 @@ public class UIManager : MonoBehaviour,
             if (panel.gameObject.activeSelf) {
                 return true;
             }
-        } 
+        }
         return false;
     }
 

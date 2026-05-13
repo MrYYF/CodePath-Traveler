@@ -48,6 +48,20 @@ public struct StatBlock {
             Evasion = a.Evasion + b.Evasion
         };
     }
+
+    public static StatBlock operator *(StatBlock a, float mutilplier) {
+        return new StatBlock {
+            MaxHP = Mathf.RoundToInt(a.MaxHP * mutilplier),
+            MaxSP = Mathf.RoundToInt(a.MaxSP * mutilplier),
+            PAtk = Mathf.RoundToInt(a.PAtk * mutilplier),
+            PDef = Mathf.RoundToInt(a.PDef * mutilplier),
+            MAtk = Mathf.RoundToInt(a.MAtk * mutilplier),
+            MDef = Mathf.RoundToInt(a.MDef * mutilplier),
+            Speed = Mathf.RoundToInt(a.Speed * mutilplier),
+            Accuracy = Mathf.RoundToInt(a.Accuracy * mutilplier),
+            Evasion = Mathf.RoundToInt(a.Evasion * mutilplier),
+        };
+    }
 }
 
 

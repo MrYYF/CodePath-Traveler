@@ -28,10 +28,6 @@ public class ItemButton : MonoBehaviour, ISelectHandler, IDeselectHandler {
         _button.onClick.AddListener(OnClick);
     }
 
-    public void GetCurrentButton() {
-        _button = GetComponent<Button>();
-    }
-
     protected virtual void OnClick() {
         if (_onItemClick != null) {
             _onItemClick.Invoke(CurrentItemDefinition);
@@ -47,13 +43,19 @@ public class ItemButton : MonoBehaviour, ISelectHandler, IDeselectHandler {
         itemIcon.sprite = InventoryManager.Instance.IconSet.GetIconForItem(inventoryItem.ItemDefinition.itemIconKey);
         itemName.text = inventoryItem.ItemDefinition.ItemName;
         itemDescription.text = inventoryItem.ItemDefinition.ItemDescription;
-        if(itemQuantity != null)
+        if (itemQuantity != null)
             itemQuantity.text = inventoryItem.Quantity.ToString();
     }
 
     public void UpdateQuantity(int newQuantity) {
         if (itemQuantity != null) {
             itemQuantity.text = newQuantity.ToString();
+        }
+    }
+
+    public void SetEquippedNameFormat() {
+        if (CurrentItemDefinition != null) {
+            itemName.text = itemName.text + "(ÒÑ×°±¸)";
         }
     }
 

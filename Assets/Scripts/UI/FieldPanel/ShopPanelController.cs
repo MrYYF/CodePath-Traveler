@@ -2,8 +2,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class ShopPanelController : PanelController
-{
+public class ShopPanelController : PanelController {
     [Header("一级按钮与金额")]
     [SerializeField] private Button buyButton;
     [SerializeField] private Button sellButton;
@@ -32,7 +31,7 @@ public class ShopPanelController : PanelController
     private void Awake() {
         ReBindButtons(buyButton, OpenBuyPanel);
         ReBindButtons(sellButton, OpenSellPanel);
-        ReBindButtons(popupConfirmButton, ExcuteTransaction);
+        ReBindButtons(popupConfirmButton, ExecuteTransaction);
         ReBindButtons(popupCancelButton, CloseConfirmPopup);
         confirmPopup.gameObject.SetActive(false);
     }
@@ -56,7 +55,7 @@ public class ShopPanelController : PanelController
         leftPart.interactable = false;
         itemPanel.gameObject.SetActive(true);
 
-        itemPanel.SetupPanel(panelType,CurrentAction,OpenConfirmPopup);
+        itemPanel.SetupPanel(panelType, CurrentAction, OpenConfirmPopup);
     }
 
     private void OpenConfirmPopup(ItemDefinitionSO itemDefinition) {
@@ -64,9 +63,10 @@ public class ShopPanelController : PanelController
         confirmPopup.gameObject.SetActive(true);
         itemPanelCanvasGroup.interactable = false;
 
-        if(_currentShopType == PanelType.Buy) {
+        if (_currentShopType == PanelType.Buy) {
             SetupBuyPopup(itemDefinition);
-        } else {
+        }
+        else {
             SetupSellPopup(itemDefinition);
         }
     }
@@ -123,8 +123,11 @@ public class ShopPanelController : PanelController
         currencyAmountText.text = $"{instance.Currency}";
     }
 
-    private void ExcuteTransaction() {
-        CurrentShopAction.TryExcuteTransaction(_currentShopType, _pendingItem);
+    /// <summary>
+    /// 执行交易动作，根据当前商店面板的交易类型刷新面板中的道具数量信息
+    /// </summary>
+    private void ExecuteTransaction() {
+        CurrentShopAction.TryExecuteTransaction(_currentShopType, _pendingItem);
         confirmPopup.gameObject.SetActive(false);
         itemPanelCanvasGroup.interactable = true;
         UpdateCurrencyDisplay();
@@ -134,8 +137,8 @@ public class ShopPanelController : PanelController
             return;
         }
 
-        int remaining = InventoryManager.Instance.GetItemQuantity(_pendingItem);
-        if(remaining > 0) {
+        int remaining = EquipmentService.GetAvailableItemCount(InventoryManager.Instance, PartyManager.Instance, _pendingItem);
+        if (remaining > 0) {
             itemPanel.RefreshItemQuantity(_pendingItem);
             itemPanel.SetDefaultSelection();
             return;

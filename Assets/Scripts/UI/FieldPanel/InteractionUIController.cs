@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 交互UI控制器，负责监听交互状态变化事件，并根据当前交互对象的可用指令列表动态显示对应的头顶图标
 /// </summary>
-public class InteractionUIController : MonoBehaviour, 
+public class InteractionUIController : MonoBehaviour,
     IEventReceiver<InteractionChangedEvent>,
     IEventReceiver<InteractionMenuRequestEvent>,
     IEventReceiver<GameModeChangedEvent> {
@@ -55,7 +55,7 @@ public class InteractionUIController : MonoBehaviour,
     private void InitPool() {
         _iconPool = new ObjectPool<GameObject>(
             createFunc: () => Instantiate(actionIconPrefab, actionIconHolder),
-            actionOnGet: icon => { 
+            actionOnGet: icon => {
                 icon.SetActive(true);
                 icon.transform.SetAsLastSibling(); // 确保新获取的图标在最后面
             },
@@ -68,7 +68,7 @@ public class InteractionUIController : MonoBehaviour,
 
         _menuButtonPool = new ObjectPool<GameObject>(
             createFunc: () => Instantiate(actionMenuButtonPrefab, actionMenuHolder),
-            actionOnGet: button => { 
+            actionOnGet: button => {
                 button.SetActive(true);
                 button.transform.SetAsLastSibling(); // 确保新获取的按钮在最后面
             },
@@ -79,7 +79,7 @@ public class InteractionUIController : MonoBehaviour,
             maxSize: 16
         );
     }
-    
+
 
     private void syncPool(List<GameObject> activeList, ObjectPool<GameObject> pool, int targetCount) {
         while (activeList.Count > targetCount) {
@@ -132,15 +132,14 @@ public class InteractionUIController : MonoBehaviour,
     }
 
     public void OnEvent(GameModeChangedEvent evt) {
-        if(evt.NewGameMode == GameMode.InteractionMenu) 
+        if (evt.NewGameMode == GameMode.InteractionMenu)
             return;
-        
-        if(actionMenuHolder.gameObject.activeSelf) {
+
+        if (actionMenuHolder.gameObject.activeSelf) {
             HideAcitonMenu();
         }
 
         if (evt.NewGameMode == GameMode.Explore) {
-            Debug.Log("切换回探索模式，恢复头顶图标显示");
             ShowHeadIcons();
             return;
         }
@@ -166,7 +165,7 @@ public class InteractionUIController : MonoBehaviour,
 
     // 更新头顶图标的位置，使其始终跟随交互对象
     private void UpdateHeadIconPosition() {
-        if(_target == null || !_target.isActiveAndEnabled) {
+        if (_target == null || !_target.isActiveAndEnabled) {
             HideHeadIcons();
             return;
         }
@@ -175,10 +174,10 @@ public class InteractionUIController : MonoBehaviour,
         var worldPos = _headAnchor.position;
         var screenPos = Camera.main.WorldToScreenPoint(_headAnchor.position);
 
-        if(RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            transform as RectTransform, 
-            screenPos, 
-            null, 
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            transform as RectTransform,
+            screenPos,
+            null,
             out var localPos)) {
             actionIconHolder.anchoredPosition = localPos;
         }
@@ -211,7 +210,7 @@ public class InteractionUIController : MonoBehaviour,
 
     private void CloseMenu(bool restoreHeadIcons) {
         HideAcitonMenu();
-        if(restoreHeadIcons) {
+        if (restoreHeadIcons) {
             ShowHeadIcons();
         }
         else {
@@ -229,5 +228,5 @@ public class InteractionUIController : MonoBehaviour,
         ReleaseAllPool(_activeButtons, _menuButtonPool);
     }
 
-    
+
 }

@@ -66,6 +66,16 @@ public class EquipmentPanelController : PanelController {
     #endregion
     private FocusLayer _focusLayer = FocusLayer.CharacterTabs;
 
+    private void Awake() {
+        candidatePanelController.OnCandidateClicked += OnCandidateClicked;
+        candidatePanelController.OnSelectedIndexChanged += OnCandidateSelected;
+    }
+
+    private void OnDestroy() {
+        candidatePanelController.OnCandidateClicked -= OnCandidateClicked;
+        candidatePanelController.OnSelectedIndexChanged -= OnCandidateSelected;
+    }
+
     #region tab人物标签相关
 
     /// <summary>
@@ -137,7 +147,7 @@ public class EquipmentPanelController : PanelController {
             equipmentSlotButton.SetupButton(equipmentItem, i, OnSlotSelected, OnSlotClicked, IsSlotUsableForMember(CurrentMember, i));
         }
 
-        OnSlotSelected(_memberIndex);
+        statPreviewPanel.Refresh(CurrentMember.GetTotalStats(), CurrentMember.GetTotalStats(), false);
         UpdateTabSelectionVisual();
         RefreshLeftCategoryColors(CurrentMember);
     }
@@ -240,7 +250,7 @@ public class EquipmentPanelController : PanelController {
         slotListCanvasGroup.interactable = interactable;
 
         for (int i = 0; i < slotButtons.Length; i++) {
-            slotButtons[i].SetInputEnabled(IsSlotUsableForMember(CurrentMember,i));
+            slotButtons[i].SetInputEnabled(IsSlotUsableForMember(CurrentMember, i));
         }
     }
 
@@ -297,7 +307,7 @@ public class EquipmentPanelController : PanelController {
     /// <summary>
     /// 打开待选装备列表面板
     /// </summary>
-    /// <param name="index"></param>
+    /// <param name="index">装备槽位的序列值</param>
     private void OpenCandidateList(int index) {
         SetSlotListInteractable(false);
         SetCharacterTabInteractable(false);
@@ -307,6 +317,12 @@ public class EquipmentPanelController : PanelController {
         string slotName = leftCategoryNameTexts[index].text;
         candidatePanelController.OpenForSlot(slot, CurrentMember, slotName, slotButtons[index].SlotIconSprite);
         _focusLayer = FocusLayer.CandidateList;
+        _slotIndex = index;
+
+        FirstSelectedButton = candidatePanelController.GetFirstButton();
+        SetDefaultSelection();
+
+        UpdateCandidatePreview(0);
     }
 
     /// <summary>
@@ -316,6 +332,55 @@ public class EquipmentPanelController : PanelController {
         candidatePanelController.Close();
         candidatePanelRoot.SetActive(false);
     }
+
+    /// <summary>
+    /// 可选装备面板中选择时的回调
+    /// </summary>
+    /// <param name="index">可选装备序列值</param>
+    private void OnCandidateSelected(int index) {
+        UpdateCandidatePreview(index);
+    }
+
+    /// <summary>
+    /// 可选装备面板中点击时的回调
+    /// </summary>
+    /// <param name="index">可选装备序列值</param>
+    private void OnCandidateClicked(int index) {
+        EquipSlot equipSlot = FixedSlotOrder[_slotIndex];
+        EquipmentItemSO targetItem = candidatePanelController.GetCandidate(index);
+        if (CurrentMember.GetEquippedItem(equipSlot) == targetItem)
+            return;
+
+        CurrentMember.SetEquippedItem(equipSlot, targetItem);
+        RefreshCurrentMemberView();
+        OpenCandidateList(_slotIndex);
+
+    }
+
+    /// <summary>
+    /// 更新可选装备对能力值产生的变化
+    /// </summary>
+    /// <param name="candidateIndex">可选装备序列值</param>
+    private void UpdateCandidatePreview(int candidateIndex) {
+        if (!IsSlotIndexUsabel(_slotIndex))
+            return;
+        EquipSlot slot = FixedSlotOrder[_slotIndex];
+        EquipmentItemSO previewItem = candidatePanelController.GetCandidate(candidateIndex);
+        RefreshPreview(slot, previewItem, true);
+    }
+
+    /// <summary>
+    /// 刷新预览值面板数据
+    /// </summary>
+    /// <param name="slot"></param>
+    /// <param name="previewItem"></param>
+    /// <param name="isInPreviewMode"></param>
+    private void RefreshPreview(EquipSlot slot, EquipmentItemSO previewItem, bool isInPreviewMode) {
+        StatBlock currentTotal = CurrentMember.GetTotalStats();
+        StatBlock previewTotal = EquipmentService.BuildPreviewTotalStats(CurrentMember, slot, previewItem);
+
+        statPreviewPanel.Refresh(currentTotal, previewTotal, isInPreviewMode);
+    }
     #endregion
 
     public override bool HandleCancelInput() {
@@ -324,7 +389,7 @@ public class EquipmentPanelController : PanelController {
             return true;
         }
 
-        if(_focusLayer == FocusLayer.SlotList) {
+        if (_focusLayer == FocusLayer.SlotList) {
             EnterCharacterTabLayer();
             return true;
         }

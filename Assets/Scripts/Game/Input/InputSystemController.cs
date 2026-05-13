@@ -1,8 +1,7 @@
 using UnityEngine.InputSystem;
 using Framework.Event;
 
-public class InputSystemController : Singleton<InputSystemController>,IEventReceiver<GameModeChangedEvent>
-{
+public class InputSystemController : Singleton<InputSystemController>, IEventReceiver<GameModeChangedEvent> {
     private CharacterInputActions _inputActions;
     public CharacterInputActions InputActions => _inputActions;
     private bool _isInitialized = false;
@@ -11,7 +10,7 @@ public class InputSystemController : Singleton<InputSystemController>,IEventRece
     #region 生命周期
     protected override void Awake() {
         base.Awake();
-        if(!_isInitialized) {
+        if (!_isInitialized) {
             _inputActions ??= new CharacterInputActions();
             _isInitialized = true;
         }
@@ -32,7 +31,7 @@ public class InputSystemController : Singleton<InputSystemController>,IEventRece
 
     public Vector2 GetMovementInput() {
         _inputActions.Player.Enable(); // 确保玩家输入ActionMap已启用
-        if (!_isInitialized ||_currentActionMap != ActiveInputActionMap.Player) {
+        if (!_isInitialized || _currentActionMap != ActiveInputActionMap.Player) {
             return Vector2.zero; // 如果当前不是玩家输入模式，返回零向量
         }
         return _inputActions.Player.Move.ReadValue<Vector2>();
@@ -62,7 +61,6 @@ public class InputSystemController : Singleton<InputSystemController>,IEventRece
     #region 事件系统
     // 监听游戏模式切换事件，根据当前游戏模式切换输入ActionMap
     public void OnEvent(GameModeChangedEvent evt) {
-        Debug.Log($"GameMode changed to {evt.NewGameMode.ToString()}");
         _currentActionMap = GetActionMapForGameMode(evt.NewGameMode);
         _inputActions.Disable(); // 先禁用所有输入
         switch (_currentActionMap) {

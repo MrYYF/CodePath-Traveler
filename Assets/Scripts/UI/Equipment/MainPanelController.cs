@@ -4,8 +4,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class MainPanelController : PanelController
-{
+public class MainPanelController : PanelController {
     [Header("Main Panel")]
 
     [SerializeField] private Button itemButton;
@@ -39,11 +38,11 @@ public class MainPanelController : PanelController
     }
 
     public override bool HandleCancelInput() {
-        if(_currentOpenPanel == null || _currentOpenPanel.activeSelf == false) {
+        if (_currentOpenPanel == null || _currentOpenPanel.activeSelf == false) {
             return false;
         }
 
-        if(_currentOpenPanel != null && 
+        if (_currentOpenPanel != null &&
             _currentOpenPanel == equipmentPanelController.gameObject &&
             equipmentPanelController.HandleCancelInput()) {
             return true;

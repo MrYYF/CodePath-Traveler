@@ -15,12 +15,14 @@ public class EquipmentCandidateItemButton : MonoBehaviour, ISelectHandler {
     private Button _button;
     private int _index;
     public Action<int> OnSelect;
+    public Action<int> OnClick;
 
     public Button Button => _button;
 
 
     private void Awake() {
         _button = GetComponent<Button>();
+        _button.onClick.AddListener(HandleClick);
     }
 
     public void Setup(int index, EquipmentItemSO item, int ownedCount, bool isInteractable, ItemIconSetSO iconSet) {
@@ -45,7 +47,26 @@ public class EquipmentCandidateItemButton : MonoBehaviour, ISelectHandler {
 
     }
 
+    /// <summary>
+    /// 选择时的回调函数
+    /// </summary>
+    /// <param name="eventData"></param>
     void ISelectHandler.OnSelect(BaseEventData eventData) {
-        
+        if (!_button.interactable) {
+            return;
+        }
+
+        OnSelect.Invoke(_index);
+    }
+
+    /// <summary>
+    /// 点击时的回调函数处理
+    /// </summary>
+    private void HandleClick() {
+        if (!_button.interactable) {
+            return;
+        }
+
+        OnClick.Invoke(_index);
     }
 }
