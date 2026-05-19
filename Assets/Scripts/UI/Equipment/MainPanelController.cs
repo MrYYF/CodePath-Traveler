@@ -63,12 +63,17 @@ public class MainPanelController : PanelController {
         SetDefaultSelection();
     }
 
-
+    /// <summary>
+    /// 打开物品面板并用PanelType.Item初始化物品面板控制器。
+    /// </summary>
     private void OpenItemPanel() {
         OpenPanel(itemPanelController.gameObject, itemButton);
         itemPanelController.SetupPanel(PanelType.Item);
     }
 
+    /// <summary>
+    /// 打开装备面板并用当前的队伍成员初始化装备面板控制器。
+    /// </summary>
     private void OpenEquipmentPanel() {
         OpenPanel(equipmentPanelController.gameObject, equipmentButton);
         equipmentPanelController.SetupWithPartyMember(PartyManager.Instance != null ? PartyManager.Instance.PartyMembers : null);

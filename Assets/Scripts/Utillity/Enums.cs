@@ -110,3 +110,11 @@ public enum StatType {
     CurrentSP = 101,
     CurrentBP = 102,
 }
+
+public enum EnemyLayoutFomation {
+    Line = 0,
+    BossTriangle = 1,
+    VShape = 2,
+    Circle = 3,
+    Random = 4
+}

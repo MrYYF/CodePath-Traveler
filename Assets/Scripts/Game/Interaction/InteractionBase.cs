@@ -40,7 +40,6 @@ public class InteractionBase : MonoBehaviour
     public void OnFocus(AllyDefinitionSO interactor) {
         CacheActions();
         _currentInteractor = interactor;
-        Debug.Log("Focused on " + interactor.Name + interactor.Job);
         RebuildCommands();
         PublishEvent(true);
     }
@@ -81,7 +80,6 @@ public class InteractionBase : MonoBehaviour
 
         for (int i = 0; i < _visibleActionEntries.Count; i++) {
             _cachedCommandInfo.Add(_visibleActionEntries[i].CommandInfo);
-            Debug.Log("Added command: " + _visibleActionEntries[i].CommandInfo.CommandName);
         }
 
         if (_visibleActionEntries.Count > 0)
