@@ -27,6 +27,7 @@ public class CharacterRuntimeData {
     public CharacterRuntimeData(CharacterDefinitionSO definition) {
         Definition = definition;
         EquipmentStats = StatBlock.Zero;
+        Level = definition.BaseLevel;
 
         var stats = GetBaseStats();
         CurrentHP = stats.MaxHP;
@@ -114,9 +115,10 @@ public class CharacterRuntimeData {
         var entry = EquippedItems.Find(e => e.equipSlot == slot);
 
         if (entry != null) {
-            if(item!= null) {
+            if (item != null) {
                 entry.equiptmentItem = item;
-            } else {
+            }
+            else {
                 EquippedItems.Remove(entry);
             }
         }
@@ -145,7 +147,7 @@ public class CharacterRuntimeData {
         if (item == null) return 0;
 
         int count = 0;
-        foreach(var entry in EquippedItems) {
+        foreach (var entry in EquippedItems) {
             if (entry != null && entry.equiptmentItem == item) {
                 count++;
             }
@@ -161,7 +163,7 @@ public class CharacterRuntimeData {
         for (int i = EquippedItems.Count - 1; i >= 0; i--) {
             var entry = EquippedItems[i];
 
-            if(entry == null || entry.equiptmentItem == null) {
+            if (entry == null || entry.equiptmentItem == null) {
                 EquippedItems.RemoveAt(i);
                 continue;
             }
@@ -174,6 +176,31 @@ public class CharacterRuntimeData {
         var totalStats = GetTotalStats();
         CurrentHP = Mathf.Clamp(CurrentHP, 0, totalStats.MaxHP);
         CurrentSP = Mathf.Clamp(CurrentSP, 0, totalStats.MaxSP);
+    }
+
+    #endregion
+
+    #region 工具静态方法
+    /// <summary>
+    /// 根据属性数据评估角色的战力，返回一个数值表示角色的综合实力，数值越高表示角色越强大。
+    /// </summary>
+    /// <param name="stats">角色的总属性</param>
+    /// <returns>战力评估值</returns>
+    public static int EvaluatePowerFromStats(StatBlock stats) {
+        // 简单的战力评估公式，可以根据实际需求调整权重和计算方式
+        float power =
+            stats.MaxHP * 1.2f +
+            stats.MaxSP * 1.2f +
+            stats.PAtk * 1.5f +
+            stats.PDef * 1.5f +
+            stats.MAtk * 1.5f +
+            stats.MDef * 1.5f +
+            stats.Accuracy * 0.8f +
+            stats.Evasion * 0.8f +
+            stats.Speed * 0.8f;
+
+
+        return Mathf.Max(1, Mathf.RoundToInt(power));
     }
 
     #endregion

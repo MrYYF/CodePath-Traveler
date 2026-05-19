@@ -18,14 +18,14 @@ MonoBehaviour:
   Job: 2
   BaseLevel: 1
   BaseStats:
-    MaxHP: 0
+    MaxHP: 100
     MaxSP: 0
-    PAtk: 0
-    PDef: 0
+    PAtk: 10
+    PDef: 10
     MAtk: 0
     MDef: 0
     Speed: 0
-    Accuracy: 0
+    Accuracy: 90
     Evasion: 0
   FieldAnimator: {fileID: 22100000, guid: 208524b2a2b88d54c8c45676db8a5227, type: 2}
   BattleAnimator: {fileID: 22100000, guid: 208524b2a2b88d54c8c45676db8a5227, type: 2}

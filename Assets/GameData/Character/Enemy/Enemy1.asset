@@ -28,4 +28,4 @@ MonoBehaviour:
     Accuracy: 90
     Evasion: 0
   FieldAnimator: {fileID: 0}
-  BattleAnimator: {fileID: 0}
+  BattleAnimator: {fileID: 22100000, guid: b89abc6a261f4f04a9f6ad9b60768fc5, type: 2}
