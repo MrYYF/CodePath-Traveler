@@ -5,8 +5,7 @@
 /// 队伍管理器，负责管理玩家的队伍成员数据，并与探索模式下的跟随系统进行交互
 /// </summary>
 [RequireComponent(typeof(PartyFieldController))]
-public class PartyManager : Singleton<PartyManager>
-{
+public class PartyManager : Singleton<PartyManager> {
     [Header("Initial Party")]
     [SerializeField] private CharacterDefinitionSO PlayerDefinition;
 
@@ -48,9 +47,11 @@ public class PartyManager : Singleton<PartyManager>
     /// </summary>
     /// <param name="newCharacter">要招募的新成员的角色定义</param>
     public void RecruitMember(CharacterDefinitionSO newCharacter) {
-        AddMember(newCharacter);
-
-        GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
+        FadeController.Instance.SetStyle(FadeStyle.PanelFade);
+        FadeController.Instance.FadeOut(() => {
+            AddMember(newCharacter);
+            FadeController.Instance.FadeIn(() => GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore));
+        });
     }
 
     /// <summary>

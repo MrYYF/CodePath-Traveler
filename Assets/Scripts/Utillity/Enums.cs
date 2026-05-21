@@ -1,3 +1,6 @@
+/// <summary>
+/// 游戏模式
+/// </summary>
 public enum GameMode
 {
     Explore,
@@ -6,18 +9,27 @@ public enum GameMode
     Pause
 }
 
+/// <summary>
+/// 激活的输入映射
+/// </summary>
 public enum ActiveInputActionMap
 {
     Player,
     UI
 }
 
+/// <summary>
+/// 相机视角
+/// </summary>
 public enum CameraView {
     Explore,
     Battle,
     BattleResult
 }
 
+/// <summary>
+/// 职业
+/// </summary>
 public enum Job {
     Any,
     None,
@@ -28,6 +40,9 @@ public enum Job {
     Thief //盗贼
 }
 
+/// <summary>
+/// 成长等级
+/// </summary>
 public enum GrowthRank {
     S,
     A,
@@ -36,6 +51,9 @@ public enum GrowthRank {
     D
 }
 
+/// <summary>
+/// 物品类型
+/// </summary>
 public enum ItemType {
     None,
     Equipment = 0, // 装备
@@ -44,8 +62,10 @@ public enum ItemType {
     Material // 材料
 }
 
+/// <summary>
+/// 物品类型图标
+/// </summary>
 public enum ItemIconKey {
-    // 物品类型枚举
     Weapon, // 武器
     Armor, // 防具
     Accessory, // 饰品
@@ -56,6 +76,9 @@ public enum ItemIconKey {
     KeyItem, // 关键道具
 }
 
+/// <summary>
+/// 面板类型
+/// </summary>
 public enum PanelType {
     Item,
     Sell,
@@ -63,6 +86,9 @@ public enum PanelType {
     Equipment,
 }
 
+/// <summary>
+/// 装备类别
+/// </summary>
 public enum EquipmentCategory {
     Weapon,
     Shield,
@@ -71,6 +97,9 @@ public enum EquipmentCategory {
     Accessory
 }
 
+/// <summary>
+/// 装备槽位
+/// </summary>
 public enum EquipSlot {
     None,
     Dagger,
@@ -86,6 +115,9 @@ public enum EquipSlot {
     Accessory2
 }
 
+/// <summary>
+/// 武器类型
+/// </summary>
 public enum WeaponType {
     None = 0,
     Dagger,
@@ -96,6 +128,9 @@ public enum WeaponType {
     Staff
 }
 
+/// <summary>
+/// 状态类型
+/// </summary>
 public enum StatType {
     MaxHP = 0,
     MaxSP = 1,
@@ -111,10 +146,18 @@ public enum StatType {
     CurrentBP = 102,
 }
 
+/// <summary>
+/// 敌人排列阵型
+/// </summary>
 public enum EnemyLayoutFomation {
     Line = 0,
     BossTriangle = 1,
     VShape = 2,
     Circle = 3,
     Random = 4
+}
+
+public enum FadeStyle {
+    PanelFade,
+    WipeMask,
 }
