@@ -16,7 +16,7 @@ public class RecruitAction : ActionBase
         EventBus.Publish(new PanelRequestEvent(this));
     }
 
-    public override void Execute(object context = null) {
+    public override void Execute() {
         PartyManager.Instance.RecruitMember(CurrentCharacter);
         HideSceneNPC();
     }

@@ -29,14 +29,13 @@ public abstract class ActionBase : MonoBehaviour
     /// </summary>
     /// <param name="inteactor">执行指令的角色信息</param>
     public virtual void TriggerAction(AllyDefinitionSO inteactor) {
-        Execute(inteactor);
+        Execute();
     }
 
     /// <summary>
     /// 直接执行指令
     /// </summary>
-    /// <param name="context">执行指令的上下文信息</param>
-    public virtual void Execute(object context = null) {
+    public virtual void Execute() {
         // Default implementation does nothing
     }
 

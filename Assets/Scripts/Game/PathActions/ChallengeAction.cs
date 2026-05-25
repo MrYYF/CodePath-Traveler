@@ -27,6 +27,11 @@ public class ChallengeAction : ActionBase {
         EventBus.Publish(new PanelRequestEvent(this));
     }
 
+    public override void Execute() {
+        BattleService.Instance.StartBattleFromAction(this);
+    }
+
+    #region 计算战力相关
     /// <summary>
     /// 计算玩家队伍的战斗力
     /// </summary>
@@ -71,4 +76,6 @@ public class ChallengeAction : ActionBase {
         return 10;
 
     }
+
+    #endregion
 }
