@@ -27,7 +27,7 @@ public class FadeController : Singleton<FadeController> {
         SetPanelAlpha(0f);
 
         wipeRawImage.enabled = false;
-        _wipeRuntimeMaterial = Instantiate(wipeRawImage.material);
+        _wipeRuntimeMaterial = wipeRawImage.material;
         SetWipeProgress(0f);
     }
 
@@ -94,7 +94,7 @@ public class FadeController : Singleton<FadeController> {
             yield return null;
         }
         ApplyValue(target);
-        if(target < 0f) {
+        if (target < 0f) {
             fadePanelImage.enabled = false;
             wipeRawImage.enabled = false;
             SetPanelAlpha(0f);
@@ -165,7 +165,7 @@ public class FadeController : Singleton<FadeController> {
     /// <param name="value01">要设置的值（通常 0 到 1）</param>
     private void ApplyValue(float value01) {
         value01 = Mathf.Clamp01(value01);
-        if(_currentFadeStyle == FadeStyle.PanelFade) {
+        if (_currentFadeStyle == FadeStyle.PanelFade) {
             SetPanelAlpha(value01);
         }
         else {

@@ -1178,10 +1178,10 @@ MonoBehaviour:
     RequiredJob: 0
     Order: 0
   battleSceneReference:
-    m_AssetGUID: 
+    m_AssetGUID: 18639fbc1a905a24f82ec9836689828c
     m_SubObjectName: 
     m_SubObjectType: 
-    m_EditorAssetChanged: 0
+    m_EditorAssetChanged: 1
   enemyTeamMembers:
   - {fileID: 11400000, guid: efc48f3465a90174c984cf13baf72153, type: 2}
   - {fileID: 11400000, guid: efc48f3465a90174c984cf13baf72153, type: 2}

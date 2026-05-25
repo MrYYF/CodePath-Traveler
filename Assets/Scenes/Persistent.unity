@@ -1917,16 +1917,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1514249af16d745a497bcee1330b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuScene:
-    m_AssetGUID: 
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
   activeScene:
     m_AssetGUID: b17fb10f55fbea742a048b2df42031ec
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  menuScene:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  postLoadBlackScreenDuration: 0.35
 --- !u!4 &113847518
 Transform:
   m_ObjectHideFlags: 0
@@ -27587,7 +27588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4419c4fcbdf024a478ec373852e79ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultFadeStyle: 0
+  defaultFadeStyle: 1
   fadePanelImage: {fileID: 1319865962}
   wipeRawImage: {fileID: 787682779}
   panelFadeDuration: 0.35
