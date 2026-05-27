@@ -2,6 +2,9 @@
 
 using UnityEngine.AddressableAssets;
 
+/// <summary>
+/// 场景加载请求，包含场景加载所需的各种参数。
+/// </summary>
 public struct SceneLoadRequest {
     public readonly AssetReference Scene;
     public readonly FadeStyle FadeStyle;

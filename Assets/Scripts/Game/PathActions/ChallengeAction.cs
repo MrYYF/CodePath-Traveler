@@ -59,6 +59,10 @@ public class ChallengeAction : ActionBase {
         return totalPower;
     }
 
+    /// <summary>
+    /// 根据玩家队伍和敌人队伍的战斗力评估值计算挑战难度，返回一个0-10的整数，表示挑战的难度等级
+    /// </summary>
+    /// <returns>挑战难度等级</returns>
     private int EvaluateDifficulty() {
         int playerPower = EvaluatePlayerTeamPower();
         int enemyPower = EvaluateEnemyTeamPower();

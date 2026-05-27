@@ -1,6 +1,9 @@
 using System;
 using UnityEngine.UI;
 
+/// <summary>
+/// 控制场景转场的淡入淡出效果，支持面板淡入淡出和擦除两种样式。通过设置样式和持续时间覆盖值，可以灵活控制转场效果的表现。提供了简单的接口来触发淡入淡出，并在完成时调用回调函数。
+/// </summary>
 public class FadeController : Singleton<FadeController> {
     [SerializeField] private FadeStyle defaultFadeStyle = FadeStyle.PanelFade;
     [Header("Fade Panel")]

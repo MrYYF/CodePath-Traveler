@@ -3,6 +3,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
+
+/// <summary>
+/// 场景加载管理器，负责处理游戏中的场景切换流程，包括淡入淡出效果、资源管理和游戏模式切换等。
+/// </summary>
 public class SceneLoadManager : Singleton<SceneLoadManager> {
     // 当前活动场景的地址引用
     public AssetReference activeScene;
@@ -30,6 +34,10 @@ public class SceneLoadManager : Singleton<SceneLoadManager> {
         };
     }
 
+    /// <summary>
+    /// 从场景加载请求开始场景切换流程
+    /// </summary>
+    /// <param name="request">场景加载请求</param>
     public void RequestLoad(SceneLoadRequest request) {
         if (isLoading) {
             return;
@@ -40,6 +48,10 @@ public class SceneLoadManager : Singleton<SceneLoadManager> {
         StartCoroutine(LoadFlow(request));
     }
 
+    /// <summary>
+    /// 加载场景加载请求流程协程
+    /// </summary>
+    /// <param name="request">场景加载请求</param>
     private IEnumerator LoadFlow(SceneLoadRequest request) {
         try {
             // 切换游戏模式，禁用玩家输入
