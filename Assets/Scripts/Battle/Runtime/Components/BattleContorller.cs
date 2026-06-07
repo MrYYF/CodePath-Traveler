@@ -92,7 +92,7 @@ public class BattleContorller : MonoBehaviour,
     /// <summary>
     /// 停止当前战斗并触发战斗结束流程，清理相关状态与资源。
     /// </summary>
-    private void StopBattle() {
+    public void StopBattle() {
         _battleRunning = false;
         _currentState = null;
         if(_battleLoopRoutine != null) {

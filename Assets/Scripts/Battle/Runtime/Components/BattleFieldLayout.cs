@@ -5,7 +5,7 @@
 public class BattleFieldLayout : MonoBehaviour {
     [Header("Scene Reference")]
     public Transform actionTrans;
-    public Transform initTrans;
+    public Transform initTrans; // 单位出生点，友军从这里出生并移动到站位
     [Header("Ally Slot Segment")]
     [SerializeField] private Transform allyTopTrans;
     [SerializeField] private Transform allyBottomTrans;

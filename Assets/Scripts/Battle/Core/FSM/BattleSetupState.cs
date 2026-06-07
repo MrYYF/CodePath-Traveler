@@ -23,6 +23,9 @@ public class BattleSetupState : BattleState {
 
     public override IEnumerator Execute() {
         Debug.Log("Entering BattleSetupState...");
+        _contorller.FieldManager.SpawnAll(_startPreload);
+
+        _contorller.StopBattle();
         yield return null;
     }
 
