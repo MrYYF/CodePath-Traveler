@@ -12,6 +12,12 @@ public class BattleService : Singleton<BattleService> {
     // 是否有待处理的战斗预加载数据
     public bool HasPendingPreload => _pendingPreload != null;
 
+    public BattleStartPreload ConsumeStartPreload() {
+        var preload = _pendingPreload;
+        _pendingPreload = null;
+        return preload;
+    }
+
     /// <summary>
     /// 根据提供的 ChallengeAction 构建敌方角色列表，并使用当前队伍、指定战斗场景和敌方阵型启动战斗。
     /// </summary>
@@ -42,7 +48,6 @@ public class BattleService : Singleton<BattleService> {
         List<CharacterRuntimeData> enemy,
         AssetReference battleScene,
         EnemyLayoutFomation enemyLayoutFomation) {
-        Debug.Log("Starting battle...");
 
         SceneLoadManager sceneLoadManager = SceneLoadManager.Instance;
 

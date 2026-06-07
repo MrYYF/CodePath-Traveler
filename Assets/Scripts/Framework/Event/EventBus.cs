@@ -31,20 +31,23 @@ public static class EventBus {
     public static void Publish<TEvent>(TEvent evt) where TEvent : IEvent {
         Type eventType = typeof(TEvent);
 
-        // 发布事件
-        if (EventDic.TryGetValue(eventType, out var receivers)) {
-            foreach (var receiver in receivers) {
-                if(receiver is UnityEngine.Object unityObj && unityObj == null) {
-                    // 处理Unity对象被销毁的情况
-                    receivers.Remove(receiver);
+        // 尝试获取已订阅的接收者并确保非空
+        if (EventDic.TryGetValue(eventType, out var receivers) && receivers != null) {
+            // 倒序遍历可以在遍历时安全地移除元素
+            for (int i = receivers.Count - 1; i >= 0; i--) {
+                var receiver = receivers[i];
+                if (receiver is UnityEngine.Object unityObj && unityObj == null) {
+                    // 移除已被 Unity 销毁的目标
+                    receivers.RemoveAt(i);
                     continue;
                 }
+
                 ((IEventReceiver<TEvent>)receiver).OnEvent(evt);
             }
-        }
 
-        if(receivers.Count == 0) {
-            EventDic.Remove(eventType);
+            if (receivers.Count == 0) {
+                EventDic.Remove(eventType);
+            }
         }
     }
 }
