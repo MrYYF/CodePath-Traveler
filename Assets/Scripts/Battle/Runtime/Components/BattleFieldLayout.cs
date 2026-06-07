@@ -1,5 +1,7 @@
 
-
+/// <summary>
+/// 战斗场地布局组件，负责提供战斗单位的站位信息
+/// </summary>
 public class BattleFieldLayout : MonoBehaviour {
     [Header("Scene Reference")]
     public Transform actionTrans;
