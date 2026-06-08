@@ -23,12 +23,15 @@ public class BattleUnit : MonoBehaviour {
     /// 更新焦点光标以及打击点位置
     /// </summary>
     private void UpdateTargetCursorPosition() {
-        Vector3 worldCenter = spriteRenderer.bounds.center;
-        Vector3 localCenter = transform.InverseTransformPoint(worldCenter);
-        Vector3 localPosition = targetCursorRenderer.transform.localPosition;
-        localPosition.y = localCenter.y;
-        targetCursorRenderer.transform.localPosition = localPosition;
-        hitPoint.localPosition = localPosition;
+        Bounds bounds = spriteRenderer.bounds;
+        Vector3 worldLeftCenter = new Vector3(bounds.min.x,bounds.center.y,bounds.center.z);
+        Vector3 localLeftCenter = transform.InverseTransformPoint(worldLeftCenter);
+        Transform cursorTransform = targetCursorRenderer.transform;
+        Vector3 localPos = cursorTransform.localPosition;
+        localPos.x = localLeftCenter.x;
+        localPos.y = localLeftCenter.y;
+        localPos.z = localLeftCenter.z - 0.1f;
+        cursorTransform.localPosition = localPos;
     }
 
     public void SetTargetSelection(bool visible) {

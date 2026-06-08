@@ -74,6 +74,11 @@ public class TargetSelectionState : BattleState {
         }
     }
 
+    public override IEnumerator Exit() {
+        _controller.ClearTargetSelection();
+        yield break;
+    }
+
     /// <summary>
     /// 处理玩家选择目标输入并实时更改选择的目标
     /// </summary>
@@ -84,7 +89,7 @@ public class TargetSelectionState : BattleState {
         }
 
         Vector2 navigate = InputSystemController.Instance.GetNavigateInput();
-        if (Mathf.Abs(navigate.x) <= 0.5f) {
+        if (Mathf.Abs(navigate.x) <= 0.5f && Mathf.Abs(navigate.y) < 0.5f) {
             return;
         }
 
