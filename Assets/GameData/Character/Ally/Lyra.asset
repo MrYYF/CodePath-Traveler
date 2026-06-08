@@ -28,7 +28,7 @@ MonoBehaviour:
     Accuracy: 90
     Evasion: 0
   FieldAnimator: {fileID: 22100000, guid: 58e27474c06d13a4dabc92d215378450, type: 2}
-  BattleAnimator: {fileID: 22100000, guid: 58e27474c06d13a4dabc92d215378450, type: 2}
+  BattleAnimator: {fileID: 22100000, guid: c7085885b393bc74ea08a9d294329595, type: 2}
   globalGrowthConfigSO: {fileID: 11400000, guid: 2a22ed6ff1be6be46b207d84a466b190,
     type: 2}
   growthProfile:

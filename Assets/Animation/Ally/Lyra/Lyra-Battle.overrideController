@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Lyra-Battle
+  m_Controller: {fileID: 9100000, guid: 062cc63f376d44b3f867b980860a2020, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: c9429c5f6656e49ec8a2e5e2ef1709e2, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3fba032251904b043ae05ff761ddc6c9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 894b07c0c7be04cc09af7255d2eff2c7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c97f4e1a2d923e74d9bf19355e2c4655, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 69f9a56dc43af4ef28dc86ca974116fc, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4ff6bff3200d247419a5f70122306a27, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 592298c4baec845858d0ca1514a3c0a7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e78e9e2eae0ccee4bb70356bcad8eaf1, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 18f00f061436340e3920ed09ba8a69f0, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d2e6b921ada539747a34451b2d44f4cb, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 16866ae26d79640d4a7e9403ba11ac24, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 63ce1749b258a4c4c86545c88435fe07, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7e4d89fc30d784ba68cada6ee38704bd, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: bfcd7433ab7a7684aa159695c3a249b1, type: 2}

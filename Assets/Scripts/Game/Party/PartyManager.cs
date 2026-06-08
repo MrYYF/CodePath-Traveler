@@ -1,11 +1,14 @@
 
 
 
+using Framework.Event;
+
 /// <summary>
 /// 队伍管理器，负责管理玩家的队伍成员数据，并与探索模式下的跟随系统进行交互
 /// </summary>
 [RequireComponent(typeof(PartyFieldController))]
-public class PartyManager : Singleton<PartyManager> {
+public class PartyManager : Singleton<PartyManager>,
+    IEventReceiver<GameModeChangedEvent> {
     [Header("Initial Party")]
     [SerializeField] private CharacterDefinitionSO PlayerDefinition;
 
@@ -13,6 +16,8 @@ public class PartyManager : Singleton<PartyManager> {
     public List<CharacterRuntimeData> PartyMembers => partyMembers;
 
     private PartyFieldController fieldController;
+
+    private bool fieldActorsHidden = false; // 用于跟踪探索模式下的跟随者是否被隐藏
 
     protected override void Awake() {
         base.Awake();
@@ -22,6 +27,12 @@ public class PartyManager : Singleton<PartyManager> {
 
     private void Start() {
         ApplyPartyInitialEquipment();
+    }
+    private void OnEnable() {
+        EventBus.Subscribe<GameModeChangedEvent>(this);
+    }
+    private void OnDisable() {
+        EventBus.Unsubscribe<GameModeChangedEvent>(this);
     }
 
     /// <summary>
@@ -75,4 +86,29 @@ public class PartyManager : Singleton<PartyManager> {
             member.ApplyInitialEquipment();
         }
     }
+
+    #region 事件监听
+    public void OnEvent(GameModeChangedEvent evt) {
+        if (evt.NewGameMode == GameMode.Battle) {
+            if (fieldActorsHidden) {
+                return;
+            }
+
+            fieldController.SetPlayerActive(false);
+            fieldController.ClearFollower();
+            return;
+        }
+
+        if (evt.NewGameMode == GameMode.Explore) {
+            if (!fieldActorsHidden) {
+                return;
+            }
+
+            fieldController.SetPlayerActive(true);
+            RefreshFieldFollowers();
+            return;
+        }
+
+    }
+    #endregion
 }

@@ -1,3 +1,6 @@
+/// <summary>
+/// 战斗场地管理器，负责根据战斗预加载数据生成战斗单位，并根据当前敌人编队的阵型布局单位位置。
+/// </summary>
 public class BattleFieldManager : MonoBehaviour {
 
     [SerializeField] private BattleUnit battleUnitPrefab;
@@ -46,12 +49,12 @@ public class BattleFieldManager : MonoBehaviour {
     /// <param name="count">数量</param>
     /// <param name="isAlly">是否为友军</param>
     /// <returns>生成的单位列表</returns>
-    private List<BattleUnit> SpawnSide(int count ,bool isAlly) {
+    private List<BattleUnit> SpawnSide(int count, bool isAlly) {
         List<BattleUnit> units = new List<BattleUnit>();
         for (int i = 0; i < count; i++) {
             // 根据是友军还是敌军，获取对应的单位坐标位置
             Vector3 targetSlotPos = isAlly ?
-                layout.GetAllySlotPos(i,count) :
+                layout.GetAllySlotPos(i, count) :
                 layout.GetEnemySlotPos(i, count, _currentFomation);
 
             // 决定出生点
@@ -61,8 +64,8 @@ public class BattleFieldManager : MonoBehaviour {
 
             // 生成单位
             BattleUnit unitObj = Instantiate(
-                battleUnitPrefab, 
-                spawnPos, 
+                battleUnitPrefab,
+                spawnPos,
                 Quaternion.identity,
                 isAlly ? allyRoot : enemyRoot);
 
@@ -91,5 +94,7 @@ public class BattleFieldManager : MonoBehaviour {
 
         _homePos.Clear();
     }
+
+    public Vector3 GetHomePos(BattleUnit unit) => _homePos[unit];
 
 }

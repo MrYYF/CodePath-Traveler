@@ -3,7 +3,7 @@ using Framework.Event;
 /// <summary>
 /// 战斗部分的核心逻辑控制器，负责管理战斗状态、执行战斗循环、维护战斗实体列表等核心功能。
 /// </summary>
-public class BattleContorller : MonoBehaviour,
+public class BattleController : MonoBehaviour,
     IEventReceiver<GameModeChangedEvent> {
     [SerializeField] private BattleFieldManager fieldManager;
 

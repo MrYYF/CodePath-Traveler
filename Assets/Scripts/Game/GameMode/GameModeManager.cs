@@ -7,6 +7,7 @@ public class GameModeManager : Singleton<GameModeManager> {
     protected override void Awake() {
         base.Awake();
         CurrentGameMode = defaultGamemode;
+        Application.targetFrameRate = 60;
     }
 
     private void Start() {

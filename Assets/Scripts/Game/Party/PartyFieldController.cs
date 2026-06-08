@@ -3,8 +3,7 @@
 /// <summary>
 /// 探索模式下的队伍跟随系统，负责管理跟随者的生成、位置更新和动画状态
 /// </summary>
-public class PartyFieldController : MonoBehaviour
-{
+public class PartyFieldController : MonoBehaviour {
     [Header("References")]
     [SerializeField] private Transform followersParent;
     [SerializeField] private GameObject fieldFollowerPrefab;
@@ -23,19 +22,22 @@ public class PartyFieldController : MonoBehaviour
     private void LateUpdate() {
         UpdateLeaderTrail();
 
-        for(int i = 0; i < fieldFollowers.Count; i++) {
+        for (int i = 0; i < fieldFollowers.Count; i++) {
             var follower = fieldFollowers[i];
             float targetDistance = followDistance * (i + 1);
             Vector3 targetPos = GetPointAtDistance(targetDistance);
 
-            follower.MoveTo(ApplyFollowerOffset(targetPos,i),followSpeed);
+            follower.MoveTo(ApplyFollowerOffset(targetPos, i), followSpeed);
         }
     }
 
-    // 更新跟随者列表
+    /// <summary>
+    /// 更新跟随者列表
+    /// </summary>
+    /// <param name="partyMembers"></param>
     public void UpdateFollowers(List<CharacterDefinitionSO> partyMembers) {
         int followerCount = partyMembers.Count - 1;
-        while(fieldFollowers.Count <  followerCount) {
+        while (fieldFollowers.Count < followerCount) {
             int index = fieldFollowers.Count;
             var pos = ApplyFollowerOffset(playerTrans.position, index);
 
@@ -50,13 +52,20 @@ public class PartyFieldController : MonoBehaviour
         RebuildTrailsAndSnapFollowers();
     }
 
-    // 应用跟随者的z轴偏移
+    /// <summary>
+    /// 应用跟随者的z轴偏移
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
     private Vector3 ApplyFollowerOffset(Vector3 position, int index) {
         position.z += zOffset * (index + 1);
         return position;
     }
 
-    // 更新领队轨迹
+    /// <summary>
+    /// 更新领队轨迹
+    /// </summary>
     private void UpdateLeaderTrail() {
         Vector3 leaderPos = playerTrans.position;
 
@@ -77,19 +86,23 @@ public class PartyFieldController : MonoBehaviour
 
     }
 
-    // 获取路径上距离领导者指定距离的点
+    /// <summary>
+    /// 获取路径上距离领导者指定距离的点
+    /// </summary>
+    /// <param name="distanceFromLeader"></param>
+    /// <returns></returns>
     private Vector3 GetPointAtDistance(float distanceFromLeader) {
-        if(trail.Count ==0) return playerTrans.position;
+        if (trail.Count == 0) return playerTrans.position;
 
         float accumulated = 0f; //累计距离
 
-        for(int i = 0;i<trail.Count - 1;i++) {
+        for (int i = 0; i < trail.Count - 1; i++) {
             Vector3 a = trail[i];
             Vector3 b = trail[i + 1];
 
             float dist = Vector3.Distance(a, b);
 
-            if(accumulated + dist >= distanceFromLeader) {
+            if (accumulated + dist >= distanceFromLeader) {
                 float t = (distanceFromLeader - accumulated) / dist;
                 return Vector3.Lerp(a, b, t);
             }
@@ -101,13 +114,37 @@ public class PartyFieldController : MonoBehaviour
         return trail[^1];
     }
 
-    // 重建轨迹队列并且将所有跟随者的位置刷新到领队处
+    /// <summary>
+    /// 重建轨迹队列并且将所有跟随者的位置刷新到领队处
+    /// </summary>
     private void RebuildTrailsAndSnapFollowers() {
         trail.Clear();
-        for(int i = 0; i < fieldFollowers.Count; i++) {
+        for (int i = 0; i < fieldFollowers.Count; i++) {
             fieldFollowers[i].SnapTo(ApplyFollowerOffset(playerTrans.position, i));
         }
 
         UpdateLeaderTrail();
+    }
+
+    /// <summary>
+    /// 设置玩家角色的显示状态，通常在切换场景或进入战斗时调用
+    /// </summary>
+    /// <param name="active"></param>
+    public void SetPlayerActive(bool active) {
+        playerTrans.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    /// 清除所有跟随者并重置轨迹
+    /// </summary>
+    public void ClearFollower() {
+        foreach (var follower in fieldFollowers) {
+            if (follower != null) {
+                Destroy(follower);
+            }
+            
+        }
+        fieldFollowers.Clear();
+        trail.Clear();
     }
 }
