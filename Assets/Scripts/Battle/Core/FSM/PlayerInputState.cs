@@ -2,7 +2,7 @@
 using System;
 
 /// <summary>
-/// 玩家输入状态
+/// 玩家选择命令状态
 /// </summary>
 public class PlayerInputState : BattleState {
     private bool _inputReceived;
@@ -53,19 +53,19 @@ public class PlayerInputState : BattleState {
     private void OnCommandSelected(BattleCommandType type) {
         switch(type) {
             case BattleCommandType.Attack:
-                ConfirmInput(BattleCommandRequest.CreateAttack());
+                ConfirmInput(BattleCommandRequest.CreateAttack(BattleTargetRequest.FromType(TargetType.SingleEnemy)));
                 break;
             case BattleCommandType.Skill:
-                ConfirmInput(BattleCommandRequest.CreateAttack());
+                ConfirmInput(BattleCommandRequest.CreateSkill());
                 break;
             case BattleCommandType.Item:
-                ConfirmInput(BattleCommandRequest.CreateAttack());
+                ConfirmInput(BattleCommandRequest.CreateItem());
                 break;
             case BattleCommandType.Defend:
-                ConfirmInput(BattleCommandRequest.CreateAttack());
+                ConfirmInput(BattleCommandRequest.CreateDefend());
                 break;
             case BattleCommandType.Escape:
-                ConfirmInput(BattleCommandRequest.CreateAttack());
+                ConfirmInput(BattleCommandRequest.CreateEscape());
                 break;
             default:
                 Debug.LogError($"未知的指令类型: {type}");

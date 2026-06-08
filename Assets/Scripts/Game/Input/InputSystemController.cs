@@ -1,7 +1,8 @@
 using UnityEngine.InputSystem;
 using Framework.Event;
 
-public class InputSystemController : Singleton<InputSystemController>, IEventReceiver<GameModeChangedEvent> {
+public class InputSystemController : Singleton<InputSystemController>,
+    IEventReceiver<GameModeChangedEvent> {
     private CharacterInputActions _inputActions;
     public CharacterInputActions InputActions => _inputActions;
     private bool _isInitialized = false;
@@ -29,6 +30,11 @@ public class InputSystemController : Singleton<InputSystemController>, IEventRec
     }
     #endregion
 
+    #region Player输入映射
+    /// <summary>
+    /// 获取Player方向键响应
+    /// </summary>
+    /// <returns>输入二维坐标值</returns>
     public Vector2 GetMovementInput() {
         _inputActions.Player.Enable(); // 确保玩家输入ActionMap已启用
         if (!_isInitialized || _currentActionMap != ActiveInputActionMap.Player) {
@@ -37,13 +43,24 @@ public class InputSystemController : Singleton<InputSystemController>, IEventRec
         return _inputActions.Player.Move.ReadValue<Vector2>();
     }
 
+    /// <summary>
+    /// 获取Player确认按键响应
+    /// </summary>
+    /// <returns>是否按下按键</returns>
     public bool GetPlayerConfirmPressed() {
         if (!_isInitialized || _currentActionMap != ActiveInputActionMap.Player) {
             return false; // 如果当前不是玩家输入模式，返回false
         }
         return _inputActions.Player.Confirm.WasPressedThisFrame();
     }
+    #endregion
 
+    #region UI输入映射
+
+    /// <summary>
+    /// 获取UI取消键响应
+    /// </summary>
+    /// <returns>是否按下按键</returns>
     public bool GetUICancelPressed() {
         if (!_isInitialized || _currentActionMap != ActiveInputActionMap.UI) {
             return false; // 如果当前不是玩家输入模式，返回false
@@ -51,12 +68,42 @@ public class InputSystemController : Singleton<InputSystemController>, IEventRec
         return _inputActions.UI.Cancel.WasPressedThisFrame();
     }
 
+    /// <summary>
+    /// 获取UI导航输入响应
+    /// </summary>
+    /// <returns>输入二维坐标值</returns>
+    public Vector2 GetNavigateInput() {
+        if (!_isInitialized || _currentActionMap != ActiveInputActionMap.UI) {
+            return Vector2.zero;
+        }
+        return _inputActions.UI.Navigate.ReadValue<Vector2>();
+    }
+
+    /// <summary>
+    /// 获取UI确认键输入响应
+    /// </summary>
+    /// <returns>是否按下按键</returns>
+    public bool GetUISubmitPressed() {
+        if (!_isInitialized || _currentActionMap != ActiveInputActionMap.UI) {
+            return false;
+        }
+        return _inputActions.UI.Confirm.WasPressedThisFrame();
+    }
+
+    #endregion
+
+    #region 其他状态下的输入
+    /// <summary>
+    /// 获取主菜单ESC按键响应
+    /// </summary>
+    /// <returns>是否按下按键</returns>
     public bool GetMenuPressed() {
         if (!_isInitialized) {
-            return false; // 如果当前不是玩家输入模式，返回false
+            return false;
         }
         return _inputActions.UI.Menu.WasPressedThisFrame() || _inputActions.Player.Menu.WasPressedThisFrame();
     }
+    #endregion
 
     #region 事件系统
     // 监听游戏模式切换事件，根据当前游戏模式切换输入ActionMap

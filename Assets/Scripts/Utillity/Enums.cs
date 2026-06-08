@@ -167,3 +167,11 @@ public enum BattleCommandType {
     Defend, // ·ÀÓù
     Escape // ÌÓÅÜ
 }
+
+public enum TargetType{
+    SingleEnemy,
+    AllEnemies,
+    SingleAlly,
+    AllAllies,
+    Self
+}

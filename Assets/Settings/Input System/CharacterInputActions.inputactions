@@ -367,7 +367,7 @@
                 },
                 {
                     "name": "",
-                    "id": "31ace64e-3bae-451d-a95e-95d3684a35b8",
+                    "id": "fe398aa8-bf4b-438e-a968-c8ebcb663a5b",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
@@ -378,8 +378,8 @@
                 },
                 {
                     "name": "",
-                    "id": "7b2be2a8-c252-4b8e-9ee1-2be23d02cd4c",
-                    "path": "<Gamepad>/buttonSouth",
+                    "id": "31ace64e-3bae-451d-a95e-95d3684a35b8",
+                    "path": "*/{Submit}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

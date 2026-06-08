@@ -13,10 +13,111 @@
 /// </remarks>
 /// </summary>
 public class TargetSelectionState : BattleState {
+    // 可用的目标选择集合
+    private List<BattleEntity> _targets;
+    // 当前选择的序列值
+    private int _currentIndex;
+
+    private bool _ignoreConfirmThisFrame;
+    private float _navigateCooldown;
+    private const float InputCooldownTime = 0.15f;
+
     public TargetSelectionState(BattleController controller) : base(controller) { }
 
-    public override IEnumerator Execute() {
-        _controller.StopBattle();
+    public override IEnumerator Enter() {
+        _targets = BattleTargeting.CollectTargets(
+            _controller.CurrentEntity,
+            _controller.CurrentCommandRequest.Target.TargetType,
+            _controller.AllEntities
+            );
+
+        _currentIndex = 0;
+        _ignoreConfirmThisFrame = true;
+        _navigateCooldown = InputCooldownTime;
+
+        // 如果没有可选目标就跳到执行层
+        if (_targets.Count == 0) {
+            _controller.SetState(new PerformActionState(_controller));
+            yield break;
+        }
+
+        // 单体目标
+        SelectedTarget(_currentIndex);
+
         yield break;
+    }
+
+    public override IEnumerator Execute() {
+        while (true) {
+            // 防止输入响应过快
+            if (_ignoreConfirmThisFrame) {
+                _ignoreConfirmThisFrame = false;
+                yield return null;
+                continue;
+            }
+
+            // 选择目标
+            HandleInput();
+
+            // 确定目标
+            if (InputSystemController.Instance.GetUISubmitPressed() && TryConfirmSelection()) {
+                yield break;
+            }
+
+            // 取消选择，返回命令选择状态
+            if (InputSystemController.Instance.GetUICancelPressed()) {
+                _controller.SetState(new PlayerInputState(_controller));
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// 处理玩家选择目标输入并实时更改选择的目标
+    /// </summary>
+    private void HandleInput() {
+        if (_navigateCooldown > 0) {
+            _navigateCooldown -= Time.deltaTime;
+            return;
+        }
+
+        Vector2 navigate = InputSystemController.Instance.GetNavigateInput();
+        if (Mathf.Abs(navigate.x) <= 0.5f) {
+            return;
+        }
+
+        int step = navigate.x > 0 || navigate.y > 0 ? 1 : -1;
+        int nextIndex = (_currentIndex + step + _targets.Count) % _targets.Count;
+        SelectedTarget(nextIndex);
+        _navigateCooldown = InputCooldownTime;
+    }
+
+    /// <summary>
+    /// 根据序列值选择单体目标
+    /// </summary>
+    /// <param name="index"></param>
+    private void SelectedTarget(int index) {
+        if (_currentIndex < 0 || _currentIndex >= _targets.Count) {
+            return;
+        }
+
+        _currentIndex = index;
+        _controller.SetSelectedTarget(_targets[_currentIndex]);
+    }
+
+    /// <summary>
+    /// 尝试确认选择的单体目标
+    /// </summary>
+    /// <returns>选择成功</returns>
+    private bool TryConfirmSelection() {
+        _controller.CurrentCommandRequest.Target = BattleTargeting.BuildSingleTargetRequest(
+            _controller.CurrentEntity,
+            _targets[_currentIndex]
+            );
+
+        _controller.SetState(new PerformActionState(_controller));
+        return true;
     }
 }

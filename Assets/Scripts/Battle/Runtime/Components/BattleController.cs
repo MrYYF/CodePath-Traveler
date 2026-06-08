@@ -106,4 +106,36 @@ public class BattleController : MonoBehaviour,
             _battleLoopRoutine = null;
         }
     }
+
+    #region 目标选择高亮桥接
+    /// <summary>
+    /// 单体目标高亮
+    /// </summary>
+    /// <param name="target">选择的目标</param>
+    public void SetSelectedTarget(BattleEntity target) {
+        foreach (var entity in _allEntities) {
+            entity.Unit.SetTargetSelection(entity == target);
+        }
+    }
+
+    /// <summary>
+    /// 群体目标高亮
+    /// </summary>
+    /// <param name="targets">选择的目标</param>
+    public void SetSelectedTarget(List<BattleEntity> targets) {
+        foreach (var entity in _allEntities) {
+            entity.Unit.SetTargetSelection(targets.Contains(entity));
+        }
+    }
+
+    /// <summary>
+    /// 取消目标选择高亮
+    /// </summary>
+    public void ClearTargetSelection() {
+        foreach (var entity in _allEntities) {
+            entity.Unit.SetTargetSelection(false);
+        }
+    }
+
+    #endregion
 }
