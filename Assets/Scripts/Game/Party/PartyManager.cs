@@ -91,11 +91,13 @@ public class PartyManager : Singleton<PartyManager>,
     public void OnEvent(GameModeChangedEvent evt) {
         if (evt.NewGameMode == GameMode.Battle) {
             if (fieldActorsHidden) {
+                Debug.Log("跟随者已经被隐藏，无需再次隐藏");
                 return;
             }
-
+            Debug.Log("隐藏跟随者以及玩家角色");
             fieldController.SetPlayerActive(false);
             fieldController.ClearFollower();
+            fieldActorsHidden = true;
             return;
         }
 
@@ -106,6 +108,7 @@ public class PartyManager : Singleton<PartyManager>,
 
             fieldController.SetPlayerActive(true);
             RefreshFieldFollowers();
+            fieldActorsHidden = false;
             return;
         }
 

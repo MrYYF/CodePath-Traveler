@@ -96,5 +96,6 @@ public class BattleFieldManager : MonoBehaviour {
     }
 
     public Vector3 GetHomePos(BattleUnit unit) => _homePos[unit];
+    public Vector3 GetActionPos(BattleUnit unit) => layout.actionTrans.position;
 
 }

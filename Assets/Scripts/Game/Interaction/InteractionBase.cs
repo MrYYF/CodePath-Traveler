@@ -4,8 +4,7 @@
 /// 交互基类，负责管理当前交互对象、可用指令列表缓存，以及发布交互状态变化事件
 /// 决定被挂载对象是否可以被交互
 /// </summary>
-public class InteractionBase : MonoBehaviour
-{
+public class InteractionBase : MonoBehaviour {
     [Header("Sign Trans")]
     public Transform HeadAnchor; // 头顶可互动图标的锚点
 
@@ -21,6 +20,7 @@ public class InteractionBase : MonoBehaviour
         public ActionCommandInfo CommandInfo;
     }
 
+    #region 周期函数
     private void Awake() {
         CacheActions();
         HeadAnchor = transform.GetChild(0);
@@ -31,12 +31,20 @@ public class InteractionBase : MonoBehaviour
         _cachedCommandInfo.Clear();
         _visibleActionEntries.Clear();
     }
+    #endregion
 
+    /// <summary>
+    /// 当玩家与交互对象进行交互时，调用此方法来发布交互菜单请求事件，通知UI系统显示交互菜单，并传递当前交互对象和可用指令列表信息
+    /// </summary>
+    /// <param name="interactor">当前交互对象</param>
     public void Interact(AllyDefinitionSO interactor) {
         EventBus.Publish(new InteractionMenuRequestEvent(this));
     }
 
-    // 当玩家靠近交互对象时，调用此方法来更新当前交互对象和可用指令列表，并发布交互状态变化事件
+    /// <summary>
+    /// 当玩家与交互对象获得焦点时，调用此方法来设置当前交互对象，并根据当前交互对象和指令列表构建可用指令信息列表，并发布交互状态变化事件
+    /// </summary>
+    /// <param name="interactor">当前交互对象</param>
     public void OnFocus(AllyDefinitionSO interactor) {
         CacheActions();
         _currentInteractor = interactor;
@@ -44,21 +52,27 @@ public class InteractionBase : MonoBehaviour
         PublishEvent(true);
     }
 
-    // 当玩家远离交互对象时，调用此方法来清除当前交互对象和可用指令列表，并发布交互状态变化事件
+    /// <summary>
+    /// 当玩家与交互对象失去焦点时，调用此方法来清除当前交互对象和可用指令列表，并发布交互状态变化事件
+    /// </summary>
+    /// <param name="interactor">当前交互对象</param>
     public void OnLoseFocus(AllyDefinitionSO interactor) {
         _currentInteractor = null;
         _cachedCommandInfo.Clear();
         _visibleActionEntries.Clear();
-        Debug.Log("LoseFocused on " + interactor.Name + interactor.Job);
 
         PublishEvent(false);
         HeadAnchor.gameObject.SetActive(true);
     }
 
-    // 获取当前交互对象的可用指令列表
+    /// <summary>
+    /// 缓存当前交互对象的可用指令列表，避免每次交互时都需要重新获取指令组件，提高性能
+    /// </summary>
     private void CacheActions() => _actionsCache = GetComponents<ActionBase>();
 
-    // 根据当前交互对象和指令列表，构建可用指令信息列表
+    /// <summary>
+    /// 根据当前交互对象和指令列表构建可用指令信息列表
+    /// </summary>
     private void RebuildCommands() {
         _cachedCommandInfo.Clear();
         _visibleActionEntries.Clear();
@@ -86,22 +100,30 @@ public class InteractionBase : MonoBehaviour
             HeadAnchor.gameObject.SetActive(false);
     }
 
-    // 检查是否有任何队伍成员可以执行该指令，只有当至少有一个队伍成员可以执行时，才将该指令添加到可用指令列表中
+    /// <summary>
+    /// 检查当前指令是否有任何一个队伍成员可以执行，只有当至少有一个队伍成员可以执行该指令时，才会将该指令显示在交互菜单中
+    /// </summary>
+    /// <param name="action">当前指令</param>
+    /// <returns>如果有返回true，否则返回false</returns>
     private bool CanAnyPartyMemberExecute(ActionBase action) {
         var partyMembers = PartyManager.Instance.PartyMembers;
-        if(partyMembers == null || partyMembers.Count == 0)
+        if (partyMembers == null || partyMembers.Count == 0)
             return false;
 
         foreach (var member in partyMembers) {
-            if(member.Definition == null)
+            if (member.Definition == null)
                 continue;
-            if(action.CanShow(member.Definition as AllyDefinitionSO))
+            if (action.CanShow(member.Definition as AllyDefinitionSO))
                 return true;
         }
 
         return false;
     }
 
+    /// <summary>
+    /// 发布交互状态变化事件，通知UI系统更新交互菜单的显示状态和内容
+    /// </summary>
+    /// <param name="inRange">是否在交互范围内</param>
     private void PublishEvent(bool inRange) {
         EventBus.Publish(new InteractionChangedEvent(this, inRange));
     }

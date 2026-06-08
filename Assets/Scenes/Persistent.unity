@@ -3184,12 +3184,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b4bdd3a6649b74cbc14fbfa9422c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commandMenuCanvasGroup: {fileID: 0}
-  btnAttack: {fileID: 0}
-  btnSkill: {fileID: 0}
-  btnItem: {fileID: 0}
-  btnDefend: {fileID: 0}
-  btnEscape: {fileID: 0}
+  commandMenuCanvasGroup: {fileID: 2094366237}
+  btnAttack: {fileID: 1447323789}
+  btnSkill: {fileID: 1395977304}
+  btnItem: {fileID: 469206490}
+  btnDefend: {fileID: 1419246410}
+  btnEscape: {fileID: 768161398}
 --- !u!1 &160658460
 GameObject:
   m_ObjectHideFlags: 0
@@ -30413,7 +30413,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 267.6, y: 0}
+  m_AnchoredPosition: {x: 550, y: -40}
   m_SizeDelta: {x: 376, y: 405}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2094366233

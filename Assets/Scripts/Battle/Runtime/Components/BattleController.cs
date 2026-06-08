@@ -5,22 +5,28 @@ using Framework.Event;
 /// </summary>
 public class BattleController : MonoBehaviour,
     IEventReceiver<GameModeChangedEvent> {
+    // 战斗场地管理器，负责根据战斗预加载数据生成战斗单位，并根据当前敌人编队的阵型布局单位位置。
     [SerializeField] private BattleFieldManager fieldManager;
-
     public BattleFieldManager FieldManager => fieldManager;
 
+    // 战斗实体列表，包含战斗中所有的单位（友方和敌方）。通常在战斗开始时根据预加载数据创建，并在战斗过程中维护更新。
     private readonly List<BattleEntity> _allEntities = new();
     public List<BattleEntity> AllEntities => _allEntities;
 
+    // 当前正在行动的实体，通常由战斗状态机中的“选择行动者”状态设置和更新
     public BattleEntity CurrentEntity { get; set; }
+    // 当前正在执行的指令请求，通常由玩家输入状态或AI决策状态设置和更新
+    public BattleCommandRequest CurrentCommandRequest { get; set; }
 
-    private BattleState _currentState; // 当前战斗状态
+    // 当前战斗状态
+    private BattleState _currentState;
 
+    // 战斗是否正在进行中，控制战斗循环的执行与停止
     private bool _battleRunning;
-
     public bool IsBattleRunning => _battleRunning;
 
-    private Coroutine _battleLoopRoutine; // 当前正在运行的战斗循环协程
+    // 当前正在运行的战斗循环协程
+    private Coroutine _battleLoopRoutine; 
 
     private void OnEnable() {
         EventBus.Subscribe<GameModeChangedEvent>(this);
@@ -31,12 +37,12 @@ public class BattleController : MonoBehaviour,
 
     #region 事件响应
     public void OnEvent(GameModeChangedEvent evt) {
-        if(evt.NewGameMode == GameMode.Battle) {
+        if (evt.NewGameMode == GameMode.Battle) {
             StartBattleIfReady();
             return;
         }
 
-        if(_battleRunning) {
+        if (_battleRunning) {
             StopBattle();
         }
     }
@@ -95,7 +101,7 @@ public class BattleController : MonoBehaviour,
     public void StopBattle() {
         _battleRunning = false;
         _currentState = null;
-        if(_battleLoopRoutine != null) {
+        if (_battleLoopRoutine != null) {
             StopCoroutine(_battleLoopRoutine);
             _battleLoopRoutine = null;
         }

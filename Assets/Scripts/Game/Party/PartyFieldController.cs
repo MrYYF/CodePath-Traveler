@@ -138,9 +138,9 @@ public class PartyFieldController : MonoBehaviour {
     /// 清除所有跟随者并重置轨迹
     /// </summary>
     public void ClearFollower() {
-        foreach (var follower in fieldFollowers) {
+        foreach (FieldFollower follower in fieldFollowers) {
             if (follower != null) {
-                Destroy(follower);
+                Destroy(follower.gameObject);
             }
             
         }
