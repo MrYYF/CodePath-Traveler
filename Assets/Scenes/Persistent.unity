@@ -13482,6 +13482,7 @@ GameObject:
   - component: {fileID: 847206972}
   - component: {fileID: 847206971}
   - component: {fileID: 847206970}
+  - component: {fileID: 847206974}
   m_Layer: 5
   m_Name: HealthBarRoot
   m_TagString: Untagged
@@ -13536,11 +13537,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Right: 20
+    m_Top: 100
+    m_Bottom: 200
   m_ChildAlignment: 2
-  m_Spacing: 0
+  m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -13586,6 +13587,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847206968}
   m_CullTransparentMesh: 1
+--- !u!114 &847206974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847206968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dbdc6c24f2f3e94b98c28685d7b9fc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 5738327491513875868, guid: fd5a3bc51ac776d42876d803904535a1,
+    type: 3}
 --- !u!1 &867339034
 GameObject:
   m_ObjectHideFlags: 0

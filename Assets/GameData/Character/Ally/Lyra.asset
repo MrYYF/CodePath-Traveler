@@ -18,7 +18,7 @@ MonoBehaviour:
   Job: 3
   BaseLevel: 1
   BaseStats:
-    MaxHP: 100
+    MaxHP: 80
     MaxSP: 100
     PAtk: 0
     PDef: 0
