@@ -1,8 +1,7 @@
 /// <summary>
 /// 游戏模式
 /// </summary>
-public enum GameMode
-{
+public enum GameMode {
     Explore,
     InteractionMenu,
     Battle,
@@ -12,8 +11,7 @@ public enum GameMode
 /// <summary>
 /// 激活的输入映射
 /// </summary>
-public enum ActiveInputActionMap
-{
+public enum ActiveInputActionMap {
     Player,
     UI
 }
@@ -160,4 +158,12 @@ public enum EnemyLayoutFomation {
 public enum FadeStyle {
     PanelFade,
     WipeMask,
+}
+
+public enum BattleCommandType {
+    Attack, // 普通攻击
+    Skill, // 技能
+    Item, // 物品
+    Defend, // 防御
+    Escape // 逃跑
 }

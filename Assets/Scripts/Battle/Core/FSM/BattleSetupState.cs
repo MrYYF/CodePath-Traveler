@@ -42,6 +42,10 @@ public class BattleSetupState : BattleState {
             yield return new WaitForSeconds(runtime);
         }
 
+        // 通知HUD建立显示，初始化首轮时间轴
+        EventBus.Publish(new BattleStartedEvent()); 
+
+
         // TODO:测试效果用，后续需要删除
         _controller.StopBattle();
         yield return null;

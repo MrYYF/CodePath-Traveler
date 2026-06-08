@@ -3,11 +3,14 @@ using System;
 
 
 public class UIManager : MonoBehaviour,
-    IEventReceiver<PanelRequestEvent> {
+    IEventReceiver<PanelRequestEvent>,
+    IEventReceiver<GameModeChangedEvent> {
 
     [Header("根节点与特殊面板引用")]
     [SerializeField, Tooltip("探索模式下显示总体 UI 根节点")]
     private GameObject fieldUIRoot;
+    [SerializeField] private GameObject battleUIRoot;
+
     [SerializeField] private GameObject mainPanel;
 
     private readonly Dictionary<Type, PanelController> _panelControllerDict = new();
@@ -19,12 +22,15 @@ public class UIManager : MonoBehaviour,
         _allPanelList.Clear();
 
         GetPanelsFromRoot(transform);
+        ApplyUIRootMode(GameModeManager.Instance.CurrentGameMode);
     }
     private void OnEnable() {
         EventBus.Subscribe<PanelRequestEvent>(this);
+        EventBus.Subscribe<GameModeChangedEvent>(this);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<PanelRequestEvent>(this);
+        EventBus.Unsubscribe<GameModeChangedEvent>(this);
     }
     private void Update() {
         var mode = GameModeManager.Instance.CurrentGameMode;
@@ -95,7 +101,10 @@ public class UIManager : MonoBehaviour,
         GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
     }
 
-
+    /// <summary>
+    /// 从指定根节点获取所有面板控制器，并将它们添加到面板列表和字典中
+    /// </summary>
+    /// <param name="root">根节点</param>
     private void GetPanelsFromRoot(Transform root) {
         var panels = root.GetComponentsInChildren<PanelController>(true);
         foreach (var panel in panels) {
@@ -106,6 +115,10 @@ public class UIManager : MonoBehaviour,
         }
     }
 
+    /// <summary>
+    /// 尝试通过当前打开的面板处理取消输入
+    /// </summary>
+    /// <returns>如果处理了取消输入返回true，否则返回false</returns>
     private bool TryHandleCancelByActivePanel() {
         foreach (var panel in _allPanelList) {
             if (panel.gameObject.activeSelf == false) {
@@ -117,6 +130,11 @@ public class UIManager : MonoBehaviour,
         }
         return false;
     }
+
+    /// <summary>
+    /// 检查是否有任何面板处于打开状态
+    /// </summary>
+    /// <returns>如果有返回true，否则返回false</returns>
     private bool IsAnyPanelOpen() {
         foreach (var panel in _allPanelList) {
             if (panel.gameObject.activeSelf) {
@@ -126,9 +144,33 @@ public class UIManager : MonoBehaviour,
         return false;
     }
 
+    /// <summary>
+    /// 关闭所有面板
+    /// </summary>
     private void CloseAllPanel() {
         foreach (var panel in _allPanelList) {
             panel.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// 根据游戏模式设置 UI 根节点的显示状态
+    /// </summary>
+    /// <param name="mode">游戏模式</param>
+    private void ApplyUIRootMode(GameMode mode) {
+        switch (mode) {
+            case GameMode.Explore:
+                fieldUIRoot.SetActive(true);
+                battleUIRoot.SetActive(false);
+                break;
+            case GameMode.Battle:
+                fieldUIRoot.SetActive(false);
+                battleUIRoot.SetActive(true);
+                break;
+            default:
+                fieldUIRoot.SetActive(true);
+                battleUIRoot.SetActive(false);
+                break;
         }
     }
 
@@ -139,6 +181,10 @@ public class UIManager : MonoBehaviour,
 
         panel?.gameObject.SetActive(true);
         panel?.SetupPanel(evt.actionBase);
+    }
+
+    public void OnEvent(GameModeChangedEvent evt) {
+        ApplyUIRootMode(evt.NewGameMode);
     }
     #endregion
 }
