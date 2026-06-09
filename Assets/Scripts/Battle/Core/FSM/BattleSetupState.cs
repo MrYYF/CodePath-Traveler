@@ -44,9 +44,11 @@ public class BattleSetupState : BattleState {
         // 通知HUD建立显示，初始化首轮时间轴
         EventBus.Publish(new BattleStartedEvent());
         _controller.StartNewRound();
+        _controller.UpdateTimelinePrediction();
+
+        yield return new WaitForSeconds(runtime);
 
         _controller.SetState(new SelectNextEntityState(_controller));
-
         yield return null;
     }
 

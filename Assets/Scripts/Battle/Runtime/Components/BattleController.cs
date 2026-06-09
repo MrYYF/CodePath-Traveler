@@ -5,6 +5,12 @@ using Framework.Event;
 /// </summary>
 public class BattleController : MonoBehaviour,
     IEventReceiver<GameModeChangedEvent> {
+    [Header("UI引用")]
+    [SerializeField] private BattleCommandUI commandUI;
+    [SerializeField] private BattleTimelineUI timelineUI;
+    public BattleTimelineUI TimelineUI => timelineUI;
+
+    [Header("场地管理")]
     // 战斗场地管理器，负责根据战斗预加载数据生成战斗单位，并根据当前敌人编队的阵型布局单位位置。
     [SerializeField] private BattleFieldManager fieldManager;
     public BattleFieldManager FieldManager => fieldManager;
@@ -157,6 +163,13 @@ public class BattleController : MonoBehaviour,
     /// </summary>
     /// <returns>下一位行动者</returns>
     public BattleEntity GetNextActorByRound() => _battleRoundSchelduler.GetNextActor(_allEntities);
+
+    #endregion
+
+    #region 时间轴预测与破盾队列同步
+    public void UpdateTimelinePrediction() {
+        timelineUI.UpdateTimeline(_battleRoundSchelduler.BuildTimelinePrediction());
+    }
 
     #endregion
 }

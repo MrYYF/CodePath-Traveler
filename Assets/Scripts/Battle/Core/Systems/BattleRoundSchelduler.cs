@@ -3,7 +3,7 @@
 /// 
 /// 维护当前回合剩余行动列表、下一回合预测列表
 /// 决定下一位行动的BattleEntity
-/// 把结果整理成时间轴UI能直接使用的预测节点
+/// 把结果整理成时间轴UI能直接使用的预测节点(BattleTimelinePredictionNode)
 /// 
 /// 只负责排序，不涉及UI与命令执行的 调度层
 /// </summary>
@@ -101,4 +101,27 @@ public class BattleRoundSchelduler {
         return result;
     }
 
+    public List<BattleTimelinePredictionNode> BuildTimelinePrediction() {
+        List<BattleTimelinePredictionNode> result = new List<BattleTimelinePredictionNode>(_currentRound.Count + _nextRound.Count) { };
+
+        // 当前回合剩余行动者
+        for (int i = 0; i < _currentRound.Count; i++) {
+            BattleEntity entity = _currentRound[i];
+            if (!entity.IsAlive) {
+                continue;
+            }
+            result.Add(new BattleTimelinePredictionNode($"{entity.ID}_R0", entity, 0));
+        }
+
+        // 当前回合剩余行动者
+        for (int i = 0; i < _nextRound.Count; i++) {
+            BattleEntity entity = _nextRound[i];
+            if (!entity.IsAlive) {
+                continue;
+            }
+            result.Add(new BattleTimelinePredictionNode($"{entity.ID}_R1", entity, 1));
+        }
+
+        return result;
+    }
 }
