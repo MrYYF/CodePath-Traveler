@@ -37,9 +37,16 @@ public class PlayerInputState : BattleState {
     private IEnumerator MoveCurrentEntityToActionPosition() {
         BattleUnit unit = _controller.CurrentEntity.Unit;
         Vector3 actionPos = _controller.FieldManager.GetActionPos(unit);
-        yield return unit.MoveToPosition(actionPos);
+        float distance = Vector3.Distance(unit.transform.position, actionPos);
+        if (distance > 0.1f) {
+            yield return unit.MoveToPosition(actionPos);
+        }
     }
 
+    /// <summary>
+    /// 判断当前指令是否需要选择目标
+    /// </summary>
+    /// <returns>需要选择返回true，否则返回false</returns>
     private bool NeedsTargetSelection() {
         return _controller.CurrentCommandRequest.Type == BattleCommandType.Attack ||
             _controller.CurrentCommandRequest.Type == BattleCommandType.Skill;
@@ -51,7 +58,7 @@ public class PlayerInputState : BattleState {
     /// </summary>
     /// <param name="type">指令类型</param>
     private void OnCommandSelected(BattleCommandType type) {
-        switch(type) {
+        switch (type) {
             case BattleCommandType.Attack:
                 ConfirmInput(BattleCommandRequest.CreateAttack(BattleTargetRequest.FromType(TargetType.SingleEnemy)));
                 break;

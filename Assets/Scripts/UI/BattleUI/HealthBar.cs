@@ -1,11 +1,12 @@
+using Framework.Event;
 using TMPro;
 using UnityEngine.UI;
 
 /// <summary>
 /// 状态栏UI层，负责控制状态栏中展示数据
 /// </summary>
-public class HealthBar : MonoBehaviour
-{
+public class HealthBar : MonoBehaviour,
+    IEventReceiver<ActiveEntityChangedEvent> {
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] private Slider hpSlider;
@@ -20,10 +21,20 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Sprite activeBackground;
     [SerializeField] private float activeScale = 1.2f;
 
+    // 当前healthbarUI组件所绑定的实体
     private BattleEntity _targetEntity;
     private Sprite _normalBackGround;
     private Vector3 _baseScale = Vector3.one;
+    private bool _isActive;
 
+    #region 生命周期
+    private void OnEnable() {
+        EventBus.Subscribe<ActiveEntityChangedEvent>(this);
+    }
+    private void OnDisable() {
+        EventBus.Unsubscribe<ActiveEntityChangedEvent>(this);
+    }
+    #endregion
 
     public void Setup(BattleEntity entity) {
         _targetEntity = entity;
@@ -53,4 +64,30 @@ public class HealthBar : MonoBehaviour
 
         bpSlider.value = runtimeData.CurrentBP;
     }
+
+    #region 事件监听
+    public void OnEvent(ActiveEntityChangedEvent evt) {
+        if(_targetEntity == null) {
+            SetActiveVisual(false);
+            return;
+        }
+
+        // 当当前行动的实体与UI所绑定的实体对应时则高亮显示
+        SetActiveVisual(_targetEntity == evt.Entity);
+    }
+
+    private void SetActiveVisual(bool active) {
+        if(_isActive == active) {
+            return;
+        }
+
+        _isActive = active;
+        backgroundImage.sprite = active ? activeBackground : _normalBackGround;
+        backgroundImage.SetNativeSize();
+        highlightRoot.localScale = active ? _baseScale * activeScale : _baseScale;
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+    }
+
+    #endregion
 }

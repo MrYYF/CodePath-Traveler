@@ -17,10 +17,10 @@ public class TimelineIcon : MonoBehaviour {
     private void Awake() {
         _canvasGroup = GetComponent<CanvasGroup>();
         _visualInitPos = visualRoot.localPosition;
+        _canvasGroup.alpha = 1f;
     }
 
     public void Setup(BattleEntity entity) {
-        _canvasGroup.alpha = 1f;
         portraitImage.sprite = entity.Definition.Portrait;
         portraitImage.SetNativeSize();
         borderImage.sprite = entity.IsPlayer ? allyFrame : enemyFrame;

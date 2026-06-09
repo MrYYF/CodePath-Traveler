@@ -5,7 +5,7 @@ using System;
 /// 战斗目标请求数据
 /// 记录命令最终作用对象
 /// </summary>
-public class BattleTargetRequest : MonoBehaviour {
+public class BattleTargetRequest {
     // 攻击对象
     public string TargetEntityID;
     // 攻击类型

@@ -26,7 +26,10 @@ public class SelectNextEntityState : BattleState {
 
         _controller.CurrentEntity = nextEntity;
         _controller.UpdateTimelinePrediction();
+
+        // 选择当前行动者并广播当前行动者变化事件
         _controller.TimelineUI.SetActiveEntity(nextEntity);
+        EventBus.Publish(new ActiveEntityChangedEvent(nextEntity));
 
         // 根据当前行动者切换输入模式
         if (nextEntity != null) {

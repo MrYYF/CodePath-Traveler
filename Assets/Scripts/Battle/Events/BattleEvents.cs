@@ -12,3 +12,14 @@ public readonly struct BattleStartedEvent : IEvent {
     //}
 }
 
+/// <summary>
+/// 当前激活的行动者发生变化事件
+/// </summary>
+public readonly struct ActiveEntityChangedEvent : IEvent {
+    public readonly BattleEntity Entity;
+
+    public ActiveEntityChangedEvent(BattleEntity entity) {
+        Entity = entity;
+    }
+}
+
