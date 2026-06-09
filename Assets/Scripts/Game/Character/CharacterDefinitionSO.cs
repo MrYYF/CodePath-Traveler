@@ -14,6 +14,10 @@ public abstract class CharacterDefinitionSO : ScriptableObject
     public int BaseLevel = 1; // 基础等级
     public StatBlock BaseStats; // 基础属性
 
+    [Header("Skill")]
+    public SkillDataSO BasicAttack;
+    public List<SkillDataSO> InitialSkills; // 初始技能 
+
     [Header("Animator")]
     public AnimatorOverrideController FieldAnimator;
     public AnimatorOverrideController BattleAnimator;

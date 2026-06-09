@@ -175,3 +175,25 @@ public enum TargetType{
     AllAllies,
     Self
 }
+
+public enum SkillType{
+    Damage,
+    Heal,
+    Buff,
+    Debuff,
+}
+
+public enum DamageKind {
+    Physical,
+    Magical,
+}
+
+public enum ElementType {
+    None,
+    Fire,
+    Ice,
+    Lightning,
+    Wind,
+    Light,
+    Dark
+}

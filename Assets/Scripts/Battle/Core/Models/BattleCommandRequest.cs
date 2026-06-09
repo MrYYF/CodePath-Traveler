@@ -1,6 +1,6 @@
 
 /// <summary>
-/// 战斗指令的数据载体
+/// 战斗指令的数据载体,包括指令类型、作用目标请求数据
 /// </summary>
 public class BattleCommandRequest {
     // 发出指令的类型
