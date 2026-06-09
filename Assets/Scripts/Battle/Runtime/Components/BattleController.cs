@@ -28,12 +28,19 @@ public class BattleController : MonoBehaviour,
     // 当前正在运行的战斗循环协程
     private Coroutine _battleLoopRoutine; 
 
+    // CTB调度器
+    private readonly BattleRoundSchelduler _battleRoundSchelduler = new();
+
+
+
+    #region 生命周期
     private void OnEnable() {
         EventBus.Subscribe<GameModeChangedEvent>(this);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<GameModeChangedEvent>(this);
     }
+    #endregion
 
     #region 事件响应
     public void OnEvent(GameModeChangedEvent evt) {
@@ -136,6 +143,20 @@ public class BattleController : MonoBehaviour,
             entity.Unit.SetTargetSelection(false);
         }
     }
+
+    #endregion
+
+    #region 回合调度桥接
+    /// <summary>
+    /// 初始化第一轮CTB顺序
+    /// </summary>
+    public void StartNewRound() => _battleRoundSchelduler.Initialize(_allEntities);
+
+    /// <summary>
+    /// 向调度器请求下一位行动者
+    /// </summary>
+    /// <returns>下一位行动者</returns>
+    public BattleEntity GetNextActorByRound() => _battleRoundSchelduler.GetNextActor(_allEntities);
 
     #endregion
 }

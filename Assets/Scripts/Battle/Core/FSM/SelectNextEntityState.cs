@@ -15,7 +15,15 @@ public class SelectNextEntityState : BattleState {
     public SelectNextEntityState(BattleController controller) : base(controller) { }
 
     public override IEnumerator Execute() {
-        BattleEntity nextEntity = _controller.AllEntities.Find(entity => entity.IsPlayer && entity.IsAlive);
+        // 获取下一位行动对象
+        BattleEntity nextEntity = _controller.GetNextActorByRound();
+
+        // 如果没有可行动对象，则战斗结束
+        if(nextEntity == null) {
+            _controller.StopBattle();
+            yield break;
+        }
+
         _controller.CurrentEntity = nextEntity;
 
         // 根据当前行动者切换输入模式

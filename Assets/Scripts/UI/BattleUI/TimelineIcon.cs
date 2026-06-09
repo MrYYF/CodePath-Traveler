@@ -3,8 +3,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 时间轴
 /// </summary>
-public class TimelineIcon : MonoBehaviour
-{
+public class TimelineIcon : MonoBehaviour {
     [SerializeField] private Image portraitImage;
     [SerializeField] private Image borderImage;
     [SerializeField] private Transform visualRoot;

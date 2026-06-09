@@ -22,4 +22,8 @@ public class BattleEntity {
         IsPlayer = isPlayer;
         ID = stableID;
     }
+
+    internal int GetCurrentSpeed() {
+        return TotalStats.Speed;
+    }
 }
