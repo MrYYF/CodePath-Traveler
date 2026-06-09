@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine.UI;
 
 /// <summary>
-/// 
+/// 状态栏UI层，负责控制状态栏中展示数据
 /// </summary>
 public class HealthBar : MonoBehaviour
 {
@@ -39,6 +39,9 @@ public class HealthBar : MonoBehaviour
         RefreshUI();
     }
 
+    /// <summary>
+    /// 刷新UI显示
+    /// </summary>
     private void RefreshUI() {
         CharacterRuntimeData runtimeData = _targetEntity.RuntimeData;
         StatBlock stats = runtimeData.GetTotalStats();

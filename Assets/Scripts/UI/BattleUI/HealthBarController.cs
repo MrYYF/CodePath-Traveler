@@ -1,7 +1,7 @@
 using Framework.Event;
 
 /// <summary>
-/// 
+/// 状态栏逻辑控制类，负责处理状态栏的生成与启用，同时向UI层传递数据
 /// </summary>
 public class HealthBarController : MonoBehaviour,
     IEventReceiver<BattleStartedEvent> {
@@ -18,6 +18,9 @@ public class HealthBarController : MonoBehaviour,
     }
     #endregion
 
+    /// <summary>
+    /// 重建状态栏
+    /// </summary>
     private void RebuildHealthBars() {
         // 清空旧状态栏
         foreach (Transform child in transform) {
