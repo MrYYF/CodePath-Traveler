@@ -20,18 +20,31 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
     [SerializeField] private SkillButton skillButtonPrefab;
 
     // 回调方法
-    private Action<SkillDataSO> _OnSkillSelected;
-    private Action<ItemDefinitionSO> _OnItemSelected;
+    private Action<SkillDataSO> _onSkillSelected;
+    private Action<ItemDefinitionSO> _onItemSelected;
     private Action<BattleCommandType> _onCommandSelected;
 
     private BattleEntity _currentEntity;
     private readonly List<GameObject> _spawnedSubMenuButtons = new List<GameObject>();
+    private Button _lastPrimaryButton; // 一级菜单选中按钮缓存
+    private bool _subMenuOpen; // 二级菜单打开状态
 
     #region 生命周期
     protected override void Awake() {
         base.Awake();
         BindPrimaryButtons();
         commandMenuCanvasGroup.gameObject.SetActive(false);
+    }
+
+    private void Update() {
+        if (!commandDetailMenuPanel.gameObject.activeSelf) {
+            return;
+        }
+
+        InputSystemController input = InputSystemController.Instance;
+        if (input != null && input.GetUICancelPressed() && _subMenuOpen) {
+            CloseSubMenu();
+        }
     }
     #endregion
 
@@ -41,7 +54,10 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
         btnAttack.Select();
     }
 
-    public void ClosePanel() => commandMenuCanvasGroup.gameObject.SetActive(false);
+    public void ClosePanel() {
+        CloseSubMenu();
+        commandMenuCanvasGroup.gameObject.SetActive(false);
+    }
 
     /// <summary>
     /// 绑定主指令按钮的点击事件
@@ -59,17 +75,32 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
     /// </summary>
     /// <param name="commandType"></param>
     private void OnCommandClicked(BattleCommandType commandType) {
-        CloseAndInvoke(commandType);
+        switch (commandType) {
+            case BattleCommandType.Skill:
+                OpenSkillMenu();
+                break;
+
+            default:
+                CloseAndInvoke(commandType);
+                break;
+        }
     }
 
     /// <summary>
     /// 请求输入战斗指令
     /// </summary>
-    /// <param name="entity">请求输入的实体</param>
-    /// <param name="onCommandSelected">完成命令的回调</param>
-    public void RequestInput(BattleEntity entity, Action<BattleCommandType> onCommandSelected) {
+    /// <param name="entity"></param>
+    /// <param name="onCommandSelected"></param>
+    /// <param name="onSkillSelected"></param>
+    /// <param name="onItemSelected"></param>
+    public void RequestInput(BattleEntity entity,
+        Action<BattleCommandType> onCommandSelected,
+        Action<SkillDataSO> onSkillSelected,
+        Action<ItemDefinitionSO> onItemSelected) {
         _currentEntity = entity;
         _onCommandSelected = onCommandSelected;
+        _onSkillSelected = onSkillSelected;
+        _onItemSelected = onItemSelected;
         ShowPanel();
     }
 
@@ -86,12 +117,65 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
 
     #region 二级菜单面板
     /// <summary>
+    /// 打开二级技能面板
+    /// </summary>
+    private void OpenSkillMenu() {
+        int currentSP = _currentEntity.CurrentSP;
+        List<SkillDataSO> skills = _currentEntity.Definition.InitialSkills;
+        if (skills.Count <= 0) {
+            return;
+        }
+        BeginSubMenu(btnSkill);
+
+        // 构建技能列表
+        Button firstButton = null;
+        foreach (var skill in skills) {
+            if (skill == null) {
+                continue;
+            }
+            SkillButton skillButton = Instantiate(skillButtonPrefab, commandDetailMenuPanel);
+            skillButton.Setup(skill);
+            Button button = skillButton.GetComponent<Button>();
+            button.interactable = skill.spCost <= currentSP;
+            button.onClick.AddListener(() => OnSkillButtonClick(skill));
+
+            if (firstButton == null && button.interactable) {
+                firstButton = button;
+            }
+
+            _spawnedSubMenuButtons.Add(skillButton.gameObject);
+        }
+
+        if (_spawnedSubMenuButtons.Count <= 0) {
+            CloseSubMenu();
+            return;
+        }
+
+        firstButton.Select();
+    }
+
+    /// <summary>
     /// 打开二级面板
     /// </summary>
-    /// <param name="button"></param>
-    private void BeginSubMenu(Button button) {
+    /// <param name="returnButton">返回时需要选中的命令按钮</param>
+    private void BeginSubMenu(Button returnButton) {
         ClearSubMenuButtons();
         commandDetailMenuPanel.gameObject.SetActive(true);
+        _subMenuOpen = true;
+        _lastPrimaryButton = returnButton;
+        commandMenuCanvasGroup.interactable = false;
+    }
+
+    private void CloseSubMenu(bool restorePrimarySelection = true) {
+        ClearSubMenuButtons();
+        commandDetailMenuPanel.gameObject.SetActive(false);
+        commandMenuCanvasGroup.interactable = true;
+
+        if (restorePrimarySelection && _subMenuOpen) {
+            _lastPrimaryButton.Select();
+            _lastPrimaryButton = null;
+            _subMenuOpen = false;
+        }
     }
 
     /// <summary>
@@ -104,22 +188,13 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
         _spawnedSubMenuButtons.Clear();
     }
 
-    /// <summary>
-    /// 外部调用入口
-    /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="onCommandSelected"></param>
-    /// <param name="onSkillSelected"></param>
-    /// <param name="onItemSelected"></param>
-    public void RequestInput(BattleEntity entity,
-        Action<BattleCommandType> onCommandSelected,
-        Action<SkillDataSO> onSkillSelected,
-        Action<ItemDefinitionSO> onItemSelected) {
-        _currentEntity = entity;
-        _onCommandSelected = onCommandSelected;
-        _OnSkillSelected = onSkillSelected;
-        _OnItemSelected = onItemSelected;
-        ShowPanel();
+    #endregion
+
+    #region 按钮回调
+    private void OnSkillButtonClick(SkillDataSO skill) {
+        ClosePanel();
+        _onSkillSelected?.Invoke(skill);
+        _onSkillSelected = null;
     }
     #endregion
 }

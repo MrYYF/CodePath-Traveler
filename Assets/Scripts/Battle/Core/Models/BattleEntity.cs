@@ -14,6 +14,8 @@ public class BattleEntity {
     public bool IsPlayer { get; }
     public bool IsAlive => RuntimeData.CurrentHP > 0;
     public int CurrentHP => RuntimeData.CurrentHP;
+    public int CurrentSP => RuntimeData.CurrentSP;
+    public int CurrentBP => RuntimeData.CurrentBP;
     public StatBlock TotalStats => RuntimeData.GetTotalStats();
 
     public BattleEntity(CharacterRuntimeData runtimeData, BattleUnit unit, bool isPlayer, string stableID) {

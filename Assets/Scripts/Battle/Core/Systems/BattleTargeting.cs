@@ -11,6 +11,36 @@
 /// </summary>
 public static class BattleTargeting
 {
+
+    /// <summary>
+    /// 判断目标类型是否需要玩家手动选择
+    /// </summary>
+    /// <param name="targetType">目标类型</param>
+    /// <returns>不需要返回true，否则返回false</returns>
+    public static bool NeedsManualSelection(TargetType targetType) {
+        return targetType == TargetType.AllAllies || 
+            targetType == TargetType.AllEnemies;
+    }
+
+    /// <summary>
+    /// 根据行动者和目标类型返回可直接确定的预设战斗目标请求数据（BTR）
+    /// </summary>
+    /// <param name="actor">当前行动者</param>
+    /// <param name="targetType">目标对象类型</param>
+    /// <returns>战斗目标请求数据（BTR）</returns>
+    public static BattleTargetRequest ResolvePresetTarget(BattleEntity actor,TargetType targetType) {
+        switch(targetType) {
+            case TargetType.Self:
+                return BattleTargetRequest.Self(actor.ID);
+            case TargetType.AllEnemies:
+                return BattleTargetRequest.AllEnemies;
+            case TargetType.AllAllies:
+                return BattleTargetRequest.AllAllies;
+            default:
+                return BattleTargetRequest.FromType(targetType);
+        }
+    }
+
     /// <summary>
     /// 根据目标类型收集候选实体集合
     /// </summary>

@@ -7,6 +7,7 @@ public class BattleCommandRequest {
     public BattleCommandType Type;
     // 作用对象
     public BattleTargetRequest Target;
+    public SkillDataSO Skill;
 
     public static BattleCommandRequest CreateAttack(BattleTargetRequest target) {
         return new BattleCommandRequest {
@@ -15,8 +16,13 @@ public class BattleCommandRequest {
         };
     }
 
-    public static BattleCommandRequest CreateSkill() {
-        return new BattleCommandRequest { Type = BattleCommandType.Skill };
+    public static BattleCommandRequest CreateSkill(BattleTargetRequest target, SkillDataSO skill) {
+        return new BattleCommandRequest {
+            Target = target,
+            Type = BattleCommandType.Skill,
+            Skill = skill
+        };
+
     }
 
     public static BattleCommandRequest CreateItem() {

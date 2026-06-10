@@ -97,7 +97,6 @@ public class BattleRoundSchelduler {
             BattleEntity entity = result[i];
             orderLog += $"{i + 1}.{entity.Definition.Name}({entity.GetCurrentSpeed()})";
         }
-        Debug.Log(orderLog);
         return result;
     }
 

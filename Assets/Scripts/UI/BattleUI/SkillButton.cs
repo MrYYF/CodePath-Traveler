@@ -16,7 +16,7 @@ public class SkillButton : MonoBehaviour
         bool showIcon = skillData.elementType != ElementType.None;
         skillIcon.gameObject.SetActive(showIcon);
         skillIcon.sprite = skillData.icon;
-        skillName.text = skillData.name;
+        skillName.text = skillData.skillName;
         skillCost.text = $"SP {skillData.spCost}";
     }
 

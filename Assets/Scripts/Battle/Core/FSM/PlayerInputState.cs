@@ -14,7 +14,7 @@ public class PlayerInputState : BattleState {
         yield return MoveCurrentEntityToActionPosition();
 
         // 请求打开玩家可用指令UI面板
-        BattleCommandUI.Instance.RequestInput(_controller.CurrentEntity, OnCommandSelected);
+        BattleCommandUI.Instance.RequestInput(_controller.CurrentEntity, OnCommandSelected, OnSkillSelected, null);
 
         yield break;
     }
@@ -62,9 +62,6 @@ public class PlayerInputState : BattleState {
             case BattleCommandType.Attack:
                 ConfirmInput(BattleCommandRequest.CreateAttack(BattleTargetRequest.FromType(TargetType.SingleEnemy)));
                 break;
-            case BattleCommandType.Skill:
-                ConfirmInput(BattleCommandRequest.CreateSkill());
-                break;
             case BattleCommandType.Item:
                 ConfirmInput(BattleCommandRequest.CreateItem());
                 break;
@@ -78,6 +75,13 @@ public class PlayerInputState : BattleState {
                 Debug.LogError($"未知的指令类型: {type}");
                 break;
         }
+    }
+
+    private void OnSkillSelected(SkillDataSO skill) {
+        ConfirmInput(BattleCommandRequest.CreateSkill(
+            BattleTargeting.ResolvePresetTarget(_controller.CurrentEntity, skill.targetType),
+            skill)
+            );
     }
 
     /// <summary>
