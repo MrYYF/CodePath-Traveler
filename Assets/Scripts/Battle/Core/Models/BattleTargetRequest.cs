@@ -3,7 +3,7 @@
 /// 记录命令最终作用对象的ID、攻击类型等数据
 /// </summary>
 public class BattleTargetRequest {
-    // 攻击对象
+    // 攻击对象ID
     public string TargetEntityID;
     // 攻击类型
     public TargetType TargetType;

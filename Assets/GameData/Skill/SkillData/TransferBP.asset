@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: "\u4EA7\u751FBP"
   description: "\u6D88\u8017SP\u503C\u4EA7\u751F1\u70B9BP\u70B9\u6570"
   icon: {fileID: 0}
-  spCost: 20
+  spCost: 200
   targetType: 2
   skillType: 1
   damageKind: 1

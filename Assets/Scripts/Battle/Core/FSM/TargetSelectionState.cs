@@ -13,6 +13,8 @@
 /// </remarks>
 /// </summary>
 public class TargetSelectionState : BattleState {
+    // 目标类型
+    private TargetType _targetType = TargetType.SingleEnemy;
     // 可用的目标选择集合
     private List<BattleEntity> _targets;
     // 当前选择的序列值
@@ -25,15 +27,23 @@ public class TargetSelectionState : BattleState {
     public TargetSelectionState(BattleController controller) : base(controller) { }
 
     public override IEnumerator Enter() {
-        _targets = BattleTargeting.CollectTargets(
+        // 根据当前命令解析目标类型
+        _targetType = _controller.CurrentCommandRequest.Skill != null ?
+            _controller.CurrentCommandRequest.Skill.targetType :
+            TargetType.SingleEnemy;
+
+        // 按照目标类型收集所有可选目标
+        _targets = BattleTargeting.GetAliveTargetsByType(
             _controller.CurrentEntity,
-            _controller.CurrentCommandRequest.Target.TargetType,
+            _targetType,
             _controller.AllEntities
             );
 
+        // 重置这一轮目标选择的运行时状态
         _currentIndex = 0;
         _ignoreConfirmThisFrame = true;
         _navigateCooldown = InputCooldownTime;
+
 
         // 如果没有可选目标就跳到执行层
         if (_targets.Count == 0) {
@@ -41,9 +51,14 @@ public class TargetSelectionState : BattleState {
             yield break;
         }
 
-        // 单体目标
-        SelectedTarget(_currentIndex);
+        // 群体目标直接全部选择
+        if (_targetType == TargetType.AllAllies || _targetType == TargetType.AllEnemies) {
+            _controller.SetSelectedTarget(_targets);
+            yield break;
+        }
 
+        // 单体目标默认选择一个
+        SelectedTarget(_currentIndex);
         yield break;
     }
 
@@ -60,7 +75,8 @@ public class TargetSelectionState : BattleState {
             HandleInput();
 
             // 确定目标
-            if (InputSystemController.Instance.GetUISubmitPressed() && TryConfirmSelection()) {
+            if (InputSystemController.Instance.GetUISubmitPressed()) {
+                ConfirmSelection();
                 yield break;
             }
 
@@ -116,11 +132,13 @@ public class TargetSelectionState : BattleState {
     /// 尝试确认选择的单体目标
     /// </summary>
     /// <returns>选择成功</returns>
-    private bool TryConfirmSelection() {
-        _controller.CurrentCommandRequest.Target = BattleTargeting.BuildSingleTargetRequest(
-            _controller.CurrentEntity,
-            _targets[_currentIndex]
-            );
+    private bool ConfirmSelection() {
+        if (_targetType == TargetType.AllEnemies || _targetType == TargetType.AllAllies) {
+            _controller.CurrentCommandRequest.TargetEntityID = null;
+        }
+        else {
+            _controller.CurrentCommandRequest.TargetEntityID = _targets[_currentIndex].ID;
+        }
 
         _controller.SetState(new PerformActionState(_controller));
         return true;
