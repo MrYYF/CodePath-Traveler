@@ -11,11 +11,50 @@
 /// </summary>
 public static class BattleTargeting {
 
+    /// <summary>
+    /// 根据当前行动对象以及目标类型返回阵营实体集合
+    /// </summary>
+    /// <param name="self">当前行动的实体</param>
+    /// <param name="targetType">目标类型</param>
+    /// <param name="allEntities">场上所有实体</param>
+    /// <returns></returns>
     public static List<BattleEntity> GetAliveTargetsByType(BattleEntity self, TargetType targetType, List<BattleEntity> allEntities) {
         return targetType switch {
             TargetType.SingleAlly or
             TargetType.AllAllies => allEntities.FindAll(entity => entity.IsAlive && entity.IsPlayer == self.IsPlayer),
             _ => allEntities.FindAll(entity => entity.IsAlive && entity.IsPlayer != self.IsPlayer)
         };
+    }
+
+    /// <summary>
+    /// 获取当前命令所对应的目标实体集合
+    /// </summary>
+    /// <param name="controller">战斗控制器</param>
+    /// <returns>被选中的目标集合</returns>
+    public static List<BattleEntity> BuildExecutionTargets(BattleController controller) {
+        BattleEntity actor = controller.CurrentEntity;
+        BattleCommandRequest command = controller.CurrentCommandRequest;
+        List<BattleEntity> allEntities = controller.AllEntities;
+
+        if (command.Type == BattleCommandType.Defend || command.Type == BattleCommandType.Escape) {
+
+            return new List<BattleEntity>() { actor };
+        }
+
+        if (command.Type == BattleCommandType.Item) {
+            BattleEntity itemTarget = allEntities.Find(entity => entity.IsAlive && entity.ID == command.TargetEntityID);
+            return itemTarget != null ? new List<BattleEntity> { itemTarget } : new List<BattleEntity>();
+        }
+
+        if (command.Type == BattleCommandType.Attack || command.Type == BattleCommandType.Skill) {
+            TargetType targetType = command.Skill.targetType;
+            if (targetType == TargetType.SingleEnemy || targetType == TargetType.SingleAlly) {
+                BattleEntity target = allEntities.Find(entity => entity.IsAlive && entity.ID == command.TargetEntityID);
+                return target != null ? new List<BattleEntity>() { target } : new List<BattleEntity>();
+            }
+            return GetAliveTargetsByType(actor, targetType, allEntities);
+        }
+
+        return new List<BattleEntity>();
     }
 }

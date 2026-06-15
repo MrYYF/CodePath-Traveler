@@ -67,6 +67,11 @@ public class CharacterRuntimeData {
         CurrentSP = Mathf.Clamp(CurrentSP + amount, 0, stats.MaxSP);
     }
 
+    public void ModifyBP(int amount) {
+        var stats = GetTotalStats();
+        CurrentBP = Mathf.Clamp(CurrentBP + amount, 0, 5);
+    }
+
     public void ResetBattleBP() {
         CurrentBP = 0;
     }

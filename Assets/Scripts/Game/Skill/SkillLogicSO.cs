@@ -7,9 +7,14 @@ public abstract class SkillLogicSO : ScriptableObject {
     /// <summary>
     /// 执行特殊逻辑
     /// </summary>
-    /// <param name="context">战斗上下文（施法者、控制器）</param>
-    /// <param name="targets">已选定的目标列表</param>
-    /// <param name="skillData">技能数据</param>
+    /// <param name="controller">控制器</param>
+    /// <param name="actor">执行者</param>
+    /// <param name="command">命令</param>
+    /// <param name="targets">目标</param>
     /// <returns></returns>
-    public abstract IEnumerator ExecuteLogic(BattleActionContext context, List<BattleEntity> targets, SkillDataSO skillData);
+    public abstract IEnumerator ExecuteLogic(
+        BattleController controller, 
+        BattleEntity actor, 
+        BattleCommandRequest command,
+        List<BattleEntity> targets);
 }

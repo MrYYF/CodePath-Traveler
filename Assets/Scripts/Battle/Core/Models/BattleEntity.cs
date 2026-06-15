@@ -17,6 +17,8 @@ public class BattleEntity {
     public int CurrentSP => RuntimeData.CurrentSP;
     public int CurrentBP => RuntimeData.CurrentBP;
     public StatBlock TotalStats => RuntimeData.GetTotalStats();
+    private const int MaxBattleBP = 5;
+    private bool _usedBPInThisTurn = false;
 
     public BattleEntity(CharacterRuntimeData runtimeData, BattleUnit unit, bool isPlayer, string stableID) {
         RuntimeData = runtimeData;
@@ -28,4 +30,18 @@ public class BattleEntity {
     internal int GetCurrentSpeed() {
         return TotalStats.Speed;
     }
+
+    public void SpendBP(int amount) {
+        RuntimeData.ModifyBP(-amount);
+
+        //TODO:广播更新BP
+    }
+
+    public void SpendSP(int amount) {
+        RuntimeData.ModifySP(-amount);
+
+        //TODO:广播更新SP
+    }
+
+    public void MarkBPUsed() => _usedBPInThisTurn = true;
 }
