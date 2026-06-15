@@ -23,6 +23,6 @@ MonoBehaviour:
   elementType: 0
   weaponType: 2
   basePower: 0
-  hitCount: 0
+  hitCount: 1
   healAmount: 0
   specialLogic: {fileID: 0}

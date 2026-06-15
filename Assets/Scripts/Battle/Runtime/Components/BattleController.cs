@@ -5,6 +5,10 @@ using Framework.Event;
 /// </summary>
 public class BattleController : MonoBehaviour,
     IEventReceiver<GameModeChangedEvent> {
+    [Header("配置参数")]
+    [SerializeField] private BattleConfigSO config;
+    public BattleConfigSO Config => config;
+
     [Header("UI引用")]
     [SerializeField] private BattleCommandUI commandUI;
     [SerializeField] private BattleTimelineUI timelineUI;

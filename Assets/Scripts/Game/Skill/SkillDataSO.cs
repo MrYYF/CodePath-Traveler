@@ -22,7 +22,7 @@ public class SkillDataSO : ScriptableObject
 
     [Header("Effect")]
     [Min(0)] public int basePower;
-    [Min(1)] public int hitCount;
+    [Min(1)] public int hitCount = 1;
     [Min(0)] public int healAmount;
 
     [Header("Special Logic Strategy")]

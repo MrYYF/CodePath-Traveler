@@ -19,6 +19,7 @@ public class BattleEntity {
     public StatBlock TotalStats => RuntimeData.GetTotalStats();
     private const int MaxBattleBP = 5;
     private bool _usedBPInThisTurn = false;
+    public bool IsDefending { get; private set; }
 
     public BattleEntity(CharacterRuntimeData runtimeData, BattleUnit unit, bool isPlayer, string stableID) {
         RuntimeData = runtimeData;
@@ -44,4 +45,53 @@ public class BattleEntity {
     }
 
     public void MarkBPUsed() => _usedBPInThisTurn = true;
+
+    #region 伤害计算
+    public int CalculateDamageFrom(BattleEntity attacker, SkillDataSO skill, float powerMultiplier) {
+        bool isMagical = skill != null && skill.damageKind == DamageKind.Magical;
+        StatBlock atkStats = attacker.TotalStats;
+        StatBlock defStats = TotalStats;
+
+        int atk = isMagical ? atkStats.MAtk : atkStats.PAtk;
+        int def = isMagical ? defStats.MDef : defStats.PDef;
+
+        if (IsDefending) {
+            def = Mathf.RoundToInt(def * 1.5f);
+        }
+
+        int basePower = skill.basePower;
+        int rawDamage = Mathf.Max(1, atk - def + basePower);
+        return Mathf.RoundToInt(rawDamage * powerMultiplier);
+    }
+
+    public void TakeDamage(int amount) {
+        if (!IsAlive) {
+            return;
+        }
+
+        RuntimeData.ModifyHP(-amount);
+
+        //TODO:广播伤害事件
+
+        Unit.UpdateVisuals();
+    }
+    #endregion
+
+    #region 防御姿态接口
+    /// <summary>
+    /// 进入防御姿态
+    /// </summary>
+    public void EnterDefendStance() {
+        if (!IsAlive) {
+            return;
+        }
+
+        IsDefending = true;
+    }
+
+    /// <summary>
+    /// 退出防御姿态
+    /// </summary>
+    public void ClearDefendStance() => IsDefending = false;
+    #endregion
 }

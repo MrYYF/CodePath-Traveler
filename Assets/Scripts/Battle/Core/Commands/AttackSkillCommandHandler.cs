@@ -4,7 +4,7 @@
 /// </summary>
 public class AttackSkillCommandHandler : BattleCommandHandleBase {
     private List<BattleEntity> _targets = new();
-    private AttackSkillExecutionEngine _executionEngine;
+    private AttackSkillExecutionEngine _executionEngine = new AttackSkillExecutionEngine();
 
 
     protected override bool PreparePhase() {
@@ -36,7 +36,7 @@ public class AttackSkillCommandHandler : BattleCommandHandleBase {
     }
 
     protected override IEnumerator ExecutionPhase() {
-        return _executionEngine.Execute(Controller, _targets);
+        yield return _executionEngine.Execute(Controller, _targets);
     }
 
 

@@ -24,7 +24,7 @@ public class BattleUnit : MonoBehaviour {
     /// </summary>
     private void UpdateTargetCursorPosition() {
         Bounds bounds = spriteRenderer.bounds;
-        Vector3 worldLeftCenter = new Vector3(bounds.min.x,bounds.center.y,bounds.center.z);
+        Vector3 worldLeftCenter = new Vector3(bounds.min.x, bounds.center.y, bounds.center.z);
         Vector3 localLeftCenter = transform.InverseTransformPoint(worldLeftCenter);
         Transform cursorTransform = targetCursorRenderer.transform;
         Vector3 localPos = cursorTransform.localPosition;
@@ -34,6 +34,10 @@ public class BattleUnit : MonoBehaviour {
         cursorTransform.localPosition = localPos;
     }
 
+    /// <summary>
+    /// 单位选择光标是否显示
+    /// </summary>
+    /// <param name="visible">是否显示</param>
     public void SetTargetSelection(bool visible) {
         if (visible) {
             UpdateTargetCursorPosition();
@@ -60,8 +64,9 @@ public class BattleUnit : MonoBehaviour {
     /// <summary>
     /// 根据战斗实体的当前状态更新动画参数和视觉效果
     /// </summary>
-    private void UpdateVisuals() {
+    public void UpdateVisuals() {
         if (!Entity.IsAlive) {
+            // 死亡动画
             animator.SetBool("isDead", true);
             return;
         }
@@ -73,6 +78,12 @@ public class BattleUnit : MonoBehaviour {
         animator.SetFloat("hp01", hpRatio);
     }
 
+    /// <summary>
+    /// 移动到指定坐标位置
+    /// </summary>
+    /// <param name="targetPos">目标位置</param>
+    /// <param name="duration">移动时间</param>
+    /// <returns></returns>
     public IEnumerator MoveToPosition(Vector3 targetPos, float duration = 0.5f) {
         animator.SetBool("isMoving", true);
 
@@ -88,5 +99,9 @@ public class BattleUnit : MonoBehaviour {
 
         animator.SetBool("isMoving", false);
 
+    }
+
+    public void PlayAttackAnimation() {
+        animator.SetTrigger("attack");
     }
 }

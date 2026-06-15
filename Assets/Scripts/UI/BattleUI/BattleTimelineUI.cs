@@ -182,7 +182,6 @@ public class BattleTimelineUI : MonoBehaviour {
         activeUnitPortrait.transform.DOKill();
         activeUnitPortrait.transform.localScale = Vector3.one * 0.5f;
         activeUnitPortrait.transform.DOScale(1f, 0.4f).SetEase(Ease.OutBack);
-        activeUnitPortrait.SetNativeSize();
     }
     #endregion
 }

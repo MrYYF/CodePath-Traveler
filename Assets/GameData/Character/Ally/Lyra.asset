@@ -20,7 +20,7 @@ MonoBehaviour:
   BaseStats:
     MaxHP: 80
     MaxSP: 100
-    PAtk: 0
+    PAtk: 5
     PDef: 0
     MAtk: 10
     MDef: 5
