@@ -12,12 +12,32 @@
 /// “真正执行行动的状态”
 /// </remarks>
 /// </summary>
-public class PerformActionState : BattleState
-{
+public class PerformActionState : BattleState {
+    private AttackSkillCommandHandler AttackSkillHandler = new();
+    private DefendCommandHandler DefendSkillHandler = new();
+    private EscapeCommandHandler EscapeCommandHandler = new();
+
     public PerformActionState(BattleController controller) : base(controller) { }
 
     public override IEnumerator Execute() {
-        _controller.StopBattle();
+        BattleEntity entity = _controller.CurrentEntity;
+        BattleCommandRequest command = _controller.CurrentCommandRequest;
+
+        switch (command.Type) {
+            case BattleCommandType.Attack:
+            case BattleCommandType.Skill:
+                yield return AttackSkillHandler.Execute(_controller);
+                break;
+            case BattleCommandType.Defend:
+                yield return DefendSkillHandler.Execute(_controller);
+                break;
+            case BattleCommandType.Escape:
+                yield return EscapeCommandHandler.Execute(_controller);
+                break;
+        }
+
+        _controller.UpdateTimelinePrediction();
+        _controller.SetState(new TurnEndState(_controller));
         yield break;
     }
 }

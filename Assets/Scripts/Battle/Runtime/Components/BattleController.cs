@@ -167,6 +167,9 @@ public class BattleController : MonoBehaviour,
     #endregion
 
     #region 时间轴预测与破盾队列同步
+    /// <summary>
+    /// 更新CTB时间轴
+    /// </summary>
     public void UpdateTimelinePrediction() {
         timelineUI.UpdateTimeline(_battleRoundSchelduler.BuildTimelinePrediction());
     }
