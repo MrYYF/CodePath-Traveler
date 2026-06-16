@@ -46,7 +46,14 @@ public class BattleEntity {
 
     public void MarkBPUsed() => _usedBPInThisTurn = true;
 
-    #region 伤害计算
+    #region 伤害/治疗数值计算
+    /// <summary>
+    /// 根据攻击者的属性与技能数据计算伤害量
+    /// </summary>
+    /// <param name="attacker">攻击者实体</param>
+    /// <param name="skill">技能数据</param>
+    /// <param name="powerMultiplier">威力系数</param>
+    /// <returns>伤害量数值</returns>
     public int CalculateDamageFrom(BattleEntity attacker, SkillDataSO skill, float powerMultiplier) {
         bool isMagical = skill != null && skill.damageKind == DamageKind.Magical;
         StatBlock atkStats = attacker.TotalStats;
@@ -64,6 +71,10 @@ public class BattleEntity {
         return Mathf.RoundToInt(rawDamage * powerMultiplier);
     }
 
+    /// <summary>
+    /// 受到伤害
+    /// </summary>
+    /// <param name="amount">伤害数值</param>
     public void TakeDamage(int amount) {
         if (!IsAlive) {
             return;
@@ -75,6 +86,30 @@ public class BattleEntity {
 
         Unit.UpdateVisuals();
     }
+
+    /// <summary>
+    /// 根据技能数据计算治疗量
+    /// </summary>
+    /// <param name="skill">技能数据</param>
+    /// <param name="powerMultiplier">威力系数</param>
+    /// <returns></returns>
+    public int CalculateHealAmountFromSkill(SkillDataSO skill, float powerMultiplier) {
+        int baseHeal = Mathf.Max(0, skill.healAmount);
+        return Mathf.RoundToInt(baseHeal * powerMultiplier);
+    }
+
+    /// <summary>
+    /// 应用治疗
+    /// </summary>
+    /// <param name="amount"></param>
+    public void Heal(int amount) {
+        if (!IsAlive) {
+            return;
+        }
+        RuntimeData.ModifyHP(amount);
+        Unit.UpdateVisuals();
+    }
+
     #endregion
 
     #region 防御姿态接口

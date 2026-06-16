@@ -6,7 +6,10 @@ public class AttackSkillCommandHandler : BattleCommandHandleBase {
     private List<BattleEntity> _targets = new();
     private AttackSkillExecutionEngine _executionEngine = new AttackSkillExecutionEngine();
 
-
+    /// <summary>
+    /// 准备阶段
+    /// </summary>
+    /// <returns></returns>
     protected override bool PreparePhase() {
         // 清空运行时状态
         _targets.Clear();
@@ -35,12 +38,20 @@ public class AttackSkillCommandHandler : BattleCommandHandleBase {
         return true;
     }
 
+    /// <summary>
+    /// 执行阶段
+    /// </summary>
+    /// <returns></returns>
     protected override IEnumerator ExecutionPhase() {
         yield return _executionEngine.Execute(Controller, _targets);
     }
 
-
+    /// <summary>
+    /// 等待后摇时间结束
+    /// </summary>
+    /// <returns></returns>
     protected override IEnumerator ResolvePhase() {
-        return base.ResolvePhase();
+        float recovery = Controller.Config.AttackRecoveryTime;
+        yield return new WaitForSeconds(recovery);
     }
 }
