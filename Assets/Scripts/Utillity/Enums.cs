@@ -168,7 +168,7 @@ public enum BattleCommandType {
     Escape // Ã”≈‹
 }
 
-public enum TargetType{
+public enum TargetType {
     SingleEnemy,
     AllEnemies,
     SingleAlly,
@@ -176,7 +176,7 @@ public enum TargetType{
     Self
 }
 
-public enum SkillType{
+public enum SkillType {
     Damage,
     Heal,
     Buff,
@@ -196,4 +196,11 @@ public enum ElementType {
     Wind,
     Light,
     Dark
+}
+
+public enum DamageType {
+    Nomal = 1,
+    Heal = 2,
+    Magic = 3,
+    Gold = 4,
 }

@@ -23,3 +23,20 @@ public readonly struct ActiveEntityChangedEvent : IEvent {
     }
 }
 
+/// <summary>
+/// 实体状态变化事件
+/// </summary>
+public readonly struct EntityStatChangedEvent : IEvent {
+    public readonly BattleEntity Entity;
+    public readonly StatType StatType;
+    public readonly int NewValue;
+    public readonly int MaxValue;
+
+    public EntityStatChangedEvent(BattleEntity entity, StatType statType, int newValue, int maxValue) {
+        Entity = entity;
+        StatType = statType;
+        NewValue = newValue;
+        MaxValue = maxValue;
+    }
+}
+

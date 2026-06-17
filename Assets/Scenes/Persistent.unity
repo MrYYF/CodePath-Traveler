@@ -31251,6 +31251,8 @@ MonoBehaviour:
   commandUI: {fileID: 159126315}
   timelineUI: {fileID: 1778273538}
   fieldManager: {fileID: 114111779}
+  damagePopupPrefab: {fileID: -5414150810529439170, guid: 8de867373ad32e04185691bea77ab817,
+    type: 3}
 --- !u!4 &2093492178
 Transform:
   m_ObjectHideFlags: 0

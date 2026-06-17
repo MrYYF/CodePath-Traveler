@@ -6,7 +6,8 @@ using UnityEngine.UI;
 /// 状态栏UI层，负责控制状态栏中展示数据
 /// </summary>
 public class HealthBar : MonoBehaviour,
-    IEventReceiver<ActiveEntityChangedEvent> {
+    IEventReceiver<ActiveEntityChangedEvent>,
+    IEventReceiver<EntityStatChangedEvent> {
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] private Slider hpSlider;
@@ -34,9 +35,11 @@ public class HealthBar : MonoBehaviour,
     }
     private void OnEnable() {
         EventBus.Subscribe<ActiveEntityChangedEvent>(this);
+        EventBus.Subscribe<EntityStatChangedEvent>(this);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<ActiveEntityChangedEvent>(this);
+        EventBus.Unsubscribe<EntityStatChangedEvent>(this);
     }
     #endregion
 
@@ -71,7 +74,7 @@ public class HealthBar : MonoBehaviour,
 
     #region 事件监听
     public void OnEvent(ActiveEntityChangedEvent evt) {
-        if(_targetEntity == null) {
+        if (_targetEntity == null) {
             SetActiveVisual(false);
             return;
         }
@@ -81,7 +84,7 @@ public class HealthBar : MonoBehaviour,
     }
 
     private void SetActiveVisual(bool active) {
-        if(_isActive == active) {
+        if (_isActive == active) {
             return;
         }
 
@@ -91,6 +94,13 @@ public class HealthBar : MonoBehaviour,
         highlightRoot.localScale = active ? _baseScale * activeScale : _baseScale;
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+    }
+
+    public void OnEvent(EntityStatChangedEvent evt) {
+        if (evt.Entity != _targetEntity) {
+            return;
+        }
+        RefreshUI();
     }
 
     #endregion

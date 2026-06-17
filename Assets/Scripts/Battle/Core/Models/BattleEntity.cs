@@ -5,8 +5,6 @@ using System;
 /// 它封装了角色的运行时数据、定义数据、所属战斗单位、唯一标识符以及是否为玩家等信息。
 /// </summary>
 public class BattleEntity {
-
-
     public CharacterRuntimeData RuntimeData { get; }
     public CharacterDefinitionSO Definition => RuntimeData.Definition;
     public BattleUnit Unit { get; }
@@ -35,13 +33,15 @@ public class BattleEntity {
     public void SpendBP(int amount) {
         RuntimeData.ModifyBP(-amount);
 
-        //TODO:广播更新BP
+        //广播更新BP
+        EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentBP, CurrentBP, 5));
     }
 
     public void SpendSP(int amount) {
         RuntimeData.ModifySP(-amount);
 
-        //TODO:广播更新SP
+        //广播更新SP
+        EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentSP, CurrentSP, TotalStats.MaxSP));
     }
 
     public void MarkBPUsed() => _usedBPInThisTurn = true;
@@ -82,7 +82,8 @@ public class BattleEntity {
 
         RuntimeData.ModifyHP(-amount);
 
-        //TODO:广播伤害事件
+        //广播HP变化事件
+        EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentHP, CurrentHP, TotalStats.MaxHP));
 
         Unit.UpdateVisuals();
     }
@@ -107,6 +108,7 @@ public class BattleEntity {
             return;
         }
         RuntimeData.ModifyHP(amount);
+        EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentHP, CurrentHP, TotalStats.MaxHP));
         Unit.UpdateVisuals();
     }
 

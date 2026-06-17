@@ -19,6 +19,9 @@ public class BattleController : MonoBehaviour,
     [SerializeField] private BattleFieldManager fieldManager;
     public BattleFieldManager FieldManager => fieldManager;
 
+    [Header("战斗数值飘动文本")]
+    [SerializeField] private DamagePopup damagePopupPrefab;
+
     // 战斗实体列表，包含战斗中所有的单位（友方和敌方）。通常在战斗开始时根据预加载数据创建，并在战斗过程中维护更新。
     private readonly List<BattleEntity> _allEntities = new();
     public List<BattleEntity> AllEntities => _allEntities;
@@ -36,7 +39,7 @@ public class BattleController : MonoBehaviour,
     public bool IsBattleRunning => _battleRunning;
 
     // 当前正在运行的战斗循环协程
-    private Coroutine _battleLoopRoutine; 
+    private Coroutine _battleLoopRoutine;
 
     // CTB调度器
     private readonly BattleRoundSchelduler _battleRoundSchelduler = new();
@@ -177,6 +180,14 @@ public class BattleController : MonoBehaviour,
     public void UpdateTimelinePrediction() {
         timelineUI.UpdateTimeline(_battleRoundSchelduler.BuildTimelinePrediction());
     }
+    #endregion
 
+    #region 战斗数值文本飘动
+    public void SpawnDamagePopup(BattleEntity target, int damage, DamageType type = DamageType.Nomal, Vector3 offset = default) {
+        Vector3 anchorPos = target.Unit.GetPopupAnchorPosition() + offset;
+        DamagePopup popup = Instantiate(damagePopupPrefab, anchorPos, Quaternion.identity, target.Unit.transform);
+        popup.transform.position = anchorPos;
+        popup.Setup(damage, type);
+    }
     #endregion
 }

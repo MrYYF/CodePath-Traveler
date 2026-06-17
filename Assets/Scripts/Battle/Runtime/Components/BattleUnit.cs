@@ -104,4 +104,10 @@ public class BattleUnit : MonoBehaviour {
     public void PlayAttackAnimation() {
         animator.SetTrigger("attack");
     }
+
+    /// <summary>
+    /// 获取战斗数值飘动文本显示位置
+    /// </summary>
+    /// <returns>位置</returns>
+    public Vector3 GetPopupAnchorPosition() => hitPoint.position;
 }

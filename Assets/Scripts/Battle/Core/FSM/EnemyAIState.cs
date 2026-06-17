@@ -68,7 +68,7 @@ public class EnemyAIState : BattleState {
             _controller.AllEntities
             );
 
-        if(candidates.Count == 0) {
+        if (candidates.Count == 0) {
             return;
         }
 
@@ -93,7 +93,7 @@ public class EnemyAIState : BattleState {
             BattleEntity candidate = candidates[i];
             float ratio = candidate.CurrentHP / candidate.TotalStats.MaxHP;
 
-            if(ratio >= bestRatio) {
+            if (ratio >= bestRatio) {
                 continue;
             }
 

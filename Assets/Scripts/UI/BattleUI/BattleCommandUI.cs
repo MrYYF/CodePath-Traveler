@@ -150,8 +150,9 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
             CloseSubMenu();
             return;
         }
-
-        firstButton.Select();
+        if (firstButton != null) {
+            firstButton.Select();
+        }
     }
 
     /// <summary>

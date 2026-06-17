@@ -32,6 +32,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fc8c1ea7e7ef7374dad114a317bbb16b, type: 2}
   - {fileID: 11400000, guid: cbddbeee2d127754fa9bf4a46e309433, type: 2}
   - {fileID: 11400000, guid: b9482a218cc06e64e989b1246df9e1ac, type: 2}
+  - {fileID: 11400000, guid: 2efa8dd0edcbd3848824c1a30404e672, type: 2}
   FieldAnimator: {fileID: 22100000, guid: 58e27474c06d13a4dabc92d215378450, type: 2}
   BattleAnimator: {fileID: 22100000, guid: c7085885b393bc74ea08a9d294329595, type: 2}
   globalGrowthConfigSO: {fileID: 11400000, guid: 2a22ed6ff1be6be46b207d84a466b190,
