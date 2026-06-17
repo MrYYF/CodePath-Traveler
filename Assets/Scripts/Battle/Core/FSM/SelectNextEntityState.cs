@@ -19,13 +19,19 @@ public class SelectNextEntityState : BattleState {
         BattleEntity nextEntity = _controller.GetNextActorByRound();
 
         // 如果没有可行动对象，则战斗结束
-        if(nextEntity == null) {
+        if (nextEntity == null) {
             _controller.StopBattle();
             yield break;
         }
 
+        // 将“当前行动者”切换为下一为行动对象
         _controller.CurrentEntity = nextEntity;
         _controller.UpdateTimelinePrediction();
+
+        // 等待回合开始停顿
+        if (_controller.Config.TurnStartDelay > 0) {
+            yield return new WaitForSeconds(_controller.Config.TurnStartDelay);
+        }
 
         // 选择当前行动者并广播当前行动者变化事件
         _controller.TimelineUI.SetActiveEntity(nextEntity);
@@ -35,6 +41,9 @@ public class SelectNextEntityState : BattleState {
         if (nextEntity != null) {
             if (nextEntity.IsPlayer) {
                 _controller.SetState(new PlayerInputState(_controller));
+            }
+            else {
+                _controller.SetState(new EnemyAIState(_controller));
             }
         }
 

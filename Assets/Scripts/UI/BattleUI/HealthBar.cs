@@ -28,6 +28,10 @@ public class HealthBar : MonoBehaviour,
     private bool _isActive;
 
     #region 生命周期
+    private void Awake() {
+        _baseScale = highlightRoot.localScale;
+        _normalBackGround = backgroundImage.sprite;
+    }
     private void OnEnable() {
         EventBus.Subscribe<ActiveEntityChangedEvent>(this);
     }
