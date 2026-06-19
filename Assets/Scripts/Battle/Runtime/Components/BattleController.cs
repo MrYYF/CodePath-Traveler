@@ -1,4 +1,5 @@
 using Framework.Event;
+using UnityEngine.Pool;
 
 /// <summary>
 /// 战斗部分的核心逻辑控制器，负责管理战斗状态、执行战斗循环、维护战斗实体列表等核心功能。
@@ -21,6 +22,10 @@ public class BattleController : MonoBehaviour,
 
     [Header("战斗数值飘动文本")]
     [SerializeField] private DamagePopup damagePopupPrefab;
+    [SerializeField] private bool useDamagePopupPool = true;
+    [SerializeField] private int popupDefaultCapacity = 10;
+    [SerializeField] private int popupMaxSize = 40;
+    private ObjectPool<DamagePopup> _damagePopupPool;
 
     // 战斗实体列表，包含战斗中所有的单位（友方和敌方）。通常在战斗开始时根据预加载数据创建，并在战斗过程中维护更新。
     private readonly List<BattleEntity> _allEntities = new();
@@ -47,6 +52,11 @@ public class BattleController : MonoBehaviour,
 
 
     #region 生命周期
+    private void Awake() {
+        if (useDamagePopupPool) {
+            InitializeDamagePopupPool();
+        }
+    }
     private void OnEnable() {
         EventBus.Subscribe<GameModeChangedEvent>(this);
     }
@@ -185,9 +195,25 @@ public class BattleController : MonoBehaviour,
     #region 战斗数值文本飘动
     public void SpawnDamagePopup(BattleEntity target, int damage, DamageType type = DamageType.Nomal, Vector3 offset = default) {
         Vector3 anchorPos = target.Unit.GetPopupAnchorPosition() + offset;
-        DamagePopup popup = Instantiate(damagePopupPrefab, anchorPos, Quaternion.identity, target.Unit.transform);
+        DamagePopup popup = _damagePopupPool.Get();
         popup.transform.position = anchorPos;
         popup.Setup(damage, type);
+    }
+
+    private void InitializeDamagePopupPool() {
+        _damagePopupPool = new ObjectPool<DamagePopup>(
+            createFunc: () => {
+                DamagePopup damagePopup = Instantiate(damagePopupPrefab, transform);
+                damagePopup.gameObject.SetActive(false);
+                damagePopup.SetPool(_damagePopupPool);
+                return damagePopup;
+            },
+            actionOnGet: popup => popup.gameObject.SetActive(true),
+            actionOnRelease: popup => popup.gameObject.SetActive(false),
+            actionOnDestroy: popup => Destroy(popup.gameObject),
+            defaultCapacity: popupDefaultCapacity,
+            maxSize: popupMaxSize
+            );
     }
     #endregion
 }

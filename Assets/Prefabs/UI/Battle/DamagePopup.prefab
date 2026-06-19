@@ -184,8 +184,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e79a44d94b73a4498304c45e4134858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  valueText: {fileID: 6316698794236305957}
-  initialVelocityY: 0.1
-  randomHorizontalRange: {x: -2, y: 2}
+  initialVelocityY: 1
+  randomHorizontalRange: {x: -3, y: 3}
+  drag: 5
+  gravity: 0
+  scaleCurve: 27
+  scaleDuration: 0.3
   lifeTime: 1
-  fadeOutStartTime: 0
+  fadeOutStartTime: 0.6

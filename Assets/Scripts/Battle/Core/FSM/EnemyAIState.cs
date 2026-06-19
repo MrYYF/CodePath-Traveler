@@ -1,5 +1,6 @@
-using System;
-
+/// <summary>
+/// 进入敌方AI行动回合
+/// </summary>
 public class EnemyAIState : BattleState {
     public EnemyAIState(BattleController controller) : base(controller) { }
 
@@ -75,7 +76,7 @@ public class EnemyAIState : BattleState {
         bool isSingleAllyHeal = skill.targetType == TargetType.SingleAlly && skill.skillType == SkillType.Heal;
         BattleEntity target = isSingleAllyHeal ?
             GetLowestHPTarget(candidates) :
-             candidates[UnityEngine.Random.Range(0, candidates.Count)];
+             candidates[Random.Range(0, candidates.Count)];
         command.TargetEntityID = target.ID;
 
     }

@@ -10,8 +10,6 @@ public class BattleUnit : MonoBehaviour {
     [Header("Base Component")]
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
-
-    [SerializeField] private Transform hitPoint;
     [SerializeField] private SpriteRenderer targetCursorRenderer;
 
     private void Awake() {
@@ -23,15 +21,17 @@ public class BattleUnit : MonoBehaviour {
     /// 更新焦点光标以及打击点位置
     /// </summary>
     private void UpdateTargetCursorPosition() {
-        Bounds bounds = spriteRenderer.bounds;
-        Vector3 worldLeftCenter = new Vector3(bounds.min.x, bounds.center.y, bounds.center.z);
-        Vector3 localLeftCenter = transform.InverseTransformPoint(worldLeftCenter);
-        Transform cursorTransform = targetCursorRenderer.transform;
-        Vector3 localPos = cursorTransform.localPosition;
-        localPos.x = localLeftCenter.x;
-        localPos.y = localLeftCenter.y;
-        localPos.z = localLeftCenter.z - 0.1f;
-        cursorTransform.localPosition = localPos;
+        if (spriteRenderer.sprite == null) {
+            return;
+        }
+        Vector3 worldCenter = spriteRenderer.bounds.center;
+        Debug.Log($"worldCenter : {worldCenter}");
+        Vector3 localCenter = transform.InverseTransformPoint(worldCenter);
+        Debug.Log($"localCenter : {localCenter}");
+        Vector3 localPosition = targetCursorRenderer.transform.localPosition;
+        localPosition.y = localCenter.y;
+        localPosition.z = localCenter.z - 0.1f;
+        targetCursorRenderer.transform.localPosition = localPosition;
     }
 
     /// <summary>
@@ -109,5 +109,5 @@ public class BattleUnit : MonoBehaviour {
     /// 获取战斗数值飘动文本显示位置
     /// </summary>
     /// <returns>位置</returns>
-    public Vector3 GetPopupAnchorPosition() => hitPoint.position;
+    public Vector3 GetPopupAnchorPosition() => targetCursorRenderer.transform.position;
 }
