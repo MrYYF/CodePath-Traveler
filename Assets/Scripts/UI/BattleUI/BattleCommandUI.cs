@@ -18,6 +18,7 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
     [Header("二级菜单面板")]
     [SerializeField] private RectTransform commandDetailMenuPanel;
     [SerializeField] private SkillButton skillButtonPrefab;
+    [SerializeField] private ItemButton itemButtonPrefab;
 
     // 回调方法
     private Action<SkillDataSO> _onSkillSelected;
@@ -80,7 +81,7 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
                 OpenSkillMenu();
                 break;
             case BattleCommandType.Item:
-                OpenSkillMenu();
+                OpenItemMenu();
                 break;
             default:
                 CloseAndInvoke(commandType);
@@ -152,9 +153,35 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
             CloseSubMenu();
             return;
         }
-        if (firstButton != null) {
-            firstButton.Select();
+        firstButton?.Select();
+    }
+
+    private void OpenItemMenu() {
+        BeginSubMenu(btnItem);
+        InventoryManager inventory = InventoryManager.Instance;
+        Button firstButton = null;
+
+        foreach (var item in inventory.CurrentInventory) {
+            if (!item.IsConsumable) {
+                continue;
+            }
+
+            ItemButton itemButton = Instantiate(itemButtonPrefab, commandDetailMenuPanel);
+            itemButton.SetupButton(item, OnItemButtonClick);
+
+            if (firstButton == null && itemButton.CurrentButton) {
+                firstButton = itemButton.CurrentButton;
+            }
+
+            _spawnedSubMenuButtons.Add(itemButton.gameObject);
         }
+
+        // 没有可选项
+        if (_spawnedSubMenuButtons.Count <= 0) {
+            CloseSubMenu();
+            return;
+        }
+        firstButton?.Select();
     }
 
     /// <summary>
@@ -169,6 +196,10 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
         commandMenuCanvasGroup.interactable = false;
     }
 
+    /// <summary>
+    /// 关闭二级面板
+    /// </summary>
+    /// <param name="restorePrimarySelection">是否返回上一级菜单</param>
     private void CloseSubMenu(bool restorePrimarySelection = true) {
         ClearSubMenuButtons();
         commandDetailMenuPanel.gameObject.SetActive(false);
@@ -197,6 +228,12 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
     private void OnSkillButtonClick(SkillDataSO skill) {
         ClosePanel();
         _onSkillSelected?.Invoke(skill);
+        _onSkillSelected = null;
+    }
+
+    private void OnItemButtonClick(ItemDefinitionSO item) {
+        ClosePanel();
+        _onItemSelected?.Invoke(item);
         _onSkillSelected = null;
     }
     #endregion

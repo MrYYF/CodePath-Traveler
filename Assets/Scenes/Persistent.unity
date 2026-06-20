@@ -3338,6 +3338,8 @@ MonoBehaviour:
   commandDetailMenuPanel: {fileID: 260357677}
   skillButtonPrefab: {fileID: 3435950332053586267, guid: 1e8fd08e3b5d56140ac5a72b2fbad076,
     type: 3}
+  itemButtonPrefab: {fileID: 1527378095155200705, guid: 347b3c7545e6d4044bf0dae8e3a795ba,
+    type: 3}
 --- !u!114 &159126316
 MonoBehaviour:
   m_ObjectHideFlags: 0

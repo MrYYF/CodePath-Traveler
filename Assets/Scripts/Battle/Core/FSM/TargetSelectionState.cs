@@ -28,10 +28,15 @@ public class TargetSelectionState : BattleState {
 
     public override IEnumerator Enter() {
         // 根据当前命令解析目标类型
-        _targetType = _controller.CurrentCommandRequest.Skill != null ?
-            _controller.CurrentCommandRequest.Skill.targetType :
-            TargetType.SingleEnemy;
-
+        if (_controller.CurrentCommandRequest.Skill != null) {
+            _targetType = _controller.CurrentCommandRequest.Skill.targetType;
+        }
+        else if (_controller.CurrentCommandRequest.Type == BattleCommandType.Item) {
+            _targetType = TargetType.SingleAlly;
+        }
+        else {
+            _targetType = TargetType.SingleEnemy;
+        }
         // 按照目标类型收集所有可选目标
         _targets = BattleTargeting.GetAliveTargetsByType(
             _controller.CurrentEntity,

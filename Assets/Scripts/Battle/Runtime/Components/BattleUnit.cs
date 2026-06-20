@@ -103,6 +103,10 @@ public class BattleUnit : MonoBehaviour {
         animator.SetTrigger("attack");
     }
 
+    public void PlayUseItemAnimation() {
+        animator.SetTrigger("use");
+    }
+
     /// <summary>
     /// 获取战斗数值飘动文本显示位置
     /// </summary>

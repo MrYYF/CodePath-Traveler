@@ -124,6 +124,17 @@ public class BattleEntity {
         Unit.UpdateVisuals();
     }
 
+    /// <summary>
+    /// 恢复SP值
+    /// </summary>
+    /// <param name="amount">恢复数量</param>
+    public void restoreSP(int amount) {
+        RuntimeData.ModifySP(amount);
+        EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentHP, CurrentHP, TotalStats.MaxHP));
+        Unit.UpdateVisuals();
+
+    }
+
     #endregion
 
     #region 防御姿态接口

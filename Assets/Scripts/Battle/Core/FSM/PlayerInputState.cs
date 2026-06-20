@@ -25,7 +25,7 @@ public class PlayerInputState : BattleState {
         _controller.FieldManager.SetBoostVfxLevel(0);
 
         // 请求打开玩家可用指令UI面板
-        BattleCommandUI.Instance.RequestInput(_controller.CurrentEntity, OnCommandSelected, OnSkillSelected, null);
+        BattleCommandUI.Instance.RequestInput(_controller.CurrentEntity, OnCommandSelected, OnSkillSelected, OnItemSelected);
 
         yield break;
     }
@@ -93,12 +93,6 @@ public class PlayerInputState : BattleState {
             case BattleCommandType.Attack:
                 ConfirmInput(BattleCommandRequest.CreateAttack(_controller.CurrentEntity, _pendingBoostSpend));
                 break;
-            case BattleCommandType.Skill:
-                ConfirmInput(BattleCommandRequest.CreateSkill(_controller.CurrentCommandRequest.Skill, _pendingBoostSpend));
-                break;
-            case BattleCommandType.Item:
-                ConfirmInput(BattleCommandRequest.CreateItem(_controller.CurrentCommandRequest.ItemDefinition));
-                break;
             case BattleCommandType.Defend:
                 ConfirmInput(BattleCommandRequest.CreateDefend());
                 break;
@@ -127,6 +121,11 @@ public class PlayerInputState : BattleState {
     /// <param name="skill"></param>
     private void OnSkillSelected(SkillDataSO skill) {
         ConfirmInput(BattleCommandRequest.CreateSkill(skill, _pendingBoostSpend));
+    }
+
+    private void OnItemSelected(ItemDefinitionSO item) {
+        ConfirmInput(BattleCommandRequest.CreateItem(item));
+
     }
     #endregion
 }

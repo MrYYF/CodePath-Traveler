@@ -14,6 +14,7 @@
 /// </summary>
 public class PerformActionState : BattleState {
     private AttackSkillCommandHandler AttackSkillHandler = new();
+    private ItemCommandHandler ItemCommandHandler = new();
     private DefendCommandHandler DefendSkillHandler = new();
     private EscapeCommandHandler EscapeCommandHandler = new();
 
@@ -27,6 +28,9 @@ public class PerformActionState : BattleState {
             case BattleCommandType.Attack:
             case BattleCommandType.Skill:
                 yield return AttackSkillHandler.Execute(_controller);
+                break;
+            case BattleCommandType.Item:
+                yield return ItemCommandHandler.Execute(_controller);
                 break;
             case BattleCommandType.Defend:
                 yield return DefendSkillHandler.Execute(_controller);
