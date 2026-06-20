@@ -18,10 +18,11 @@ public class PlayerInputState : BattleState {
 
         // 重置输入暂存状态
         _inputReceived = false;
-        _pendingBoostSpend = 0;
         _controller.CurrentCommandRequest = null;
 
-        //TODO:重置BP表现
+        //重置BP表现
+        _pendingBoostSpend = 0;
+        _controller.FieldManager.SetBoostVfxLevel(0);
 
         // 请求打开玩家可用指令UI面板
         BattleCommandUI.Instance.RequestInput(_controller.CurrentEntity, OnCommandSelected, OnSkillSelected, null);
@@ -31,13 +32,26 @@ public class PlayerInputState : BattleState {
 
     public override IEnumerator Execute() {
         while (!_inputReceived) {
-            // TODO:等候玩家输入期间持续监听BP 消耗
+            // 等候玩家输入期间持续监听BP 消耗
+            UpdateBoostInput();
             yield return null;
         }
 
         // 输入完成根据目标规则决定下一个状态
         MoveToNextStateByTargetRule();
+    }
 
+    /// <summary>
+    /// 监听Boost按键，更新boost消耗
+    /// </summary>
+    private void UpdateBoostInput() {
+        int maxSpend = Mathf.Min(3, _controller.CurrentEntity.CurrentBP);
+        if (maxSpend <= 0) {
+            return;
+        }
+        int delta = InputSystemController.Instance.GetBoostDeltra();
+        _pendingBoostSpend = Mathf.Clamp(delta + _pendingBoostSpend, 0, maxSpend);
+        _controller.FieldManager.SetBoostVfxLevel(_pendingBoostSpend);
     }
 
     /// <summary>
@@ -77,10 +91,10 @@ public class PlayerInputState : BattleState {
         switch (type) {
             //TODO:BP消耗
             case BattleCommandType.Attack:
-                ConfirmInput(BattleCommandRequest.CreateAttack(_controller.CurrentEntity));
+                ConfirmInput(BattleCommandRequest.CreateAttack(_controller.CurrentEntity, _pendingBoostSpend));
                 break;
             case BattleCommandType.Skill:
-                ConfirmInput(BattleCommandRequest.CreateSkill(_controller.CurrentCommandRequest.Skill));
+                ConfirmInput(BattleCommandRequest.CreateSkill(_controller.CurrentCommandRequest.Skill, _pendingBoostSpend));
                 break;
             case BattleCommandType.Item:
                 ConfirmInput(BattleCommandRequest.CreateItem(_controller.CurrentCommandRequest.ItemDefinition));
@@ -112,7 +126,7 @@ public class PlayerInputState : BattleState {
     /// </summary>
     /// <param name="skill"></param>
     private void OnSkillSelected(SkillDataSO skill) {
-        ConfirmInput(BattleCommandRequest.CreateSkill(skill));
+        ConfirmInput(BattleCommandRequest.CreateSkill(skill, _pendingBoostSpend));
     }
     #endregion
 }

@@ -25,8 +25,8 @@ public class AttackSkillExecutionEngine {
         bool isPhysicalBranch = _skill.damageKind == DamageKind.Physical
             && _skill.skillType != SkillType.Heal;
 
-        _powerMultiplier = 1f;
-        _hitCount = isPhysicalBranch ? _skill.hitCount : 1;
+        _powerMultiplier = _skill.GetBoostPowerMultiplier(_command.BPSpend);
+        _hitCount = isPhysicalBranch ? _skill.GetFinalHitCount(_command.Type, _command.BPSpend) : 1;
         _groupInterval = _targets.Count > 1 ? _controller.Config.GroupTargetHitInterval : 0f;
         _hitInterval = _hitCount > 1 ? _controller.Config.MultiHitInterval : 0f;
     }

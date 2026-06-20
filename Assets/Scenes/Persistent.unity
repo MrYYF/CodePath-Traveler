@@ -96,7 +96,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: a26440f99ddf38745ad63a1a925d9c65,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -2124,6 +2125,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleUnitPrefab: {fileID: 859255699386360393, guid: b317c14062bc3fe41a8a9face576c911,
     type: 3}
+  boostVfxPrefabs:
+  - {fileID: 4823518202205099639, guid: ff04d090fa4ab9642aaefd6a2f86c50b, type: 3}
+  - {fileID: 4823518202205099639, guid: 8deeae111bb509a4d8a7c8483b9ed9da, type: 3}
+  - {fileID: 4823518202205099639, guid: 2d47f5c120efc1e43abc4e4a70cc1458, type: 3}
+  boostVfxOffset: {x: 0, y: 0.1, z: 0}
 --- !u!4 &114111780
 Transform:
   m_ObjectHideFlags: 0
@@ -31253,6 +31259,9 @@ MonoBehaviour:
   fieldManager: {fileID: 114111779}
   damagePopupPrefab: {fileID: -5414150810529439170, guid: 8de867373ad32e04185691bea77ab817,
     type: 3}
+  useDamagePopupPool: 1
+  popupDefaultCapacity: 10
+  popupMaxSize: 40
 --- !u!4 &2093492178
 Transform:
   m_ObjectHideFlags: 0

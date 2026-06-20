@@ -14,6 +14,7 @@ public class BattleRoundSchelduler {
     public void Initialize(List<BattleEntity> allEntities) {
         _currentRound = GenerateSortedOrder(allEntities);
         _nextRound = GenerateSortedOrder(allEntities);
+        TriggerRoundStart(allEntities);
     }
 
     /// <summary>
@@ -65,7 +66,7 @@ public class BattleRoundSchelduler {
     private void StartNextRound(List<BattleEntity> allEntities) {
         _currentRound = _nextRound;
         _nextRound = GenerateSortedOrder(allEntities);
-
+        TriggerRoundStart(allEntities);
     }
 
     /// <summary>
@@ -100,6 +101,10 @@ public class BattleRoundSchelduler {
         return result;
     }
 
+    /// <summary>
+    /// 构建预测时间轴
+    /// </summary>
+    /// <returns>时间轴节点集合</returns>
     public List<BattleTimelinePredictionNode> BuildTimelinePrediction() {
         List<BattleTimelinePredictionNode> result = new List<BattleTimelinePredictionNode>(_currentRound.Count + _nextRound.Count) { };
 
@@ -122,5 +127,20 @@ public class BattleRoundSchelduler {
         }
 
         return result;
+    }
+
+
+    private void TriggerRoundStart(List<BattleEntity> allEntities) {
+        for (int i = 0; i < allEntities.Count; i++) {
+            BattleEntity entity = allEntities[i];
+            if (!entity.IsAlive) {
+                continue;
+            }
+
+            entity.ClearDefendStance();
+            if (entity.IsPlayer) {
+                entity.RecoverBP();
+            }
+        }
     }
 }

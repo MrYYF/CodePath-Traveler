@@ -25,9 +25,7 @@ public class BattleUnit : MonoBehaviour {
             return;
         }
         Vector3 worldCenter = spriteRenderer.bounds.center;
-        Debug.Log($"worldCenter : {worldCenter}");
         Vector3 localCenter = transform.InverseTransformPoint(worldCenter);
-        Debug.Log($"localCenter : {localCenter}");
         Vector3 localPosition = targetCursorRenderer.transform.localPosition;
         localPosition.y = localCenter.y;
         localPosition.z = localCenter.z - 0.1f;

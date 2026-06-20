@@ -9,6 +9,12 @@ public class BattleFieldManager : MonoBehaviour {
     private Transform allyRoot;
     private Transform enemyRoot;
 
+    [Header("Boost VFX")]
+    [SerializeField] private GameObject[] boostVfxPrefabs;
+    [Tooltip("偏移量"), SerializeField] private Vector3 boostVfxOffset;
+    private GameObject _boostVfxInstance;
+    private int _currentBoostVfxLevel;
+
     // 单位与其初始位置的映射关系，用于重置单位位置等操作
     private readonly Dictionary<BattleUnit, Vector3> _homePos = new();
 
@@ -98,4 +104,32 @@ public class BattleFieldManager : MonoBehaviour {
     public Vector3 GetHomePos(BattleUnit unit) => _homePos[unit];
     public Vector3 GetActionPos(BattleUnit unit) => layout.actionTrans.position;
 
+    #region boost VFX
+    public void SetBoostVfxLevel(int level) {
+        if (_currentBoostVfxLevel == level) {
+            return;
+        }
+
+        _currentBoostVfxLevel = level;
+
+        if (_boostVfxInstance != null) {
+            Destroy(_boostVfxInstance);
+        }
+
+        if (level == 0) {
+            return;
+        }
+
+        if (level > 0) {
+            _boostVfxInstance = Instantiate(
+                boostVfxPrefabs[level - 1],
+                layout.actionTrans.position,
+                Quaternion.identity,
+                layout.actionTrans
+                );
+
+            _boostVfxInstance.transform.localPosition = boostVfxOffset;
+        }
+    }
+    #endregion
 }

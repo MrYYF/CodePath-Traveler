@@ -90,6 +90,28 @@ public class InputSystemController : Singleton<InputSystemController>,
         return _inputActions.UI.Confirm.WasPressedThisFrame();
     }
 
+    /// <summary>
+    /// 获取UI Boost按键输入响应
+    /// </summary>
+    /// <returns>增加或减少</returns>
+    public int GetBoostDeltra() {
+        if (!_isInitialized || _currentActionMap != ActiveInputActionMap.UI) {
+            return 0;
+        }
+
+        if (!_inputActions.UI.Boost.WasPressedThisFrame()) {
+            return 0;
+        }
+
+        float value = _inputActions.UI.Boost.ReadValue<float>();
+        if(value > 0.5) {
+            return 1;
+        }else if(value < -0.5) {
+            return -1;
+        }
+        return 0;
+    }
+
     #endregion
 
     #region 其他状态下的输入

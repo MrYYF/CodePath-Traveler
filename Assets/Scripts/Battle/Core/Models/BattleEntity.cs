@@ -1,4 +1,5 @@
 using System;
+using static UnityEngine.EventSystems.EventTrigger;
 
 /// <summary>
 /// 战斗实体类，代表战斗中的一个单位（可以是玩家角色或敌人）。
@@ -37,12 +38,23 @@ public class BattleEntity {
         EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentBP, CurrentBP, 5));
     }
 
+    public void RecoverBP() {
+        if(_usedBPInThisTurn || CurrentBP >= MaxBattleBP) {
+            _usedBPInThisTurn = false;
+            return;
+        }
+        RuntimeData.ModifyBP(1);
+        EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentBP, CurrentBP, 5));
+    }
+
     public void SpendSP(int amount) {
         RuntimeData.ModifySP(-amount);
 
         //广播更新SP
         EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentSP, CurrentSP, TotalStats.MaxSP));
     }
+
+    
 
     public void MarkBPUsed() => _usedBPInThisTurn = true;
 

@@ -79,7 +79,9 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
             case BattleCommandType.Skill:
                 OpenSkillMenu();
                 break;
-
+            case BattleCommandType.Item:
+                OpenSkillMenu();
+                break;
             default:
                 CloseAndInvoke(commandType);
                 break;
