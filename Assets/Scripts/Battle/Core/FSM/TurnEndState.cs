@@ -14,6 +14,7 @@ public class TurnEndState : BattleState
         BattleEntity entity = _controller.CurrentEntity;
 
         // UI表现恢复
+        _controller.FieldManager.SetBoostVfxLevel(0);
 
         // 若满足胜利条件，插入停顿进入结算
         yield return new WaitForSeconds(_controller.Config.VictoryResultDelay);

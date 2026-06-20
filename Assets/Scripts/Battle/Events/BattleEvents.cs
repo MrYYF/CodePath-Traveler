@@ -40,3 +40,23 @@ public readonly struct EntityStatChangedEvent : IEvent {
     }
 }
 
+public readonly struct SkillNameDisplayEvent : IEvent {
+    public readonly BattleEntity Actor;
+    public readonly string SkillName;
+
+    public SkillNameDisplayEvent(BattleEntity actor, string skillName) {
+        Actor = actor;
+        SkillName = skillName;
+    }
+}
+
+public readonly struct BattleNotificationEvent : IEvent {
+    public readonly string Message;
+    public readonly bool IsSuccess;
+
+    public BattleNotificationEvent(string message, bool isSuccess) {
+        Message = message;
+        IsSuccess = isSuccess;
+    }
+}
+

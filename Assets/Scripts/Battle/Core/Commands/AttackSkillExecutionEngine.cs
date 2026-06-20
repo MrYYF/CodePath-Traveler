@@ -91,7 +91,7 @@ public class AttackSkillExecutionEngine {
 
             int damage = target.CalculateDamageFrom(_actor, _skill, _powerMultiplier);
 
-            for (int hitIndex = 0; hitIndex < _skill.hitCount; hitIndex++) {
+            for (int hitIndex = 0; hitIndex < _hitCount; hitIndex++) {
                 if (!target.IsAlive) break;
                 yield return PlayAttackWithWindup();
                 ApplyDamageHit(target, damage);

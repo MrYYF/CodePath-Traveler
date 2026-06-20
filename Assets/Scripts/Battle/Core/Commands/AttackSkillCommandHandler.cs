@@ -33,8 +33,9 @@ public class AttackSkillCommandHandler : BattleCommandHandleBase {
             $"Skill = {Command.Skill.skillName}, " +
             $"TargetID = {Command.TargetEntityID}"
             );
-        //TODO:显示技能名字
 
+        //显示技能名字
+        EventBus.Publish(new SkillNameDisplayEvent(Actor, Command.Skill.skillName));
         return true;
     }
 
