@@ -18,7 +18,7 @@ MonoBehaviour:
   itemIconKey: 0
   BuyPrice: 100
   MaxStack: 1
-  RarityWeight: 79
+  RarityWeight: 35
   equipmentCategory: 0
   weaponType: 6
   statBouns:

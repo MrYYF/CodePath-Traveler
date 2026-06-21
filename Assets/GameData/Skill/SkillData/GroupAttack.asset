@@ -47,7 +47,7 @@ MonoBehaviour:
     genericValueBonus: 0
   - tier: 3
     powerMultiplier: 2.5
-    hitCountBonus: 2
+    hitCountBonus: 1
     chanceBonus: 0
     durationBonus: 0
     genericValueBonus: 0

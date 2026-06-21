@@ -2491,6 +2491,7 @@ GameObject:
   - component: {fileID: 2024368655}
   - component: {fileID: 2024368653}
   - component: {fileID: 2024368652}
+  - component: {fileID: 2024368660}
   m_Layer: 0
   m_Name: NPC2
   m_TagString: Untagged
@@ -2658,6 +2659,30 @@ Transform:
   - {fileID: 1328090015}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2024368660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024368651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265db8772209d144bbc96ff7d2b3e6db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matchJob: 0
+  CommandInfo:
+    CommandName: CN
+    Description: CN
+    Icon: {fileID: 21300000, guid: 0b2ab670df29649b6b2c801c55abb9ec, type: 3}
+    RequiredJob: 0
+    Order: 0
+  stealableItems:
+  - ItemDefinition: {fileID: 11400000, guid: 3991fafba4221944598574310a0e0d66, type: 2}
+    Quantity: 5
+  - ItemDefinition: {fileID: 11400000, guid: ce4c3404266355c429d849219e664bf9, type: 2}
+    Quantity: 5
 --- !u!1 &2086919979
 GameObject:
   m_ObjectHideFlags: 0

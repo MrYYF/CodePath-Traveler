@@ -6,6 +6,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 /// 它封装了角色的运行时数据、定义数据、所属战斗单位、唯一标识符以及是否为玩家等信息。
 /// </summary>
 public class BattleEntity {
+    #region 基础数据
     public CharacterRuntimeData RuntimeData { get; }
     public CharacterDefinitionSO Definition => RuntimeData.Definition;
     public BattleUnit Unit { get; }
@@ -19,27 +20,75 @@ public class BattleEntity {
     private const int MaxBattleBP = 5;
     private bool _usedBPInThisTurn = false;
     public bool IsDefending { get; private set; }
+    #endregion
+
+    #region 偷取掉落
+    public List<InventoryItem> BattleDrops { get; } = new();
+    public bool HasBeenRobbed { get; private set; }
+    #endregion
 
     public BattleEntity(CharacterRuntimeData runtimeData, BattleUnit unit, bool isPlayer, string stableID) {
         RuntimeData = runtimeData;
         Unit = unit;
         IsPlayer = isPlayer;
         ID = stableID;
+        InitializeBattleStats();
     }
 
+    /// <summary>
+    /// 初始化实体战斗数据
+    /// </summary>
+    private void InitializeBattleStats() {
+        if (Definition is EnemyDefinitionSO enemyDefinition) {
+            InitializeBattleDrops(enemyDefinition);
+        }
+    }
+
+    /// <summary>
+    /// 初始化敌方实体战斗掉落
+    /// </summary>
+    /// <param name="enemyDefinition">敌方数据</param>
+    private void InitializeBattleDrops(EnemyDefinitionSO enemyDefinition) {
+        BattleDrops.Clear();
+
+        if (enemyDefinition.Drops.Count >= 0) {
+            foreach (var drop in enemyDefinition.Drops) {
+                if (drop.Quantity <= 0) {
+                    continue;
+                }
+                BattleDrops.Add(new InventoryItem(drop.ItemDefinition, drop.Quantity));
+            }
+            RefreshRobbedState();
+        }
+    }
+
+    /// <summary>
+    /// 刷新偷取状态
+    /// </summary>
+    public void RefreshRobbedState() {
+        HasBeenRobbed = true;
+
+        foreach (var drop in BattleDrops) {
+            if (drop.Quantity > 0) {
+                HasBeenRobbed = false;
+                return;
+            }
+        }
+    }
+
+    #region 数值相关方法
     internal int GetCurrentSpeed() {
         return TotalStats.Speed;
     }
 
     public void SpendBP(int amount) {
         RuntimeData.ModifyBP(-amount);
-
         //广播更新BP
         EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentBP, CurrentBP, 5));
     }
 
     public void RecoverBP() {
-        if(_usedBPInThisTurn || CurrentBP >= MaxBattleBP) {
+        if (_usedBPInThisTurn || CurrentBP >= MaxBattleBP) {
             _usedBPInThisTurn = false;
             return;
         }
@@ -49,14 +98,12 @@ public class BattleEntity {
 
     public void SpendSP(int amount) {
         RuntimeData.ModifySP(-amount);
-
         //广播更新SP
         EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentSP, CurrentSP, TotalStats.MaxSP));
     }
 
-    
-
     public void MarkBPUsed() => _usedBPInThisTurn = true;
+    #endregion
 
     #region 伤害/治疗数值计算
     /// <summary>

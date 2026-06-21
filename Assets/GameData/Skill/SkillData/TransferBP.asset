@@ -16,13 +16,38 @@ MonoBehaviour:
   skillName: "\u4EA7\u751FBP"
   description: "\u6D88\u8017SP\u503C\u4EA7\u751F1\u70B9BP\u70B9\u6570"
   icon: {fileID: 0}
-  spCost: 200
+  spCost: 50
   targetType: 2
-  skillType: 1
+  skillType: 2
   damageKind: 1
   elementType: 0
-  weaponType: 6
-  basePower: 0
-  hitCount: 0
-  healAmount: 1
+  weaponType: 0
+  basePower: 1
+  hitCount: 1
+  healAmount: 0
   specialLogic: {fileID: 11400000, guid: 1ffcd14c94c111c4a9302f793e80f9b4, type: 2}
+  boostTiers:
+  - tier: 0
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 0
+  - tier: 1
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 0
+  - tier: 2
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 0
+  - tier: 3
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 1

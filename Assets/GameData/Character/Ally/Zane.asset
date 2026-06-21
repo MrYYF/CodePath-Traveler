@@ -19,7 +19,7 @@ MonoBehaviour:
   BaseLevel: 1
   BaseStats:
     MaxHP: 100
-    MaxSP: 0
+    MaxSP: 50
     PAtk: 10
     PDef: 0
     MAtk: 0
@@ -28,7 +28,10 @@ MonoBehaviour:
     Accuracy: 90
     Evasion: 5
   BasicAttack: {fileID: 11400000, guid: 04ba906913e64d841a0bb4f2ea607a5d, type: 2}
-  InitialSkills: []
+  InitialSkills:
+  - {fileID: 11400000, guid: cbddbeee2d127754fa9bf4a46e309433, type: 2}
+  - {fileID: 11400000, guid: 2efa8dd0edcbd3848824c1a30404e672, type: 2}
+  - {fileID: 11400000, guid: 166c8947caba7e24ea7e98fa58faba3d, type: 2}
   FieldAnimator: {fileID: 22100000, guid: 0dec882dc606bbf4b8f116c8efc43a89, type: 2}
   BattleAnimator: {fileID: 22100000, guid: 961a880c6f8c64549b20097e7428a311, type: 2}
   globalGrowthConfigSO: {fileID: 11400000, guid: 2a22ed6ff1be6be46b207d84a466b190,

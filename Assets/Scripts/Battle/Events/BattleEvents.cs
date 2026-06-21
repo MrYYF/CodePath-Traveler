@@ -54,7 +54,7 @@ public readonly struct BattleNotificationEvent : IEvent {
     public readonly string Message;
     public readonly bool IsSuccess;
 
-    public BattleNotificationEvent(string message, bool isSuccess) {
+    public BattleNotificationEvent(string message, bool isSuccess = false) {
         Message = message;
         IsSuccess = isSuccess;
     }

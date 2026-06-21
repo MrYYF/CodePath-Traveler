@@ -28,13 +28,12 @@ public class CharacterRuntimeData {
         Definition = definition;
         EquipmentStats = StatBlock.Zero;
         Level = definition.BaseLevel;
-
+        ApplyInitialEquipment();
         var stats = GetBaseStats();
         CurrentHP = stats.MaxHP;
         CurrentSP = stats.MaxSP;
         CurrentBP = 0;
 
-        ApplyInitialEquipment();
     }
 
     public StatBlock GetBaseStats() {

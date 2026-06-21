@@ -18,7 +18,7 @@ MonoBehaviour:
   Job: 1
   BaseLevel: 1
   BaseStats:
-    MaxHP: 20
+    MaxHP: 100
     MaxSP: 0
     PAtk: 20
     PDef: 0
@@ -32,3 +32,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fc8c1ea7e7ef7374dad114a317bbb16b, type: 2}
   FieldAnimator: {fileID: 0}
   BattleAnimator: {fileID: 22100000, guid: 8e9649c41d97fc04791e78bc086e2690, type: 2}
+  ExpReward: 0
+  MoneyReward: 0
+  Drops:
+  - ItemDefinition: {fileID: 11400000, guid: ce4c3404266355c429d849219e664bf9, type: 2}
+    Quantity: 5
+  - ItemDefinition: {fileID: 11400000, guid: 3991fafba4221944598574310a0e0d66, type: 2}
+    Quantity: 5
