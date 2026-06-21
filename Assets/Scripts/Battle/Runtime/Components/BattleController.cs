@@ -193,7 +193,7 @@ public class BattleController : MonoBehaviour,
     #endregion
 
     #region 战斗数值文本飘动
-    public void SpawnDamagePopup(BattleEntity target, int damage, DamageType type = DamageType.Nomal, Vector3 offset = default) {
+    public void SpawnDamagePopup(BattleEntity target, int damage, DamagePopupType type = DamagePopupType.Nomal, Vector3 offset = default) {
         Vector3 anchorPos = target.Unit.GetPopupAnchorPosition() + offset;
         DamagePopup popup = _damagePopupPool.Get();
         popup.transform.position = anchorPos;

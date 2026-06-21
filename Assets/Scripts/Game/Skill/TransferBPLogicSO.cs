@@ -21,7 +21,7 @@ public class TransferBPLogicSO : SkillLogicSO {
                 EventBus.Publish(new EntityStatChangedEvent(target, StatType.CurrentBP, target.CurrentBP, 5));
             }
 
-            controller.SpawnDamagePopup(target, finalAmount, DamageType.Gold);
+            controller.SpawnDamagePopup(target, finalAmount, DamagePopupType.Gold);
         }
     }
 }

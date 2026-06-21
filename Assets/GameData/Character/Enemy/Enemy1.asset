@@ -37,3 +37,5 @@ MonoBehaviour:
   Drops:
   - ItemDefinition: {fileID: 11400000, guid: 3fbf1ffdfa8837245af1c20eed81e07a, type: 2}
     Quantity: 1
+  MaxShields: 2
+  Weaknesses: 0b00000008000000

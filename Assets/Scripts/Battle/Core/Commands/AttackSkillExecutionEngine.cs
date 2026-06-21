@@ -127,7 +127,7 @@ public class AttackSkillExecutionEngine {
 
             target.Heal(healAmount);
             Debug.Log($"[Battle] Heal {target.Definition.Name} 受到了 {healAmount} 点治疗");
-            _controller.SpawnDamagePopup(target, healAmount, DamageType.Heal);
+            _controller.SpawnDamagePopup(target, healAmount, DamagePopupType.Heal);
 
             // 群体目标等待间隔
             if (_groupInterval > 0f && i < _targets.Count - 1) {
@@ -167,6 +167,6 @@ public class AttackSkillExecutionEngine {
     private void ApplyDamageHit(BattleEntity target, int damage) {
         target.TakeDamage(damage);
         Debug.Log($"{target.Definition.Name} 受到了 {damage} 点伤害");
-        _controller.SpawnDamagePopup(target, damage, DamageType.Nomal);
+        _controller.SpawnDamagePopup(target, damage, DamagePopupType.Nomal);
     }
 }

@@ -27,6 +27,13 @@ public class BattleEntity {
     public bool HasBeenRobbed { get; private set; }
     #endregion
 
+    #region 护盾与弱点
+    public int CurrentShield { get; private set; }
+    private int MaxShield { get; set; }
+    private readonly HashSet<DamageType> _weaknesses = new();
+    private readonly List<DamageType> _orderedWeaknesses = new();
+    #endregion
+
     public BattleEntity(CharacterRuntimeData runtimeData, BattleUnit unit, bool isPlayer, string stableID) {
         RuntimeData = runtimeData;
         Unit = unit;
@@ -41,40 +48,11 @@ public class BattleEntity {
     private void InitializeBattleStats() {
         if (Definition is EnemyDefinitionSO enemyDefinition) {
             InitializeBattleDrops(enemyDefinition);
+            MaxShield = Mathf.Max(1, enemyDefinition.MaxShields);
+            ApplyWeaknesses(enemyDefinition.Weaknesses, false);
         }
     }
 
-    /// <summary>
-    /// 初始化敌方实体战斗掉落
-    /// </summary>
-    /// <param name="enemyDefinition">敌方数据</param>
-    private void InitializeBattleDrops(EnemyDefinitionSO enemyDefinition) {
-        BattleDrops.Clear();
-
-        if (enemyDefinition.Drops.Count >= 0) {
-            foreach (var drop in enemyDefinition.Drops) {
-                if (drop.Quantity <= 0) {
-                    continue;
-                }
-                BattleDrops.Add(new InventoryItem(drop.ItemDefinition, drop.Quantity));
-            }
-            RefreshRobbedState();
-        }
-    }
-
-    /// <summary>
-    /// 刷新偷取状态
-    /// </summary>
-    public void RefreshRobbedState() {
-        HasBeenRobbed = true;
-
-        foreach (var drop in BattleDrops) {
-            if (drop.Quantity > 0) {
-                HasBeenRobbed = false;
-                return;
-            }
-        }
-    }
 
     #region 数值相关方法
     internal int GetCurrentSpeed() {
@@ -200,5 +178,76 @@ public class BattleEntity {
     /// 退出防御姿态
     /// </summary>
     public void ClearDefendStance() => IsDefending = false;
+    #endregion
+
+    #region 掉落、偷取相关
+    /// <summary>
+    /// 初始化敌方实体战斗掉落
+    /// </summary>
+    /// <param name="enemyDefinition">敌方数据</param>
+    private void InitializeBattleDrops(EnemyDefinitionSO enemyDefinition) {
+        BattleDrops.Clear();
+
+        if (enemyDefinition.Drops.Count >= 0) {
+            foreach (var drop in enemyDefinition.Drops) {
+                if (drop.Quantity <= 0) {
+                    continue;
+                }
+                BattleDrops.Add(new InventoryItem(drop.ItemDefinition, drop.Quantity));
+            }
+            RefreshRobbedState();
+        }
+    }
+
+    /// <summary>
+    /// 刷新偷取状态
+    /// </summary>
+    public void RefreshRobbedState() {
+        HasBeenRobbed = true;
+
+        foreach (var drop in BattleDrops) {
+            if (drop.Quantity > 0) {
+                HasBeenRobbed = false;
+                return;
+            }
+        }
+    }
+    #endregion
+
+    #region 护盾、弱点相关
+    /// <summary>
+    /// 更新弱点列表集合
+    /// </summary>
+    /// <param name="weaknesses">新的弱点集合</param>
+    /// <param name="publishEvent">是否发布弱点更新事件</param>
+    private void ApplyWeaknesses(List<DamageType> weaknesses, bool publishEvent) {
+        _weaknesses.Clear();
+        _orderedWeaknesses.Clear();
+
+        foreach (var type in weaknesses) {
+            if (type == DamageType.None || type == DamageType.Untyped) {
+                continue;
+            }
+
+            // 双写结构：hashset用于命中判定，list用于UI展示
+            if (_weaknesses.Add(type)) {
+                _orderedWeaknesses.Add(type);
+            }
+        }
+
+        // 广播弱点变化事件
+        if (publishEvent) {
+            EventBus.Publish(new EntityWeaknessChangedEvent(this));
+        }
+    }
+
+    /// <summary>
+    /// 伤害类型是否包含弱点
+    /// </summary>
+    /// <param name="type">伤害类型</param>
+    /// <returns>如果非玩家且包含弱点则true，否则false</returns>
+    public bool IsWeakTo(DamageType type) => !IsPlayer && _weaknesses.Contains(type);
+
+    public List<DamageType> GetWeaknesses() => _orderedWeaknesses;
     #endregion
 }

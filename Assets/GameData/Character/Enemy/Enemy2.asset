@@ -39,3 +39,5 @@ MonoBehaviour:
     Quantity: 5
   - ItemDefinition: {fileID: 11400000, guid: 3991fafba4221944598574310a0e0d66, type: 2}
     Quantity: 5
+  MaxShields: 0
+  Weaknesses: 060000000a000000

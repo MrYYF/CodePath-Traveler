@@ -51,7 +51,7 @@ public class DamagePopup : MonoBehaviour {
     }
     #endregion
 
-    public void Setup(int amount, DamageType type) {
+    public void Setup(int amount, DamagePopupType type) {
         textMesh.text = ConvertNumberToSpriteString(amount, type);
         _timer = 0f;
         textMesh.color = _baseColor;
@@ -68,7 +68,7 @@ public class DamagePopup : MonoBehaviour {
     /// <param name="value">要显示的整数值。方法会使用其绝对值（因此不会显示负号）。</param>
     /// <param name="type">数字所属的 `DamageType`，用于计算图集中数字精灵的起始索引。每种类型假定占用连续的 10 个索引（0-9）。</param>
     /// <returns>返回一个可直接赋值给 `TextMeshPro.text` 的字符串，格式示例：<sprite=12><sprite=13>...，每个数字字符被替换为对应索引的 sprite 标签。</returns>
-    private string ConvertNumberToSpriteString(int value, DamageType type) {
+    private string ConvertNumberToSpriteString(int value, DamagePopupType type) {
         string original = Mathf.Abs(value).ToString();
         StringBuilder builder = new StringBuilder();
         int startIndex = (int)type * 10;

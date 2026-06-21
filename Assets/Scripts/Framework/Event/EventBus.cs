@@ -1,6 +1,9 @@
 using System;
 using Framework.Event;
 
+/// <summary>
+/// 事件总线，负责事件的订阅、发布、取消订阅
+/// </summary>
 public static class EventBus {
     private static readonly Dictionary<Type, List<object>> EventDic = new();
 

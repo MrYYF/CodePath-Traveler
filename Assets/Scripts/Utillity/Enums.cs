@@ -198,9 +198,18 @@ public enum ElementType {
     Dark
 }
 
-public enum DamageType {
+public enum DamagePopupType {
     Nomal = 1,
     Heal = 2,
     Magic = 3,
     Gold = 4,
+}
+
+public enum DamageType {
+    // 武器伤害类型
+    Dagger,Sword,Spear,Axe,Bow,Staff,
+    // 元素伤害类型
+    Fire,Ice,Lightning,Wind,Light,Dark,
+    // 特殊
+    None, Untyped
 }

@@ -2673,8 +2673,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchJob: 0
   CommandInfo:
-    CommandName: CN
-    Description: CN
+    CommandName: "\u5077\u7A83"
+    Description: "\u5077\u7A83"
     Icon: {fileID: 21300000, guid: 0b2ab670df29649b6b2c801c55abb9ec, type: 3}
     RequiredJob: 0
     Order: 0

@@ -29,7 +29,7 @@ public class ItemCommandHandler : BattleCommandHandleBase {
         }
         else {
             _target.restoreSP(restoreAmount);
-            Controller.SpawnDamagePopup(_target, restoreAmount, DamageType.Magic);
+            Controller.SpawnDamagePopup(_target, restoreAmount, DamagePopupType.Magic);
         }
 
         yield break;

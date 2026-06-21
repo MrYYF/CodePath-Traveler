@@ -40,6 +40,7 @@ public readonly struct EntityStatChangedEvent : IEvent {
     }
 }
 
+// 技能名称展示事件
 public readonly struct SkillNameDisplayEvent : IEvent {
     public readonly BattleEntity Actor;
     public readonly string SkillName;
@@ -50,6 +51,7 @@ public readonly struct SkillNameDisplayEvent : IEvent {
     }
 }
 
+// 战斗通知事件
 public readonly struct BattleNotificationEvent : IEvent {
     public readonly string Message;
     public readonly bool IsSuccess;
@@ -57,6 +59,26 @@ public readonly struct BattleNotificationEvent : IEvent {
     public BattleNotificationEvent(string message, bool isSuccess = false) {
         Message = message;
         IsSuccess = isSuccess;
+    }
+}
+
+// 护盾变化事件
+public readonly struct EntityShieldChangedEvent : IEvent {
+    public readonly BattleEntity Target;
+    public readonly int NewShield;
+
+    public EntityShieldChangedEvent(BattleEntity target, int newShield) {
+        Target = target;
+        NewShield = newShield;
+    }
+}
+
+// 弱点变化事件
+public readonly struct EntityWeaknessChangedEvent : IEvent {
+    public readonly BattleEntity Target;
+
+    public EntityWeaknessChangedEvent(BattleEntity target) {
+        Target = target;
     }
 }
 
