@@ -50,6 +50,8 @@ MonoBehaviour:
   animator: {fileID: 3689465450450994186}
   spriteRenderer: {fileID: 8870730969038186345}
   targetCursorRenderer: {fileID: 6144765310703736854}
+  breakStunFx: {fileID: 1371091078885387065}
+  breakStunYOffset: 0.4
 --- !u!1 &1371091078885387065
 GameObject:
   m_ObjectHideFlags: 0

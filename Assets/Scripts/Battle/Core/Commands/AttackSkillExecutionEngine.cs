@@ -16,6 +16,7 @@ public class AttackSkillExecutionEngine {
     private int _hitCount = 1; // 打击次数
     private float _groupInterval; // 群体间隔
     private float _hitInterval; // 打击间隔
+    private DamageType _hitDamageType = DamageType.Untyped;
     #endregion
 
     /// <summary>
@@ -29,6 +30,7 @@ public class AttackSkillExecutionEngine {
         _hitCount = isPhysicalBranch ? _skill.GetFinalHitCount(_command.Type, _command.BPSpend) : 1;
         _groupInterval = _targets.Count > 1 ? _controller.Config.GroupTargetHitInterval : 0f;
         _hitInterval = _hitCount > 1 ? _controller.Config.MultiHitInterval : 0f;
+        _hitDamageType = _skill.ResolveDamageType();
     }
 
     public IEnumerator Execute(BattleController controller, List<BattleEntity> targets) {
@@ -168,5 +170,20 @@ public class AttackSkillExecutionEngine {
         target.TakeDamage(damage);
         Debug.Log($"{target.Definition.Name} 受到了 {damage} 点伤害");
         _controller.SpawnDamagePopup(target, damage, DamagePopupType.Nomal);
+        TryResolveBreakFromHit(target);
     }
+
+    #region 破盾
+    /// <summary>
+    /// 根据攻击判断是否破盾
+    /// </summary>
+    /// <param name="target"></param>
+    private void TryResolveBreakFromHit(BattleEntity target) {
+        if(target.IsPlayer || !target.IsWeakTo(_hitDamageType) || !target.TryReduceShield(1)) {
+            return;
+        }
+
+        _controller.NotifyEntityBrokenOrDead(target);
+    }
+    #endregion
 }

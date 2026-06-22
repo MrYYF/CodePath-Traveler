@@ -7,7 +7,8 @@ using UnityEngine.UI;
 /// </summary>
 public class WeaknessBar : MonoBehaviour,
     IEventReceiver<EntityShieldChangedEvent>,
-    IEventReceiver<EntityWeaknessChangedEvent> {
+    IEventReceiver<EntityWeaknessChangedEvent>,
+    IEventReceiver<EntityRecoverFromBreakEvent> {
     #region 弱点条配置与缓存
     [Header("Shield")]
     [SerializeField] private TMP_Text shieldText;
@@ -26,10 +27,12 @@ public class WeaknessBar : MonoBehaviour,
     private void OnEnable() {
         EventBus.Subscribe<EntityShieldChangedEvent>(this);
         EventBus.Subscribe<EntityWeaknessChangedEvent>(this);
+        EventBus.Subscribe<EntityRecoverFromBreakEvent>(this);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<EntityShieldChangedEvent>(this);
         EventBus.Unsubscribe<EntityWeaknessChangedEvent>(this);
+        EventBus.Unsubscribe<EntityRecoverFromBreakEvent>(this);
     }
 
     #endregion
@@ -102,6 +105,13 @@ public class WeaknessBar : MonoBehaviour,
 
     public void OnEvent(EntityShieldChangedEvent evt) {
         if(evt.Target != _targetEntity) {
+            return;
+        }
+        RefreshShield();
+    }
+
+    public void OnEvent(EntityRecoverFromBreakEvent evt) {
+        if (evt.Target != _targetEntity) {
             return;
         }
         RefreshShield();

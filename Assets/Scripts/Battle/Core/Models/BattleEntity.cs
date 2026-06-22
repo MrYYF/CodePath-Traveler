@@ -29,7 +29,10 @@ public class BattleEntity {
 
     #region 护盾与弱点
     public int CurrentShield { get; private set; }
+    public bool IsBroken { get; private set; }
     private int MaxShield { get; set; }
+    private int BrokenTurnsRemaining { get; set; } // 剩余需要跳过的行动次数
+    private bool BreakSkipPending { get; set; } // 回合内一次性跳过标记，新回合重置为true，消耗BrokenTurnsRemaining重置为false
     private readonly HashSet<DamageType> _weaknesses = new();
     private readonly List<DamageType> _orderedWeaknesses = new();
     #endregion
@@ -50,7 +53,10 @@ public class BattleEntity {
             InitializeBattleDrops(enemyDefinition);
             MaxShield = Mathf.Max(1, enemyDefinition.MaxShields);
             ApplyWeaknesses(enemyDefinition.Weaknesses, false);
+            ResetShieldAndBreakState();
+            return;
         }
+        _usedBPInThisTurn = false;
     }
 
 
@@ -180,7 +186,7 @@ public class BattleEntity {
     public void ClearDefendStance() => IsDefending = false;
     #endregion
 
-    #region 掉落、偷取相关
+    #region 掉落/偷取相关
     /// <summary>
     /// 初始化敌方实体战斗掉落
     /// </summary>
@@ -214,7 +220,7 @@ public class BattleEntity {
     }
     #endregion
 
-    #region 护盾、弱点相关
+    #region 弱点相关
     /// <summary>
     /// 更新弱点列表集合
     /// </summary>
@@ -248,6 +254,126 @@ public class BattleEntity {
     /// <returns>如果非玩家且包含弱点则true，否则false</returns>
     public bool IsWeakTo(DamageType type) => !IsPlayer && _weaknesses.Contains(type);
 
+    /// <summary>
+    /// 获取弱点集合
+    /// </summary>
+    /// <returns></returns>
     public List<DamageType> GetWeaknesses() => _orderedWeaknesses;
+    #endregion
+
+    #region 护盾
+    /// <summary>
+    /// 尝试减少护盾值
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public bool TryReduceShield(int amount) {
+        // 没有破防且有护盾
+        if (IsBroken || CurrentShield <= 0) {
+            return false;
+        }
+
+        // 扣除当前护盾
+        CurrentShield = Mathf.Max(0, CurrentShield - amount);
+
+        // 广播
+        EventBus.Publish(new EntityShieldChangedEvent(this, CurrentShield));
+
+        // 如果护盾归零则进入破盾状态
+        if (CurrentShield == 0) {
+            OnBreak();
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 进入破盾状态
+    /// </summary>
+    private void OnBreak() {
+        IsBroken = true;
+        BrokenTurnsRemaining = 1;
+        BreakSkipPending = false;
+
+        // TODO:打断蓄力
+
+        // 刷新单位头顶的break眩晕表现
+        Unit.SetBreakStunVisual(true);
+
+        // 广播事件
+        EventBus.Publish(new EntityBreakEvent(this));
+    }
+
+    /// <summary>
+    /// 从破盾状态恢复
+    /// </summary>
+    public void RecoverFromBreak() {
+        if (!IsBroken) {
+            return;
+        }
+
+        // 重置护盾与破盾状态
+        ResetShieldAndBreakState();
+
+        // 关闭眩晕表现
+        Unit.SetBreakStunVisual(false);
+
+        // 广播事件
+        EventBus.Publish(new EntityRecoverFromBreakEvent(this));
+        EventBus.Publish(new EntityShieldChangedEvent(this, CurrentShield));
+    }
+
+    /// <summary>
+    /// 回合开始时从破盾状态恢复
+    /// </summary>
+    public void ResolveBreakRecoveryAtRoundStart() {
+        if (IsBroken && BrokenTurnsRemaining <= 0) {
+            RecoverFromBreak();
+        }
+    }
+
+    /// <summary>
+    /// 重置护盾与破盾状态
+    /// </summary>
+    private void ResetShieldAndBreakState() {
+        IsBroken = false;
+        BrokenTurnsRemaining = 0;
+        BreakSkipPending = false;
+        CurrentShield = MaxShield;
+    }
+
+    /// <summary>
+    /// 增加破盾状态跳过的回合数
+    /// </summary>
+    /// <param name="amount">回合数</param>
+    public void AddBrokenSkipTurns(int amount) {
+        if (!IsBroken) {
+            return;
+        }
+
+        BrokenTurnsRemaining += amount;
+    }
+
+    /// <summary>
+    /// 消耗剩余需要跳过的行动次数
+    /// </summary>
+    /// <param name="amount"></param>
+    public void ConsumBrokenTurnsByTimeLine(int amount) {
+        if (!IsBroken || BrokenTurnsRemaining <= 0) {
+            return;
+        }
+
+        // 减少剩余破碎回合数
+        BrokenTurnsRemaining = Mathf.Max(0, BrokenTurnsRemaining - amount);
+
+        // 下回合若仍需跳过则由BreakSkipPending重置
+        BreakSkipPending = false;
+    }
+
+    public void TriggerBreakSkipForRound() {
+        if (IsBroken && BrokenTurnsRemaining > 0) {
+            BreakSkipPending = true;
+        }
+    }
     #endregion
 }

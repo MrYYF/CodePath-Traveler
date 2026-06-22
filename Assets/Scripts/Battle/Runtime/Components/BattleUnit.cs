@@ -11,6 +11,9 @@ public class BattleUnit : MonoBehaviour {
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private SpriteRenderer targetCursorRenderer;
+    [Header("眩晕特效")]
+    [SerializeField] private GameObject breakStunFx;
+    [SerializeField] private float breakStunYOffset = 0.4f;
 
     private void Awake() {
         targetCursorRenderer.enabled = false;
@@ -65,6 +68,7 @@ public class BattleUnit : MonoBehaviour {
     public void UpdateVisuals() {
         if (!Entity.IsAlive) {
             // 死亡动画
+            SetBreakStunVisual(false);
             animator.SetBool("isDead", true);
             return;
         }
@@ -112,4 +116,29 @@ public class BattleUnit : MonoBehaviour {
     /// </summary>
     /// <returns>位置</returns>
     public Vector3 GetPopupAnchorPosition() => targetCursorRenderer.transform.position;
+
+    /// <summary>
+    /// 设置眩晕效果是否显示
+    /// </summary>
+    /// <param name="visible"></param>
+    public void SetBreakStunVisual(bool visible) {
+        if (visible) {
+            UpdateBreakStunPosition();
+        }
+        breakStunFx.SetActive(visible);
+    }
+
+    /// <summary>
+    /// 更新破盾眩晕效果的位置
+    /// </summary>
+    private void UpdateBreakStunPosition() {
+        // sprite世界空间最高点坐标
+        Vector3 worldTop = spriteRenderer.bounds.max;
+        // 本地坐标
+        Vector3 localTop = transform.InverseTransformPoint(worldTop);
+        Transform breakStunTransform = breakStunFx.transform;
+        Vector3 localPos = breakStunTransform.localPosition;
+        localPos.y = localTop.y + breakStunYOffset;
+        breakStunTransform.localPosition = localPos;
+    }
 }

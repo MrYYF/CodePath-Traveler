@@ -10,6 +10,9 @@
 public class BattleRoundSchelduler {
     private List<BattleEntity> _currentRound = new List<BattleEntity>();
     private List<BattleEntity> _nextRound = new List<BattleEntity>();
+    // 单位待跳过次数
+    private readonly Dictionary<BattleEntity, int> _pendingNextRoundBreakSkip = new();
+
 
     public void Initialize(List<BattleEntity> allEntities) {
         _currentRound = GenerateSortedOrder(allEntities);
@@ -129,7 +132,10 @@ public class BattleRoundSchelduler {
         return result;
     }
 
-
+    /// <summary>
+    /// 回合开始处理
+    /// </summary>
+    /// <param name="allEntities"></param>
     private void TriggerRoundStart(List<BattleEntity> allEntities) {
         for (int i = 0; i < allEntities.Count; i++) {
             BattleEntity entity = allEntities[i];
@@ -137,10 +143,59 @@ public class BattleRoundSchelduler {
                 continue;
             }
 
+            // 从破盾状态恢复
+            entity.ResolveBreakRecoveryAtRoundStart();
+            // 从字典中消费“跳过下一回合”的对象
+            if (_pendingNextRoundBreakSkip.Remove(entity)) {
+                entity.ConsumBrokenTurnsByTimeLine(1);
+            }
+
+            // 清除防御状态
             entity.ClearDefendStance();
+
+            // 跳过本回合
+            entity.TriggerBreakSkipForRound();
+
             if (entity.IsPlayer) {
                 entity.RecoverBP();
             }
         }
     }
+
+    #region 破盾
+    /// <summary>
+    /// 单位被破盾或死亡时调用
+    /// 已死亡则剔除；当前回合已行动剔除下一回合；未行动则剔除当前回合和下个回合
+    /// </summary>
+    /// <param name="target">目标单位</param>
+    public void KickOutFromTimeline(BattleEntity target) {
+        if (target == null) {
+            return;
+        }
+
+        // 已死亡
+        if (!target.IsAlive) {
+            _currentRound.Remove(target);
+            _nextRound.Remove(target);
+            _pendingNextRoundBreakSkip.Remove(target);
+        }
+
+        // 未被破盾
+        if (!target.IsBroken) {
+            return;
+        }
+
+        // 当前未行动，跳过当前回合+下回合
+        if (_currentRound.Remove(target)) {
+            target.AddBrokenSkipTurns(1);
+            target.ConsumBrokenTurnsByTimeLine(1);
+        }
+
+        // 当前已行动
+        if (_nextRound.Remove(target)) {
+            _pendingNextRoundBreakSkip[target] = 1;
+        }
+    }
+
+    #endregion
 }

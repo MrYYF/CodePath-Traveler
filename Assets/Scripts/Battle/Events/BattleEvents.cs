@@ -82,3 +82,25 @@ public readonly struct EntityWeaknessChangedEvent : IEvent {
     }
 }
 
+/// <summary>
+/// 破盾事件
+/// </summary>
+public readonly struct EntityBreakEvent : IEvent {
+    public readonly BattleEntity Target;
+
+    public EntityBreakEvent(BattleEntity target) {
+        Target = target;
+    }
+}
+
+/// <summary>
+/// 破盾恢复事件
+/// </summary>
+public readonly struct EntityRecoverFromBreakEvent : IEvent {
+    public readonly BattleEntity Target;
+
+    public EntityRecoverFromBreakEvent(BattleEntity target) {
+        Target = target;
+    }
+}
+

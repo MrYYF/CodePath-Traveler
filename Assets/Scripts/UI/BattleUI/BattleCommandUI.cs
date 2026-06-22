@@ -20,6 +20,11 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
     [SerializeField] private SkillButton skillButtonPrefab;
     [SerializeField] private ItemButton itemButtonPrefab;
 
+    [Header("攻击类型图标")]
+    [SerializeField] private DamageTypeIconSetSO damageTypeIconSet;
+    [SerializeField] private Image attackTypeIconImage;
+    [SerializeField] private GameObject attackTypeIconRoot;
+
     // 回调方法
     private Action<SkillDataSO> _onSkillSelected;
     private Action<ItemDefinitionSO> _onItemSelected;
@@ -104,6 +109,7 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
         _onCommandSelected = onCommandSelected;
         _onSkillSelected = onSkillSelected;
         _onItemSelected = onItemSelected;
+        RefreshAttackTypeIcon();
         ShowPanel();
     }
 
@@ -115,6 +121,32 @@ public class BattleCommandUI : Singleton<BattleCommandUI> {
         ClosePanel();
         _onCommandSelected.Invoke(commandType);
         _onCommandSelected = null;
+    }
+
+    /// <summary>
+    /// 刷新普通攻击伤害类型图标
+    /// </summary>
+    private void RefreshAttackTypeIcon() {
+        SkillDataSO basicAttack = _currentEntity.Definition.BasicAttack;
+        DamageType damageType = basicAttack.ResolveDamageType();
+        if(damageType == DamageType.None || damageType == DamageType.Untyped) {
+            SetAttackTypeIconVisible(false);
+            return;
+        }
+
+        Sprite icon = damageTypeIconSet.GetIcon(damageType);
+        attackTypeIconImage.sprite = icon;
+        SetAttackTypeIconVisible(true);
+    }
+
+    /// <summary>
+    /// 设置普通攻击伤害类型是否可见
+    /// </summary>
+    /// <param name="visible">是否可见</param>
+    private void SetAttackTypeIconVisible(bool visible) {
+        attackTypeIconRoot.SetActive(visible);
+        attackTypeIconImage.enabled = visible;
+        attackTypeIconImage.gameObject.SetActive(visible);
     }
     #endregion
 

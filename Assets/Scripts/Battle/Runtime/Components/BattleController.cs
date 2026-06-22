@@ -216,4 +216,15 @@ public class BattleController : MonoBehaviour,
             );
     }
     #endregion
+
+    #region 破盾相关
+    /// <summary>
+    /// 尝试判断实体是否被破盾或击杀
+    /// </summary>
+    /// <param name="brokenEntity"></param>
+    public void NotifyEntityBrokenOrDead(BattleEntity brokenEntity) {
+        _battleRoundSchelduler.KickOutFromTimeline(brokenEntity);
+    }
+
+    #endregion
 }

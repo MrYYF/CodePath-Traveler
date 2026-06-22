@@ -73,6 +73,34 @@ public class SkillDataSO : ScriptableObject {
         return finalHitCount + GetBoostTier(spend).hitCountBonus;
     }
     #endregion
+
+    public DamageType ResolveDamageType() {
+        if(weaponType != WeaponType.None) {
+            return weaponType switch {
+                WeaponType.Sword => DamageType.Sword,
+                WeaponType.Bow => DamageType.Bow,
+                WeaponType.Dagger => DamageType.Dagger,
+                WeaponType.Axe => DamageType.Axe,
+                WeaponType.Spear => DamageType.Spear,
+                WeaponType.Staff => DamageType.Staff,
+                _ => DamageType.Untyped
+            };
+        }
+
+        if(elementType != ElementType.None) {
+            return elementType switch {
+                ElementType.Fire => DamageType.Fire,
+                ElementType.Ice => DamageType.Ice,
+                ElementType.Wind => DamageType.Wind,
+                ElementType.Dark => DamageType.Dark,
+                ElementType.Light => DamageType.Light,
+                ElementType.Lightning => DamageType.Lightning,
+                _ => DamageType.Untyped
+            };
+        }
+
+        return DamageType.Untyped;
+    }
 }
 
 /// <summary>
