@@ -450,7 +450,6 @@ public class BattleEntity {
         }
 
         // 非敌人 || 无挂起阶段index
-        Debug.Log($"{Definition.Name} + {_pendingBossPhaseIndex}");
         if (Definition is not EnemyDefinitionSO enemyDef || _pendingBossPhaseIndex < 0) {
             return false;
         }

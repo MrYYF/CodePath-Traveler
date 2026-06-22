@@ -40,7 +40,9 @@ public readonly struct EntityStatChangedEvent : IEvent {
     }
 }
 
-// 技能名称展示事件
+/// <summary>
+/// 技能名称展示事件
+/// </summary>
 public readonly struct SkillNameDisplayEvent : IEvent {
     public readonly BattleEntity Actor;
     public readonly string SkillName;
@@ -51,7 +53,9 @@ public readonly struct SkillNameDisplayEvent : IEvent {
     }
 }
 
-// 战斗通知事件
+/// <summary>
+/// 战斗通知事件
+/// </summary>
 public readonly struct BattleNotificationEvent : IEvent {
     public readonly string Message;
     public readonly bool IsSuccess;
@@ -62,7 +66,9 @@ public readonly struct BattleNotificationEvent : IEvent {
     }
 }
 
-// 护盾变化事件
+/// <summary>
+/// 护盾变化事件
+/// </summary>
 public readonly struct EntityShieldChangedEvent : IEvent {
     public readonly BattleEntity Target;
     public readonly int NewShield;
@@ -73,7 +79,9 @@ public readonly struct EntityShieldChangedEvent : IEvent {
     }
 }
 
-// 弱点变化事件
+/// <summary>
+/// 弱点变化事件
+/// </summary>
 public readonly struct EntityWeaknessChangedEvent : IEvent {
     public readonly BattleEntity Target;
 
@@ -103,4 +111,27 @@ public readonly struct EntityRecoverFromBreakEvent : IEvent {
         Target = target;
     }
 }
+
+/// <summary>
+/// 请求播放击杀演出
+/// </summary>
+public readonly struct KillCinematicRequestedEvent : IEvent {
+    public readonly BattleEntity Target;
+
+    public KillCinematicRequestedEvent(BattleEntity target) {
+        Target = target;
+    }
+}
+
+/// <summary>
+/// 请求播放破盾演出
+/// </summary>
+public readonly struct BreakCinematicRequestedEvent : IEvent {
+    public readonly BattleEntity Target;
+
+    public BreakCinematicRequestedEvent(BattleEntity target) {
+        Target = target;
+    }
+}
+
 

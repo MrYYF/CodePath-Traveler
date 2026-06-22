@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77377cad9b81c143ab77c4f92721c64, type: 3}
+  m_Name: Battle Cinematic Config SO
+  m_EditorClassIdentifier: 
+  EnableKillCinematic: 1
+  EnableBreakCinematic: 1
+  KillDissolveStagger: 0.08
+  Kill:
+    HitStopDuration: 0.5
+    SloMoScale: 0.15
+    SlowMoInDuration: 0.06
+    SlowMoOutDuration: 0.18
+    HoldDuration: 0.12
+    CameraTurnDuration: 0.08
+    CameraHoldDuration: 0.05
+    CameraReturnDuration: 0.12
+    CameraEulerOffset: {x: 0, y: 0, z: 0}
+    CameraPositionOffset: {x: 0, y: 0, z: 0}
+  Break:
+    HitStopDuration: 1
+    SloMoScale: 0.05
+    SlowMoInDuration: 0.06
+    SlowMoOutDuration: 0.18
+    HoldDuration: 1
+    CameraTurnDuration: 0.08
+    CameraHoldDuration: 0.05
+    CameraReturnDuration: 0.12
+    CameraEulerOffset: {x: 0, y: 0, z: 0}
+    CameraPositionOffset: {x: 0, y: 0, z: 0}

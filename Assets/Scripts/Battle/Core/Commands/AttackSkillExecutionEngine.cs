@@ -241,6 +241,7 @@ public class AttackSkillExecutionEngine {
         }
 
         _controller.NotifyEntityBrokenOrDead(target);
+        EventBus.Publish(new BreakCinematicRequestedEvent(target));
     }
     #endregion
 
