@@ -1,6 +1,3 @@
-using System;
-using static UnityEngine.EventSystems.EventTrigger;
-
 /// <summary>
 /// 战斗实体类，代表战斗中的一个单位（可以是玩家角色或敌人）。
 /// 它封装了角色的运行时数据、定义数据、所属战斗单位、唯一标识符以及是否为玩家等信息。
@@ -44,6 +41,10 @@ public class BattleEntity {
     private int _pendingBossPhaseIndex;
     #endregion
 
+    #region 蓄力技能临时状态字段
+    public SkillDataSO PreparedSkill { get; set; }
+    #endregion
+
     public BattleEntity(CharacterRuntimeData runtimeData, BattleUnit unit, bool isPlayer, string stableID) {
         RuntimeData = runtimeData;
         Unit = unit;
@@ -61,9 +62,10 @@ public class BattleEntity {
             MaxShield = Mathf.Max(1, enemyDefinition.MaxShields);
             ApplyWeaknesses(enemyDefinition.Weaknesses, false);
             ResetShieldAndBreakState();
-            return;
         }
         _usedBPInThisTurn = false;
+        CurrentBossPhaseIndex = -1;
+        _pendingBossPhaseIndex = -1;
     }
 
 
@@ -79,8 +81,11 @@ public class BattleEntity {
     }
 
     public void RecoverBP() {
-        if (_usedBPInThisTurn || CurrentBP >= MaxBattleBP) {
-            _usedBPInThisTurn = false;
+        bool shouldRecoverBP = !_usedBPInThisTurn;
+
+        _usedBPInThisTurn = false;
+
+        if (!shouldRecoverBP || CurrentBP >= MaxBattleBP) {
             return;
         }
         RuntimeData.ModifyBP(1);
@@ -129,8 +134,11 @@ public class BattleEntity {
         if (!IsAlive) {
             return;
         }
-
+        // 实际产生伤害
         RuntimeData.ModifyHP(-amount);
+
+        // 检查是否需要阶段转换
+        TryQueueBossPhaseTransitionByHp();
 
         //广播HP变化事件
         EventBus.Publish(new EntityStatChangedEvent(this, StatType.CurrentHP, CurrentHP, TotalStats.MaxHP));
@@ -302,7 +310,9 @@ public class BattleEntity {
         BrokenTurnsRemaining = 1;
         BreakSkipPending = false;
 
-        // TODO:打断蓄力
+        // 破盾打断蓄力
+        PreparedSkill = null;
+        Unit.StopTelegraphVfx();
 
         // 刷新单位头顶的break眩晕表现
         Unit.SetBreakStunVisual(true);
@@ -398,5 +408,97 @@ public class BattleEntity {
 
         return enemyDef.BossPhase[CurrentBossPhaseIndex];
     }
+
+    /// <summary>
+    /// 根据血量比例得到下一个带转换阶段index
+    /// </summary>
+    private void TryQueueBossPhaseTransitionByHp() {
+        if (IsPlayer || !IsAlive || Definition is not EnemyDefinitionSO enemyDef) {
+            return;
+        }
+
+        float hpRatio = CurrentHP / (float)Mathf.Max(1, TotalStats.MaxHP);
+        int targetPhaseIndex = CurrentBossPhaseIndex;
+
+        for (int i = CurrentBossPhaseIndex + 1; i < enemyDef.BossPhase.Count; i++) {
+            BossPhaseConfig phase = enemyDef.BossPhase[i];
+
+            if (hpRatio <= phase.triggerHpRatio) {
+                targetPhaseIndex = i;
+            }
+            else {
+                break;
+            }
+        }
+
+        if (targetPhaseIndex > CurrentBossPhaseIndex && targetPhaseIndex > _pendingBossPhaseIndex) {
+            _pendingBossPhaseIndex = targetPhaseIndex;
+        }
+    }
+
+    /// <summary>
+    /// 尝试转换到下一阶段
+    /// </summary>
+    /// <param name="appliedPhase">阶段信息</param>
+    /// <returns></returns>
+    public bool TryApplyPendingBossPhase(out BossPhaseConfig appliedPhase) {
+        appliedPhase = null;
+
+        // 检查 IsBroken 状态
+        if (IsBroken) {
+            return false;
+        }
+
+        // 非敌人 || 无挂起阶段index
+        Debug.Log($"{Definition.Name} + {_pendingBossPhaseIndex}");
+        if (Definition is not EnemyDefinitionSO enemyDef || _pendingBossPhaseIndex < 0) {
+            return false;
+        }
+
+        // 将挂起索引正式赋值，并清空挂起
+        BossPhaseConfig phase = enemyDef.BossPhase[_pendingBossPhaseIndex];
+        CurrentBossPhaseIndex = _pendingBossPhaseIndex;
+        _pendingBossPhaseIndex = -1;
+        appliedPhase = phase;
+
+        // 应用配置
+        ApplyBossPhaseConfig(phase);
+        return true;
+    }
+
+    /// <summary>
+    /// 套用单个boss阶段配置
+    /// </summary>
+    /// <param name="phase">阶段配置</param>
+    private void ApplyBossPhaseConfig(BossPhaseConfig phase) {
+        // 护盾幻化
+        if (phase.overrideMaxShield) {
+            bool wasBroken = IsBroken;
+
+            MaxShield = phase.maxShield;
+            ResetShieldAndBreakState();
+            Unit.SetBreakStunVisual(false);
+
+            if (wasBroken) {
+                EventBus.Publish(new EntityRecoverFromBreakEvent(this));
+            }
+            EventBus.Publish(new EntityShieldChangedEvent(this, CurrentShield));
+        }
+
+        // 弱点变化
+        if (phase.overrideWeaknesses) {
+            ApplyWeaknesses(phase.Weaknesses, true);
+        }
+    }
+
+    /// <summary>
+    /// 阶段转换提示信息
+    /// </summary>
+    /// <param name="phase">阶段配置</param>
+    /// <returns>提示信息文字</returns>
+    public string ResolveBossPhasePrompt(BossPhaseConfig phase) =>
+        !string.IsNullOrWhiteSpace(phase.promptText) ?
+        phase.promptText :
+        "进入了新阶段！";
     #endregion
 }

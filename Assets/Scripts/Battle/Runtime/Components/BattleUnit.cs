@@ -16,6 +16,9 @@ public class BattleUnit : MonoBehaviour {
     [Header("镜头震动")]
     [SerializeField] private CinemachineImpulseSource impulseSource;
 
+    // 蓄力特效
+    private GameObject _telegraphVfxInstance;
+
     private void Awake() {
         targetCursorRenderer.enabled = false;
         UpdateTargetCursorPosition();
@@ -71,6 +74,7 @@ public class BattleUnit : MonoBehaviour {
             // 死亡动画
             SetBreakStunVisual(false);
             animator.SetBool("isDead", true);
+            StopTelegraphVfx();
             return;
         }
 
@@ -150,4 +154,36 @@ public class BattleUnit : MonoBehaviour {
     public void PlayImpulse(float strength) {
         impulseSource.GenerateImpulse(strength);
     }
+
+    #region 蓄力相关
+    /// <summary>
+    /// 停止并销毁蓄力特效
+    /// </summary>
+    public void StopTelegraphVfx() {
+        if (_telegraphVfxInstance == null) {
+            return;
+        }
+        Destroy(_telegraphVfxInstance);
+        _telegraphVfxInstance = null;
+    }
+
+    /// <summary>
+    /// 播放蓄力技能特效
+    /// </summary>
+    /// <param name="skill"></param>
+    public void PlayTelegraphVfx(SkillDataSO skill) {
+        StopTelegraphVfx();
+        if (skill.telegraphVfxPrefab == null) {
+            return;
+        }
+
+        Vector3 spawnPos = GetPopupAnchorPosition() + skill.telegraphVfxOffset;
+        Transform parent = skill.telegraphVfxAttachToCaster ? transform : null;
+        _telegraphVfxInstance = Instantiate(skill.telegraphVfxPrefab, spawnPos, Quaternion.identity, parent);
+
+        if(skill.telegraphVfxLifeTime > 0) {
+            Destroy(_telegraphVfxInstance, skill.telegraphVfxLifeTime);
+        }
+    }
+    #endregion
 }

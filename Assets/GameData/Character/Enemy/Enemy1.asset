@@ -20,7 +20,7 @@ MonoBehaviour:
   BaseStats:
     MaxHP: 100
     MaxSP: 0
-    PAtk: 35
+    PAtk: 5
     PDef: 5
     MAtk: 10
     MDef: 5
@@ -43,7 +43,7 @@ MonoBehaviour:
     basicAttackWeight: 10
     damageSkillWeight: 15
     defaultSkillWeight: 10
-    telgraphMinBasePower: 50
+    telgraphMinBasePower: 10
     telgraphMinSpCost: 10
     telgraphHpRatioThreshold: 0.7
     telgraphWeight: 40
@@ -58,6 +58,28 @@ MonoBehaviour:
     overrideWeaknesses: 1
     Weaknesses: 0700000006000000
     promptText: "\u4F60\u4EEC\u8FD9\u662F\u81EA\u5BFB\u6B7B\u8DEF\uFF01"
+    introDelay: 1
+    basicAttackWeightMultiplier: 1
+    damageSkillWeightMultiplier: 1
+    healWeightMultiplier: 1
+    telgraphWeightMultiplier: 1
+  - triggerHpRatio: 0.5
+    overrideMaxShield: 1
+    maxShield: 3
+    overrideWeaknesses: 1
+    Weaknesses: 0700000006000000
+    promptText: "\u7AD9\u5728\u4F60\u9762\u524D\u7684\u662F\u2014\u2014"
+    introDelay: 1
+    basicAttackWeightMultiplier: 1
+    damageSkillWeightMultiplier: 1
+    healWeightMultiplier: 1
+    telgraphWeightMultiplier: 1
+  - triggerHpRatio: 0.25
+    overrideMaxShield: 1
+    maxShield: 4
+    overrideWeaknesses: 1
+    Weaknesses: 0700000006000000
+    promptText: "\u4E0D\uFF01\u4E0D\u53EF\u80FD\uFF01\uFF01\uFF01"
     introDelay: 1
     basicAttackWeightMultiplier: 1
     damageSkillWeightMultiplier: 1

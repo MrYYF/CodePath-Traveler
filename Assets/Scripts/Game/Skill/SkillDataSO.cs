@@ -1,5 +1,4 @@
-
-
+using UnityEngine;
 using System;
 
 /// <summary>
@@ -48,6 +47,12 @@ public class SkillDataSO : ScriptableObject {
     [Tooltip("销毁延迟"), Min(0)] public float vfxLifeTime = 2f;
     [Header("镜头效果")]
     [Min(0f)] public float cameraImpluseStrength = 0f;
+
+    [Header("蓄力提示特效")]
+    [Tooltip("进入蓄力状态播放的特效")] public GameObject telegraphVfxPrefab;
+    [Tooltip("蓄力特效偏移")] public Vector3 telegraphVfxOffset;
+    [Tooltip("蓄力特效自动销毁时间 0=不自动销毁"),Min(0)] public float telegraphVfxLifeTime = 0f;
+    [Tooltip("蓄力特效是否挂载到角色")] public bool telegraphVfxAttachToCaster = true;
 
 
     #region BP相关方法

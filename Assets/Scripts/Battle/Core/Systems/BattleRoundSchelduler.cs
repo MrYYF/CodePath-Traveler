@@ -150,6 +150,11 @@ public class BattleRoundSchelduler {
                 entity.ConsumBrokenTurnsByTimeLine(1);
             }
 
+            // 如果上一轮挂起阶段转换，则新回合开始时转阶段
+            if(!entity.IsBroken && entity.TryApplyPendingBossPhase(out BossPhaseConfig appliedPhase)) {
+                EventBus.Publish(new BattleNotificationEvent(entity.ResolveBossPhasePrompt(appliedPhase)));
+            }
+
             // 清除防御状态
             entity.ClearDefendStance();
 

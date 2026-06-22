@@ -59,6 +59,7 @@ public class WeaknessBar : MonoBehaviour,
     /// 重构弱点图标
     /// </summary>
     private void RebuildWeaknessIcons() {
+        CleanSpawnedIcons();
         List<DamageType> weaknesses = _targetEntity.GetWeaknesses();
         if (weaknesses.Count <= 0) {
             return;
@@ -75,8 +76,15 @@ public class WeaknessBar : MonoBehaviour,
         }
     }
 
+    private void CleanSpawnedIcons() {
+        foreach (var icon in _spawnedIcons) {
+            Destroy(icon);
+        }
+        _spawnedIcons.Clear();
+    }
+
     public void SetVisible(bool visible) {
-        if(gameObject.activeSelf == visible) {
+        if (gameObject.activeSelf == visible) {
             return;
         }
         gameObject.SetActive(visible);
@@ -97,14 +105,14 @@ public class WeaknessBar : MonoBehaviour,
 
     #region 事件监听
     public void OnEvent(EntityWeaknessChangedEvent evt) {
-        if(evt.Target != _targetEntity) {
+        if (evt.Target != _targetEntity) {
             return;
         }
         RebuildWeaknessIcons();
     }
 
     public void OnEvent(EntityShieldChangedEvent evt) {
-        if(evt.Target != _targetEntity) {
+        if (evt.Target != _targetEntity) {
             return;
         }
         RefreshShield();

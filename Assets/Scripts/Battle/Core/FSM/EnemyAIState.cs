@@ -11,9 +11,38 @@ public class EnemyAIState : BattleState {
     public EnemyAIState(BattleController controller) : base(controller) { }
 
     public override IEnumerator Execute() {
+        // 处理挂起的转阶段切换提示
+        yield return PlayPendingBossPhaseIntro();
+
+        // AI计算出一条行动命令
         _controller.CurrentCommandRequest = BuildAICommand();
+
+        // 思考等待时间
         yield return new WaitForSeconds(_controller.Config.AIThinkDuration);
+
+        // 进入执行表现阶段
         _controller.SetState(new PerformActionState(_controller));
+    }
+
+    /// <summary>
+    /// 进行挂起的阶段转换
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PlayPendingBossPhaseIntro() {
+        BattleEntity actor = _controller.CurrentEntity;
+        // 应用挂起的转阶段缓存
+        if (!actor.TryApplyPendingBossPhase(out BossPhaseConfig appliedPhase)) {
+            yield break;
+        }
+
+        // 广播提示信息
+        EventBus.Publish(new BattleNotificationEvent(appliedPhase.promptText));
+
+        // 阶段切换延迟
+        float introDelay = appliedPhase.introDelay;
+        if(introDelay > 0) {
+            yield return new WaitForSeconds(introDelay);
+        }
     }
 
     /// <summary>
@@ -22,10 +51,19 @@ public class EnemyAIState : BattleState {
     /// <returns></returns>
     private BattleCommandRequest BuildAICommand() {
         BattleEntity actor = _controller.CurrentEntity;
-        SkillDataSO selectedSkill = ChooseFirstAvailableSkill(actor);
+
+        // 上一回合蓄力则这回合直接释放
+        if(actor.PreparedSkill != null) {
+            return BuildPreparedSkillCommand();
+        }
 
         // 进行行动候选评估
         ActionDecision decision = EvaluateActions();
+
+        // 如果选择的是蓄力技能
+        if (decision.IsTelegraph) {
+            return BuildTelegraphCommand(decision.SelectedSkill);
+        }
         return BuildCommand(decision.SelectedSkill);
     }
 
@@ -46,6 +84,49 @@ public class EnemyAIState : BattleState {
         AutoTargetSelection(command);
         return command;
     }
+
+    #region 蓄力技能
+    private BattleCommandRequest BuildTelegraphCommand(SkillDataSO skill) {
+        BattleEntity actor = _controller.CurrentEntity;
+
+        // 下回合准备使用的技能
+        string skillName = skill.skillName;
+        actor.PreparedSkill = skill;
+
+        // 播放蓄力特效
+        actor.Unit.PlayTelegraphVfx(skill);
+
+        // 技能名称与提示
+        EventBus.Publish(new BattleNotificationEvent("敌人正在酝酿一次强大的攻击"));
+        EventBus.Publish(new SkillNameDisplayEvent(actor, skillName));
+
+        return BattleCommandRequest.CreateDefend(); // 跳过当前回合
+    }
+
+    /// <summary>
+    /// 构建准备好的技能命令
+    /// </summary>
+    /// <param name="skill">技能数据</param>
+    /// <returns>战斗命令</returns>
+    private BattleCommandRequest BuildPreparedSkillCommand() {
+        BattleEntity actor = _controller.CurrentEntity;
+
+        // 准备释放的技能
+        SkillDataSO skillToCast = actor.PreparedSkill;
+        string skillName = skillToCast.skillName;
+
+        // 清除缓存
+        actor.PreparedSkill = null;
+        actor.Unit.StopTelegraphVfx();
+
+        // 通知
+        EventBus.Publish(new BattleNotificationEvent($"{actor.Definition.Name}释放了[{skillName}]!"));
+        EventBus.Publish(new SkillNameDisplayEvent(actor, skillName));
+
+        return BuildCommand(skillToCast);
+    }
+
+    #endregion 
 
     /// <summary>
     /// 根据SP数值选择第一个可用技能
@@ -173,7 +254,7 @@ public class EnemyAIState : BattleState {
                     break;
             }
 
-            if(weight > 0) {
+            if (weight > 0) {
                 candidates.Add(new ActionDecision {
                     SelectedSkill = skill,
                     IsTelegraph = isTelegraph,
@@ -245,17 +326,22 @@ public class EnemyAIState : BattleState {
             weight;
     }
 
+    /// <summary>
+    /// 根据权重在待选行动列表中随机选择一个行动
+    /// </summary>
+    /// <param name="candidates">待选行动列表</param>
+    /// <returns>选择的行动</returns>
     private ActionDecision PickByWeight(List<ActionDecision> candidates) {
         float totalWeight = 0;
         foreach (var candidate in candidates) {
             totalWeight += candidate.Weight;
         }
 
-        float randomWeight = Random.Range(0,totalWeight);
+        float randomWeight = Random.Range(0, totalWeight);
 
         foreach (var candidate in candidates) {
             totalWeight -= candidate.Weight;
-            if(totalWeight < 0) {
+            if (totalWeight < 0) {
                 return candidate;
             }
         }
