@@ -82,8 +82,14 @@ public class AttackSkillExecutionEngine {
 
             // 播放技能特效
             if (mode == SkillVfxSpawnMode.GroupCenter && !hasPlayedVfx) {
+                yield return PlayAttackWithWindup();
                 yield return PlayHitVfx(target);
                 hasPlayedVfx = true;
+            }
+
+            if (!hasPlayedVfx) {
+                yield return PlayAttackWithWindup();
+                yield return PlayHitVfx(target);
             }
 
             int damage = target.CalculateDamageFrom(_actor, _skill, _powerMultiplier);
@@ -102,21 +108,25 @@ public class AttackSkillExecutionEngine {
     /// <returns></returns>
     private IEnumerator ExecutePhysicalBranch() {
         SkillVfxSpawnMode mode = GetVfxMode();
+        bool hasPlayedVfx = false;
 
         for (int i = 0; i < _targets.Count; i++) {
-            bool hasPlayedVfx = false;
-
             BattleEntity target = _targets[i];
             int damage = target.CalculateDamageFrom(_actor, _skill, _powerMultiplier);
 
             for (int hitIndex = 0; hitIndex < _hitCount; hitIndex++) {
                 if (!target.IsAlive) break;
-                yield return PlayAttackWithWindup();
 
                 // 播放技能特效
                 if (mode == SkillVfxSpawnMode.GroupCenter && !hasPlayedVfx) {
+                    yield return PlayAttackWithWindup();
                     yield return PlayHitVfx(target);
                     hasPlayedVfx = true;
+                }
+                
+                if (!hasPlayedVfx) {
+                    yield return PlayAttackWithWindup();
+                    yield return PlayHitVfx(target);
                 }
 
                 ApplyDamageHit(target, damage);
@@ -154,8 +164,14 @@ public class AttackSkillExecutionEngine {
 
             // 播放技能特效
             if (mode == SkillVfxSpawnMode.GroupCenter && !hasPlayedVfx) {
+                yield return PlayAttackWithWindup();
                 yield return PlayHitVfx(target);
                 hasPlayedVfx = true;
+            }
+
+            if (!hasPlayedVfx) {
+                yield return PlayAttackWithWindup();
+                yield return PlayHitVfx(target);
             }
 
             target.Heal(healAmount);

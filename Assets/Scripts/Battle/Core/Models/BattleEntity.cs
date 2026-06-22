@@ -37,6 +37,13 @@ public class BattleEntity {
     private readonly List<DamageType> _orderedWeaknesses = new();
     #endregion
 
+    #region 阶段状态临时字段
+    // 当前阶段的索引
+    private int CurrentBossPhaseIndex { get; set; }
+    // 已满足阈值但尚未进入的阶段索引
+    private int _pendingBossPhaseIndex;
+    #endregion
+
     public BattleEntity(CharacterRuntimeData runtimeData, BattleUnit unit, bool isPlayer, string stableID) {
         RuntimeData = runtimeData;
         Unit = unit;
@@ -374,6 +381,22 @@ public class BattleEntity {
         if (IsBroken && BrokenTurnsRemaining > 0) {
             BreakSkipPending = true;
         }
+    }
+    #endregion
+
+    #region 阶段逻辑
+    /// <summary>
+    /// 获取当前阶段配置
+    /// </summary>
+    /// <returns></returns>
+    public BossPhaseConfig GetActiveBossPhaseConfig() {
+        if (Definition is not EnemyDefinitionSO enemyDef ||
+                CurrentBossPhaseIndex < 0 ||
+                CurrentBossPhaseIndex > enemyDef.BossPhase.Count) {
+            return null;
+        }
+
+        return enemyDef.BossPhase[CurrentBossPhaseIndex];
     }
     #endregion
 }

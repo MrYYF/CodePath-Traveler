@@ -37,5 +37,29 @@ MonoBehaviour:
   Drops:
   - ItemDefinition: {fileID: 11400000, guid: 3fbf1ffdfa8837245af1c20eed81e07a, type: 2}
     Quantity: 1
-  MaxShields: 2
-  Weaknesses: 0b0000000a00000005000000
+  MaxShields: 1
+  Weaknesses: 00000000010000000500000003000000
+  aiTuning:
+    basicAttackWeight: 10
+    damageSkillWeight: 15
+    defaultSkillWeight: 10
+    telgraphMinBasePower: 50
+    telgraphMinSpCost: 10
+    telgraphHpRatioThreshold: 0.7
+    telgraphWeight: 40
+    healLowHpRatioThreshold: 0.4
+    healBaseWeight: 40
+    healPreLowHpBonus: 20
+    singleHealMultiLowHpPenalty: 0.8
+  BossPhase:
+  - triggerHpRatio: 0.75
+    overrideMaxShield: 1
+    maxShield: 2
+    overrideWeaknesses: 1
+    Weaknesses: 0700000006000000
+    promptText: "\u4F60\u4EEC\u8FD9\u662F\u81EA\u5BFB\u6B7B\u8DEF\uFF01"
+    introDelay: 1
+    basicAttackWeightMultiplier: 1
+    damageSkillWeightMultiplier: 1
+    healWeightMultiplier: 1
+    telgraphWeightMultiplier: 1
