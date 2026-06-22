@@ -103,6 +103,8 @@ public class BattleFieldManager : MonoBehaviour {
 
     public Vector3 GetHomePos(BattleUnit unit) => _homePos[unit];
     public Vector3 GetActionPos(BattleUnit unit) => layout.actionTrans.position;
+    public Vector3 GetSideCenter(bool isAlly) => isAlly ? layout.GetAllyGroupCenter() : layout.GetEnemyGroupCenter(_currentFomation);
+
 
     #region boost VFX
     public void SetBoostVfxLevel(int level) {

@@ -26,3 +26,36 @@ MonoBehaviour:
   hitCount: 0
   healAmount: 30
   specialLogic: {fileID: 0}
+  boostTiers:
+  - tier: 0
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 0
+  - tier: 1
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 0
+  - tier: 2
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 0
+  - tier: 3
+    powerMultiplier: 1
+    hitCountBonus: 0
+    chanceBonus: 0
+    durationBonus: 0
+    genericValueBonus: 0
+  hitVfxPrefab: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05,
+    type: 3}
+  vfxSpawnMode: 0
+  vfxSpawnFromCaster: 0
+  vfxOffset: {x: 0, y: 0, z: 0}
+  vfxYRotation: 0
+  vfxHitDelay: 0
+  vfxLifeTime: 2

@@ -27,7 +27,7 @@ MonoBehaviour:
     Speed: 5
     Accuracy: 70
     Evasion: 0
-  BasicAttack: {fileID: 0}
+  BasicAttack: {fileID: 11400000, guid: 21665310b0cc56e4d9df28f9eee8f28e, type: 2}
   InitialSkills: []
   FieldAnimator: {fileID: 22100000, guid: 208524b2a2b88d54c8c45676db8a5227, type: 2}
   BattleAnimator: {fileID: 22100000, guid: 9670dd6a142760d448456d18015277f6, type: 2}

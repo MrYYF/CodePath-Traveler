@@ -37,6 +37,19 @@ public class SkillDataSO : ScriptableObject {
         BoostTierConfig.Default(3)
     };
 
+    [Header("VFX")]
+    public GameObject hitVfxPrefab;
+    public SkillVfxSpawnMode vfxSpawnMode = SkillVfxSpawnMode.AutoByTargetType;
+    [Tooltip("勾选后特效会从施法者当前位置发出，否则沿用SpawnMode设定")]
+    public bool vfxSpawnFromCaster = false;
+    public Vector3 vfxOffset;
+    public float vfxYRotation = 0f;
+    [Tooltip("命中延迟"), Min(0)] public float vfxHitDelay = 0f;
+    [Tooltip("销毁延迟"), Min(0)] public float vfxLifeTime = 2f;
+    [Header("镜头效果")]
+    [Min(0f)] public float cameraImpluseStrength = 0f;
+
+
     #region BP相关方法
     /// <summary>
     /// 根据bp点数的等级获取技能boost加成配置
@@ -75,7 +88,7 @@ public class SkillDataSO : ScriptableObject {
     #endregion
 
     public DamageType ResolveDamageType() {
-        if(weaponType != WeaponType.None) {
+        if (weaponType != WeaponType.None) {
             return weaponType switch {
                 WeaponType.Sword => DamageType.Sword,
                 WeaponType.Bow => DamageType.Bow,
@@ -87,7 +100,7 @@ public class SkillDataSO : ScriptableObject {
             };
         }
 
-        if(elementType != ElementType.None) {
+        if (elementType != ElementType.None) {
             return elementType switch {
                 ElementType.Fire => DamageType.Fire,
                 ElementType.Ice => DamageType.Ice,

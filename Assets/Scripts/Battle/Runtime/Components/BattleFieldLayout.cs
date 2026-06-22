@@ -44,4 +44,27 @@ public class BattleFieldLayout : MonoBehaviour {
         return Vector3.Lerp(start, end, t);
     }
     #endregion
+
+    #region 获取位置相关
+    /// <summary>
+    /// 获取友军中心位置
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetAllyGroupCenter() {
+        return Vector3.Lerp(allyTopTrans.position, allyBottomTrans.position, 0.5f);
+    }
+
+    /// <summary>
+    /// 获取敌军中心位置
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetEnemyGroupCenter(EnemyLayoutFomation fomation) {
+        if(fomation == EnemyLayoutFomation.BossTriangle) {
+            return enemyBossTrans.position;
+        }
+
+        return Vector3.Lerp(enemyTopTrans.position, enemyBottomTrans.position, 0.5f);
+    }
+
+    #endregion
 }

@@ -213,3 +213,9 @@ public enum DamageType {
     // Ãÿ ‚
     None, Untyped
 }
+
+public enum SkillVfxSpawnMode {
+    AutoByTargetType = 0,
+    Target = 1,
+    GroupCenter = 2,
+}

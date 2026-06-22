@@ -1,5 +1,4 @@
-
-using System;
+using Unity.Cinemachine;
 
 /// <summary>
 /// 战斗单位组件，附加在战斗场景中的每个单位的GameObject上。
@@ -14,6 +13,8 @@ public class BattleUnit : MonoBehaviour {
     [Header("眩晕特效")]
     [SerializeField] private GameObject breakStunFx;
     [SerializeField] private float breakStunYOffset = 0.4f;
+    [Header("镜头震动")]
+    [SerializeField] private CinemachineImpulseSource impulseSource;
 
     private void Awake() {
         targetCursorRenderer.enabled = false;
@@ -140,5 +141,13 @@ public class BattleUnit : MonoBehaviour {
         Vector3 localPos = breakStunTransform.localPosition;
         localPos.y = localTop.y + breakStunYOffset;
         breakStunTransform.localPosition = localPos;
+    }
+
+    /// <summary>
+    /// 播放镜头震动效果
+    /// </summary>
+    /// <param name="strength">强度</param>
+    public void PlayImpulse(float strength) {
+        impulseSource.GenerateImpulse(strength);
     }
 }

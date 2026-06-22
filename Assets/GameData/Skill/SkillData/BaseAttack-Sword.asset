@@ -51,3 +51,12 @@ MonoBehaviour:
     chanceBonus: 0
     durationBonus: 0
     genericValueBonus: 0
+  hitVfxPrefab: {fileID: 6823302871133167919, guid: 3138a83bedbd6ad4481ba0b061da2eb6,
+    type: 3}
+  vfxSpawnMode: 1
+  vfxSpawnFromCaster: 0
+  vfxOffset: {x: 0, y: 0, z: 0}
+  vfxYRotation: 0
+  vfxHitDelay: 0
+  vfxLifeTime: 2
+  cameraImpluseStrength: 0.2
