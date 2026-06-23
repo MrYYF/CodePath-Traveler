@@ -28,12 +28,6 @@ public class AttackSkillCommandHandler : BattleCommandHandleBase {
         // 构建目标
         _targets.AddRange(BattleTargeting.BuildExecutionTargets(Controller));
 
-        Debug.Log(
-            $"[AttackDebug] Name = {Actor.Definition.Name}, " +
-            $"Skill = {Command.Skill.skillName}, " +
-            $"TargetID = {Command.TargetEntityID}"
-            );
-
         //显示技能名字
         EventBus.Publish(new SkillNameDisplayEvent(Actor, Command.Skill.skillName));
         return true;

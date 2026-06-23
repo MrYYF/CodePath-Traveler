@@ -19,10 +19,10 @@ MonoBehaviour:
   BaseLevel: 1
   BaseStats:
     MaxHP: 80
-    MaxSP: 100
+    MaxSP: 150
     PAtk: 5
     PDef: 0
-    MAtk: 10
+    MAtk: 50
     MDef: 10
     Speed: 5
     Accuracy: 80

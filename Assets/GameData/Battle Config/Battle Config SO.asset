@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d9071be7d3a6f3449933668937b648e, type: 3}
   m_Name: Battle Config SO
   m_EditorClassIdentifier: 
+  StartBattleDelay: 1
+  TurnStartDelay: 0.3
+  TurnEndDelay: 0.3
+  VictoryResultDelay: 0.2
+  AIThinkDuration: 1
   GroupTargetHitInterval: 0.05
   MultiHitInterval: 0.08
   AttackWindupTime: 0.4

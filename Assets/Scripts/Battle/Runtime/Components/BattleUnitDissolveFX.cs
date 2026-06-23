@@ -64,7 +64,7 @@ public class BattleUnitDissolveFX : MonoBehaviour {
         // 生成特效
         Vector3 pos = transform.position + deathVfxOffset;
         ParticleSystem vfxInstantiate = Instantiate(deathVfxPrefab, pos, Quaternion.identity);
-        Destroy(vfxInstantiate, deathVfxDestroyDelay);
+        Destroy(vfxInstantiate.gameObject, deathVfxDestroyDelay);
     }
 
 

@@ -19,21 +19,21 @@ MonoBehaviour:
     HitStopDuration: 0.5
     SloMoScale: 0.15
     SlowMoInDuration: 0.06
-    SlowMoOutDuration: 0.18
+    SlowMoOutDuration: 1
     HoldDuration: 0.12
-    CameraTurnDuration: 0.08
-    CameraHoldDuration: 0.05
-    CameraReturnDuration: 0.12
-    CameraEulerOffset: {x: 0, y: 4, z: 0}
+    CameraTurnDuration: 0.5
+    CameraHoldDuration: 1.5
+    CameraReturnDuration: 0.5
+    CameraEulerOffset: {x: 0, y: 0, z: 0}
     CameraPositionOffset: {x: -2, y: 0, z: 0.5}
   Break:
-    HitStopDuration: 1
+    HitStopDuration: 0.5
     SloMoScale: 0.1
     SlowMoInDuration: 0.06
     SlowMoOutDuration: 0.18
     HoldDuration: 0.5
-    CameraTurnDuration: 0.08
-    CameraHoldDuration: 0.05
-    CameraReturnDuration: 0.12
-    CameraEulerOffset: {x: 0, y: 4, z: 0}
+    CameraTurnDuration: 0.5
+    CameraHoldDuration: 1.5
+    CameraReturnDuration: 0.5
+    CameraEulerOffset: {x: 0, y: 0, z: 0}
     CameraPositionOffset: {x: -2, y: 0, z: 0.5}
