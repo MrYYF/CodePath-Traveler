@@ -119,6 +119,8 @@ public class BattleResultPanelController : MonoBehaviour,
             hud.SetInfo(member.Definition.Name, startLevel, startExp, showTargetExp, startProgress, member.Definition.Portrait);
 
             //TODO:动画
+            int appliedExp = member.AddExp(gainExp);
+            hud.PlayExpGainAnimation(member, appliedExp, expTweenStagger * aliveIndex);
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(infoHUDRoot);

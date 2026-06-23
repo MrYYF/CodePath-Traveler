@@ -137,7 +137,7 @@ public readonly struct BattleEndedEvent : IEvent {
     public readonly int MoneyReward;
     public readonly List<BattleDropReward> dropRewards;
 
-    public BattleEndedEvent(bool isWin, int expReward, int moneyReward, List<BattleDropReward> dropRewards) {
+    public BattleEndedEvent(bool isWin, int expReward = 0, int moneyReward = 0, List<BattleDropReward> dropRewards = null) {
         IsWin = isWin;
         ExpReward = expReward;
         MoneyReward = moneyReward;

@@ -120,6 +120,10 @@ public class BattleUnit : MonoBehaviour {
         animator.SetTrigger("use");
     }
 
+    public void PlayVictoryAnimation() {
+        animator.SetBool("isWin", true);
+    }
+
     /// <summary>
     /// 获取战斗数值飘动文本显示位置
     /// </summary>

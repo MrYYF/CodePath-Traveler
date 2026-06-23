@@ -231,4 +231,15 @@ public class BattleController : MonoBehaviour,
     }
 
     #endregion
+
+    #region 胜负判定与结算
+    /// <summary>
+    /// 结束战斗并发布相关事件
+    /// </summary>
+    /// <param name="endedEvent">结束战斗事件</param>
+    public void EndBattle(BattleEndedEvent endedEvent) {
+        StopBattle();
+        EventBus.Publish(endedEvent);
+    }
+    #endregion
 }

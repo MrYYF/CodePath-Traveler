@@ -32,8 +32,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2efa8dd0edcbd3848824c1a30404e672, type: 2}
   FieldAnimator: {fileID: 0}
   BattleAnimator: {fileID: 22100000, guid: b89abc6a261f4f04a9f6ad9b60768fc5, type: 2}
-  ExpReward: 0
-  MoneyReward: 0
+  ExpReward: 100
+  MoneyReward: 300
   Drops:
   - ItemDefinition: {fileID: 11400000, guid: 3fbf1ffdfa8837245af1c20eed81e07a, type: 2}
     Quantity: 1

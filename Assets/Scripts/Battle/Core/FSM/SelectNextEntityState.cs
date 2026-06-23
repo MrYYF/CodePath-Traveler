@@ -15,16 +15,15 @@ public class SelectNextEntityState : BattleState {
     public SelectNextEntityState(BattleController controller) : base(controller) { }
 
     public override IEnumerator Execute() {
-        // 获取下一位行动对象
-        BattleEntity nextEntity = _controller.GetNextActorByRound();
-
-        // 如果没有可行动对象，则战斗结束
-        if (nextEntity == null) {
-            _controller.StopBattle();
+        if (BattleOutcomeResolver.TryGetBattleEndedEvent(_controller.AllEntities, out BattleEndedEvent endedEvent)) {
+            _controller.EndBattle(endedEvent);
             yield break;
         }
 
-        // 将“当前行动者”切换为下一为行动对象
+        // 获取下一位行动对象
+        BattleEntity nextEntity = _controller.GetNextActorByRound();
+
+        // 将“当前行动者”切换为下一行动对象
         _controller.CurrentEntity = nextEntity;
         _controller.UpdateTimelinePrediction();
 
