@@ -76,6 +76,9 @@ public class WeaknessBar : MonoBehaviour,
         }
     }
 
+    /// <summary>
+    /// 清空已生成的弱点图标
+    /// </summary>
     private void CleanSpawnedIcons() {
         foreach (var icon in _spawnedIcons) {
             Destroy(icon);
@@ -83,6 +86,10 @@ public class WeaknessBar : MonoBehaviour,
         _spawnedIcons.Clear();
     }
 
+    /// <summary>
+    /// 设置弱点护盾状态栏可见性
+    /// </summary>
+    /// <param name="visible"></param>
     public void SetVisible(bool visible) {
         if (gameObject.activeSelf == visible) {
             return;

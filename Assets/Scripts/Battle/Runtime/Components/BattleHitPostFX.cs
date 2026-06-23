@@ -1,5 +1,8 @@
 using UnityEngine.Rendering;
 
+/// <summary>
+/// 打击命中的后处理特效
+/// </summary>
 public class BattleHitPostFX : MonoBehaviour
 {
     [Header("Volume")]

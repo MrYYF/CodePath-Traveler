@@ -10,6 +10,9 @@ public class AttackSkillExecutionEngine {
     private BattleCommandRequest _command;
     private List<BattleEntity> _targets;
     private SkillDataSO _skill;
+    private readonly List<BattleEntity> _killedTargets = new();
+    private bool _hasPlayedKillCinematic;
+    private bool _breakCinematicRequested;
     #endregion
 
     #region 执行参数缓存
@@ -25,6 +28,9 @@ public class AttackSkillExecutionEngine {
     /// 缓存执行参数
     /// </summary>
     private void CacheExecutionParameters() {
+        _killedTargets.Clear();
+        _hasPlayedKillCinematic = false;
+        _breakCinematicRequested = false;
         bool isPhysicalBranch = _skill.damageKind == DamageKind.Physical
             && _skill.skillType != SkillType.Heal;
 
@@ -37,6 +43,7 @@ public class AttackSkillExecutionEngine {
     }
 
     public IEnumerator Execute(BattleController controller, List<BattleEntity> targets) {
+        // 缓存上下文
         _controller = controller;
         _actor = controller.CurrentEntity;
         _command = controller.CurrentCommandRequest;
@@ -50,8 +57,10 @@ public class AttackSkillExecutionEngine {
             yield break;
         }
 
+        // 计算普通命令执行参数
         CacheExecutionParameters();
 
+        // 分支处理结算
         if (_skill.skillType == SkillType.Heal) {
             yield return ExecuteHealBranch();
         }
@@ -61,6 +70,9 @@ public class AttackSkillExecutionEngine {
         else {
             yield return ExecutePhysicalBranch();
         }
+
+        // 统一处理错峰死亡特效
+        FinishKillDissolves();
     }
 
     /// <summary>
@@ -214,6 +226,12 @@ public class AttackSkillExecutionEngine {
     /// <param name="target">目标</param>
     /// <param name="damage">伤害数值</param>
     private void ApplyDamageHit(BattleEntity target, int damage) {
+        // 判断是否会造成击杀
+        bool willKill = !target.IsPlayer && target.CurrentHP - damage <= 0;
+        if(willKill) {
+            _killedTargets.Add(target);
+        }
+
         // 屏幕震动
         if (_skill.cameraImpluseStrength > 0f) {
             target.Unit.PlayImpulse(_skill.cameraImpluseStrength);
@@ -221,10 +239,18 @@ public class AttackSkillExecutionEngine {
 
         // 实际造成伤害
         target.TakeDamage(damage);
-        Debug.Log($"{target.Definition.Name} 受到了 {damage} 点伤害");
 
         // 伤害数值弹出
         _controller.SpawnDamagePopup(target, damage, DamagePopupType.Nomal);
+
+        // 如果击杀，则发送演出请求
+        if (willKill) {
+            if (!_hasPlayedKillCinematic) {
+                _hasPlayedKillCinematic = true;
+                EventBus.Publish(new KillCinematicRequestedEvent(target));
+            }
+            return;
+        }
 
         // 计算破盾相关效果
         TryResolveBreakFromHit(target);
@@ -241,7 +267,12 @@ public class AttackSkillExecutionEngine {
         }
 
         _controller.NotifyEntityBrokenOrDead(target);
-        EventBus.Publish(new BreakCinematicRequestedEvent(target));
+
+        if (_breakCinematicRequested) {
+            return;
+        }
+        _breakCinematicRequested = true;
+        EventBus.Publish(new BreakCinematicRequestedEvent());
     }
     #endregion
 
@@ -338,5 +369,13 @@ public class AttackSkillExecutionEngine {
         _ => !_actor.IsPlayer,
     };
 
+    private void FinishKillDissolves() {
+        int index = 0;
+        float stagger = _controller.CinematicService.KillDissolveStagger;
+        foreach (var target in _killedTargets) {
+            target.Unit.PlayEnemyDissolve(stagger * index++);
+        }
+
+    }
     #endregion
 }

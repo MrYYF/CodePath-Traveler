@@ -24,16 +24,16 @@ MonoBehaviour:
     CameraTurnDuration: 0.08
     CameraHoldDuration: 0.05
     CameraReturnDuration: 0.12
-    CameraEulerOffset: {x: 0, y: 0, z: 0}
-    CameraPositionOffset: {x: 0, y: 0, z: 0}
+    CameraEulerOffset: {x: 0, y: 4, z: 0}
+    CameraPositionOffset: {x: -2, y: 0, z: 0.5}
   Break:
     HitStopDuration: 1
-    SloMoScale: 0.05
+    SloMoScale: 0.1
     SlowMoInDuration: 0.06
     SlowMoOutDuration: 0.18
-    HoldDuration: 1
+    HoldDuration: 0.5
     CameraTurnDuration: 0.08
     CameraHoldDuration: 0.05
     CameraReturnDuration: 0.12
-    CameraEulerOffset: {x: 0, y: 0, z: 0}
-    CameraPositionOffset: {x: 0, y: 0, z: 0}
+    CameraEulerOffset: {x: 0, y: 4, z: 0}
+    CameraPositionOffset: {x: -2, y: 0, z: 0.5}

@@ -15,6 +15,10 @@ public class BattleController : MonoBehaviour,
     [SerializeField] private BattleTimelineUI timelineUI;
     public BattleTimelineUI TimelineUI => timelineUI;
 
+    [Header("战斗演出")]
+    [SerializeField] private BattleCinematicService cinematicService;
+    public BattleCinematicService CinematicService => cinematicService;
+
     [Header("场地管理")]
     // 战斗场地管理器，负责根据战斗预加载数据生成战斗单位，并根据当前敌人编队的阵型布局单位位置。
     [SerializeField] private BattleFieldManager fieldManager;

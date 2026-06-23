@@ -19,7 +19,11 @@ public class BattleUnit : MonoBehaviour {
     // 蓄力特效
     private GameObject _telegraphVfxInstance;
 
+    // 死亡特效
+    private BattleUnitDissolveFX _dissolveFX;
+
     private void Awake() {
+        _dissolveFX = GetComponent<BattleUnitDissolveFX>();
         targetCursorRenderer.enabled = false;
         UpdateTargetCursorPosition();
     }
@@ -181,9 +185,28 @@ public class BattleUnit : MonoBehaviour {
         Transform parent = skill.telegraphVfxAttachToCaster ? transform : null;
         _telegraphVfxInstance = Instantiate(skill.telegraphVfxPrefab, spawnPos, Quaternion.identity, parent);
 
-        if(skill.telegraphVfxLifeTime > 0) {
+        if (skill.telegraphVfxLifeTime > 0) {
             Destroy(_telegraphVfxInstance, skill.telegraphVfxLifeTime);
         }
     }
+    #endregion
+
+    #region 死亡特效
+    /// <summary>
+    /// 设置单位是否可见
+    /// </summary>
+    /// <param name="visible">可见性</param>
+    public void SetBodyVisible(bool visible) {
+        spriteRenderer.enabled = visible;
+    }
+
+    /// <summary>
+    /// 播放敌方死亡消散特效
+    /// </summary>
+    /// <param name="delay">消散延迟</param>
+    public void PlayEnemyDissolve(float delay = 0f) {
+        _dissolveFX.PlayDelayVfx(delay);
+    }
+
     #endregion
 }

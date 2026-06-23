@@ -88,7 +88,6 @@ public class EquipmentPanelController : PanelController {
 
         for (int i = 0; i < partyMembers.Count; i++) {
             CharacterRuntimeData member = partyMembers[i];
-            if (member == null) continue;
             _partyMembers.Add(member);
         }
 

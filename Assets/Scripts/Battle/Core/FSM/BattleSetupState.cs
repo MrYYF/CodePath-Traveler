@@ -29,7 +29,7 @@ public class BattleSetupState : BattleState {
         _controller.AllEntities.AddRange(CreateEntities(_startPreload.enemy, _controller.FieldManager.SpawnedEnemyUnits, false));
 
         // 敌方出现在默认位置，友方从屏幕外飞入
-        float runtime = 2f; // TODO:测试效果用，后续需要做成统一SO配置文件
+        float runtime = _controller.Config.StartBattleDelay; 
         if (runtime > 0f) {
             yield return new WaitForSeconds(runtime);
 

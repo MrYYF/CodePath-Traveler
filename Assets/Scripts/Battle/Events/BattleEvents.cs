@@ -126,12 +126,6 @@ public readonly struct KillCinematicRequestedEvent : IEvent {
 /// <summary>
 /// 请求播放破盾演出
 /// </summary>
-public readonly struct BreakCinematicRequestedEvent : IEvent {
-    public readonly BattleEntity Target;
-
-    public BreakCinematicRequestedEvent(BattleEntity target) {
-        Target = target;
-    }
-}
+public readonly struct BreakCinematicRequestedEvent : IEvent { }
 
 

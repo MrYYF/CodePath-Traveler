@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1149047728336798158}
   - component: {fileID: 859255699386360393}
   - component: {fileID: 4425320133933325395}
+  - component: {fileID: 4384459711429179345}
   m_Layer: 0
   m_Name: BattleUnit
   m_TagString: Untagged
@@ -106,7 +107,23 @@ MonoBehaviour:
     DissipationMode: 2
     DissipationDistance: 100
     PropagationSpeed: 343
-  DefaultVelocity: {x: 0, y: -1, z: 0}
+  DefaultVelocity: {x: -0.1, y: 0, z: 0}
+--- !u!114 &4384459711429179345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767180264370132667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aecdc145d730a284ab0dfa7390a179f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathVfxPrefab: {fileID: 6300717128283190289, guid: 90375796f996bff4cabed66da5e558cb,
+    type: 3}
+  deathVfxOffset: {x: 0, y: 0.5, z: 0}
+  deathVfxDestroyDelay: 2
 --- !u!1 &1371091078885387065
 GameObject:
   m_ObjectHideFlags: 0

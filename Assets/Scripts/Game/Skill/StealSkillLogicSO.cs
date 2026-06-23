@@ -7,6 +7,7 @@ public class StealSkillLogicSO : SkillLogicSO {
     public string EmptyPocketMessage = "敌人兜里空空如也";
     public string EmptyFailuerMessage = "偷窃失败";
     public float lowHpBonusMax = 0.2f;
+    public float breakBonus = 0.15f;
 
     public override IEnumerator ExecuteLogic(BattleController controller, BattleEntity actor, BattleCommandRequest command, List<BattleEntity> targets) {
         actor.Unit.PlayAttackAnimation();
@@ -100,12 +101,13 @@ public class StealSkillLogicSO : SkillLogicSO {
             hpBonus = (1 - hpPercent) * lowHpBonusMax;
         }
 
-        // TODO:破盾加成
+        // 破盾加成
+        float brokenBonus = target.IsBroken ? breakBonus : 0;
 
         // boost 加成
         float tierBonus = tier.chanceBonus;
 
-        float finalChance = baseChance01 + hpBonus + tierBonus;
+        float finalChance = baseChance01 + hpBonus + tierBonus + brokenBonus;
 
         return Mathf.Clamp01(finalChance);
     }

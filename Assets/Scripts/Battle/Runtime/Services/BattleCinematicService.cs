@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Framework.Event;
 
 public class BattleCinematicService : MonoBehaviour,
@@ -13,6 +14,8 @@ public class BattleCinematicService : MonoBehaviour,
     [SerializeField, Tooltip("战斗演出参数SO")]
     private BattleCinematicConfigSO cinematicConfig;
 
+    public float KillDissolveStagger => cinematicConfig.KillDissolveStagger;
+
     #region 生命周期
     private void OnEnable() {
         EventBus.Subscribe<KillCinematicRequestedEvent>(this);
@@ -27,31 +30,45 @@ public class BattleCinematicService : MonoBehaviour,
 
     #region 事件相关
     public void OnEvent(KillCinematicRequestedEvent evt) {
-        throw new System.NotImplementedException();
+        StartCoroutine(PlayKillCinematic(evt.Target));
     }
 
     public void OnEvent(BreakCinematicRequestedEvent evt) {
-        StartCoroutine(PlayBreakCinematic(evt.Target));
+        StartCoroutine(PlayBreakCinematic());
     }
     #endregion
 
     #region 击杀与破盾统一演出流程
-    private IEnumerator PlayBreakCinematic(BattleEntity target) {
+    private IEnumerator PlayBreakCinematic() {
+        breakPostFX.Play();
+
         if (!cinematicConfig.EnableBreakCinematic) {
             yield break;
         }
 
-        breakPostFX.Play();
-        yield return PlayImpactCinematic(target, cinematicConfig.Break);
+        yield return PlayImpactCinematic(cinematicConfig.Break);
+    }
+
+    private IEnumerator PlayKillCinematic(BattleEntity target) {
+        target.Unit.PlayEnemyDissolve();
+        if (!cinematicConfig.EnableKillCinematic) {
+            yield break;
+        }
+
+        yield return PlayImpactCinematic(cinematicConfig.Kill);
+
     }
 
     /// <summary>
     /// 播放停顿效果
     /// </summary>
-    /// <param name="target">目标实体</param>
     /// <param name="settings">演出配置</param>
     /// <returns></returns>
-    private IEnumerator PlayImpactCinematic(BattleEntity target, BattleImpactCinematicSettings settings) {
+    private IEnumerator PlayImpactCinematic(BattleImpactCinematicSettings settings) {
+        // 相机偏移
+        Tween cameraTween = PlayCamera(settings);
+
+        // 记录当前时间倍率
         float previousTimeScale = Time.timeScale;
 
         // 命中时停
@@ -63,14 +80,70 @@ public class BattleCinematicService : MonoBehaviour,
         // 进入慢动作
         yield return PlayTimeScale(previousTimeScale, settings.SloMoScale, settings.SlowMoInDuration);
 
-        // 慢动作持续
-        if (settings.HoldDuration > 0) {
-            yield return new WaitForSecondsRealtime(settings.HoldDuration);
-        }
+        // 等待镜头动画完成
+        yield return cameraTween.WaitForCompletion();
+
+        //// 慢动作持续
+        //if (settings.HoldDuration > 0) {
+        //    yield return new WaitForSecondsRealtime(settings.HoldDuration);
+        //}
 
         // 退出慢动作
         yield return PlayTimeScale(settings.SloMoScale, previousTimeScale, settings.SlowMoOutDuration);
 
+    }
+
+    #endregion
+
+    #region 相机演出
+
+    /// <summary>
+    /// 播放相机动画
+    /// </summary>
+    /// <param name="settings">配置</param>
+    /// <returns></returns>
+    private Tween PlayCamera(BattleImpactCinematicSettings settings) {
+        // 记录基础位置
+        Vector3 basePos = battleCameraPivot.position;
+        Quaternion baseRot = battleCameraPivot.rotation;
+
+        // 计算最终位置
+        Vector3 toPos = basePos + (baseRot * settings.CameraPositionOffset);
+        Quaternion toRot = baseRot * Quaternion.Euler(settings.CameraEulerOffset);
+
+        // 停止上一个补间动画
+        battleCameraPivot.DOKill();
+
+        // 开始相机移动 SetUpdate(true)无视timescale用真实时间播放动画
+        Sequence sequence = DOTween.Sequence().SetUpdate(true);
+        AddCameraMove(sequence, toPos, toRot, settings.CameraTurnDuration);
+
+        // 移动后停留
+        if (settings.CameraHoldDuration > 0) {
+            sequence.AppendInterval(settings.CameraHoldDuration);
+        }
+
+        // 回到原位置
+        AddCameraMove(sequence, basePos, baseRot, settings.CameraReturnDuration);
+
+        return sequence;
+    }
+
+    /// <summary>
+    /// 在动画队列中添加相机移动
+    /// </summary>
+    /// <param name="sequence">队列</param>
+    /// <param name="toPos">目标位置</param>
+    /// <param name="toRot">目标旋转</param>
+    /// <param name="duration">持续时间</param>
+    private void AddCameraMove(Sequence sequence, Vector3 toPos, Quaternion toRot, float duration) {
+        if (duration <= 0) {
+            sequence.AppendCallback(() => battleCameraPivot.SetPositionAndRotation(toPos, toRot));
+        }
+
+        sequence.Append(battleCameraPivot.DOMove(toPos, duration).SetEase(Ease.Linear));
+        // Join与上一个同时播放
+        sequence.Join(battleCameraPivot.DORotateQuaternion(toRot, duration).SetEase(Ease.Linear));
     }
 
     #endregion
