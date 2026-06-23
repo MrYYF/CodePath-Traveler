@@ -1,4 +1,3 @@
-
 using System;
 
 [CreateAssetMenu(menuName = "Character/Character/Ally", order = 1)]
@@ -18,6 +17,28 @@ public class AllyDefinitionSO : CharacterDefinitionSO
     public struct InitialEquipmentEntry {
         public EquipSlot equipSlot;
         public EquipmentItemSO equiptmentItem;
+    }
+
+    #region 经验成长参数
+    [Header("Progression")]
+    [Min(1)] public int ExpToNextLevelAtLv1 = 100;
+    [Min(1)] public float ExpGrowthPerLevel = 1.15f;
+    [Min(1)] public int MaxLevel = 99;
+    #endregion
+
+    /// <summary>
+    /// 计算升到下一级需要的经验
+    /// </summary>
+    /// <param name="currentLevel">当前等级</param>
+    /// <returns>升到下一级需要的经验</returns>
+    public int GetExpRequiredToNextLevel(int currentLevel) {
+        if(currentLevel >= MaxLevel) {
+            return 0;
+        }
+        int clampedLevel = Mathf.Max(1, currentLevel);
+        // 指数计算所需经验值
+        float scaled = ExpToNextLevelAtLv1 * Mathf.Pow(ExpGrowthPerLevel, clampedLevel - 1);
+        return Mathf.Max(1,Mathf.RoundToInt(scaled));
     }
 
     public bool CanEquipWeaponType(WeaponType weaponType) {

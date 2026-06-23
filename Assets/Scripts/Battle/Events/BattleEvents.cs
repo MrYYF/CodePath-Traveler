@@ -128,4 +128,47 @@ public readonly struct KillCinematicRequestedEvent : IEvent {
 /// </summary>
 public readonly struct BreakCinematicRequestedEvent : IEvent { }
 
+/// <summary>
+/// 战斗结束事件
+/// </summary>
+public readonly struct BattleEndedEvent : IEvent {
+    public readonly bool IsWin;
+    public readonly int ExpReward;
+    public readonly int MoneyReward;
+    public readonly List<BattleDropReward> dropRewards;
 
+    public BattleEndedEvent(bool isWin, int expReward, int moneyReward, List<BattleDropReward> dropRewards) {
+        IsWin = isWin;
+        ExpReward = expReward;
+        MoneyReward = moneyReward;
+        this.dropRewards = dropRewards ?? new List<BattleDropReward>();
+    }
+}
+
+/// <summary>
+/// 进入战斗结算界面事件
+/// </summary>
+public readonly struct BattleResultViewEnterEvent : IEvent {
+    public readonly int ExpReward;
+    public readonly int MoneyReward;
+    public readonly List<BattleDropReward> dropRewards;
+
+    public BattleResultViewEnterEvent(int expReward, int moneyReward, List<BattleDropReward> dropRewards) {
+        ExpReward = expReward;
+        MoneyReward = moneyReward;
+        this.dropRewards = dropRewards ?? new List<BattleDropReward>();
+    }
+}
+
+/// <summary>
+/// 掉落战利品数据结构
+/// </summary>
+public readonly struct BattleDropReward {
+    public readonly ItemDefinitionSO ItemDefinition;
+    public readonly int Quantity;
+
+    public BattleDropReward(ItemDefinitionSO itemDefinition, int quantity) {
+        ItemDefinition = itemDefinition;
+        Quantity = quantity;
+    }
+}

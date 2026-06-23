@@ -15,7 +15,6 @@ public class CharacterRuntimeData {
 
     public bool hasAppliedInitialEquipment = false;
 
-    // TODO: 可能需要改成Dictionary<EquipSlot, EquipmentItemSO>以方便查询和管理
     public List<EquippedItemEntry> EquippedItems = new();
 
     [Serializable]
@@ -206,6 +205,73 @@ public class CharacterRuntimeData {
 
         return Mathf.Max(1, Mathf.RoundToInt(power));
     }
+    #endregion
+
+    #region 经验成长与升级
+    /// <summary>
+    /// 获取升到下一级所需经验值
+    /// </summary>
+    /// <returns>经验值</returns>
+    public int GetExpRequiredToNextLevel() {
+        return ((AllyDefinitionSO)Definition).GetExpRequiredToNextLevel(Level);
+    }
+
+    /// <summary>
+    /// 获取当前经验到升级的百分比
+    /// </summary>
+    /// <returns>经验到升级百分比</returns>
+    public float GetExpProgress01() {
+        int targetExp = GetExpRequiredToNextLevel();
+        if (targetExp == 0) {
+            return 1;
+        }
+
+        return CurrentExp / (float)targetExp;
+    }
+
+    /// <summary>
+    /// 添加经验并处理升级
+    /// </summary>
+    /// <param name="amount">获得数值</param>
+    /// <returns>实际应用的经验值</returns>
+    public int AddExp(int amount) {
+        int remainingExp = amount;
+
+        AllyDefinitionSO allDef = (AllyDefinitionSO)Definition;
+        int appliedExp = 0; //实际应用的经验值
+        bool leveledUp = false;
+
+        while (remainingExp > 0) {
+            int targetExp = allDef.GetExpRequiredToNextLevel(Level);
+            if (targetExp == 0) {
+                CurrentExp = 0;
+                break;
+            }
+
+            int need = targetExp - CurrentExp; // 升级所需经验值
+            int gain = Mathf.Min(need, remainingExp); // 实际应用的经验值
+
+            // 添加经验值
+            CurrentExp += gain;
+            remainingExp -= gain;
+            appliedExp += gain;
+
+            // 升级
+            if(CurrentExp >= targetExp) {
+                Level++;
+                leveledUp = true;
+                CurrentExp = 0;
+            }
+        }
+
+        // 如果升级
+        if(leveledUp) {
+            HealFull();
+        }
+
+        return appliedExp;
+    }
+
 
     #endregion
 }
