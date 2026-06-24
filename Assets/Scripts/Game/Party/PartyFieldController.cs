@@ -163,6 +163,7 @@ public class PartyFieldController : MonoBehaviour {
         playerTrans.position = position;
         playerTrans.rotation = rotation;
         cc.enabled = true;
+        playerTrans.GetComponent<PlayerEncounterTracker>().ResetEncounterTracking(position);
         RebuildTrailsAndSnapFollowers();
     }
 }
