@@ -1,5 +1,7 @@
 
 
+using System;
+
 /// <summary>
 /// 探索模式下的队伍跟随系统，负责管理跟随者的生成、位置更新和动画状态
 /// </summary>
@@ -153,5 +155,14 @@ public class PartyFieldController : MonoBehaviour {
         }
         fieldFollowers.Clear();
         trail.Clear();
+    }
+
+    internal void TeleportPartyTo(Vector3 position, Quaternion rotation) {
+        CharacterController cc = playerTrans.GetComponent<CharacterController>();
+        cc.enabled = false;
+        playerTrans.position = position;
+        playerTrans.rotation = rotation;
+        cc.enabled = true;
+        RebuildTrailsAndSnapFollowers();
     }
 }

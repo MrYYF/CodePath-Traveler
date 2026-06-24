@@ -62,7 +62,7 @@ public class PartyManager : Singleton<PartyManager>,
     /// <returns>是否包含</returns>
     public bool HasMember(CharacterDefinitionSO definition) {
         foreach (var member in partyMembers) {
-            if(member.Definition == definition) 
+            if (member.Definition == definition)
                 return true;
         }
 
@@ -126,6 +126,24 @@ public class PartyManager : Singleton<PartyManager>,
             return;
         }
 
+    }
+    #endregion
+
+    #region 队伍移动
+    /// <summary>
+    /// 重新定位玩家与队伍队列位置
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="rotation">旋转</param>
+    public void TeleportPartyTo(Vector3 position, Quaternion rotation) {
+        // 如果当前玩家与队伍未显示
+        if (fieldActorsHidden) {
+            fieldActorsHidden = false;
+            fieldController.SetPlayerActive(true);
+            RefreshFieldFollowers();
+        }
+
+        fieldController.TeleportPartyTo(position, rotation);
     }
     #endregion
 }

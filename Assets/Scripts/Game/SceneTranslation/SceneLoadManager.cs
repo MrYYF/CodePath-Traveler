@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
@@ -17,6 +18,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager> {
     [SerializeField, Range(0f, 2f)] private float postLoadBlackScreenDuration = 0.35f;
     // 是否正处于场景加载过程中
     private bool isLoading;
+    public bool IsLoading => isLoading;
     // 当前加载的场景句柄，用于卸载和资源管理
     private AsyncOperationHandle<SceneInstance>? _currentSceneHandle;
 
@@ -95,7 +97,8 @@ public class SceneLoadManager : Singleton<SceneLoadManager> {
             if (restoreExploreModeBeforeFadeIn) {
                 GameModeManager.Instance.RequestChangeGameMode(GameMode.Explore);
                 yield return null;
-                //TODO: 摄像机位置调整
+
+                ApplySpawnPointAfterLoad(request, loadHandle.Result.Scene);
             }
 
             // 场景加载完成后保持黑屏一段时间，确保资源完全就绪
@@ -116,4 +119,70 @@ public class SceneLoadManager : Singleton<SceneLoadManager> {
         }
         yield return null;
     }
+
+    #region 传送
+    private void ApplySpawnPointAfterLoad(SceneLoadRequest request, Scene loadedScene) {
+        SceneSpawnPoint spawnPoint = FindSpawnPoint(loadedScene, request.SpawnPointId);
+        PlayerController player = FindObjectOfType<PlayerController>();
+
+        // 获取玩家位置并计算偏移
+        Vector3 delta = spawnPoint.transform.position - player.transform.position;
+
+        // 移动玩家以及队列
+        PartyManager.Instance.TeleportPartyTo(spawnPoint.transform.position, spawnPoint.transform.rotation);
+
+        // 切换相机位置
+        SnapMainCamera(delta);
+    }
+
+    /// <summary>
+    /// 寻找目标场景中符合需求的传送点
+    /// </summary>
+    /// <param name="scene">目标场景</param>
+    /// <param name="targetSpawnId">目标传送点id</param>
+    /// <returns>传送点信息</returns>
+    private SceneSpawnPoint FindSpawnPoint(Scene scene, string targetSpawnId) {
+        SceneSpawnPoint fallback = null;
+        SceneSpawnPoint first = null;
+
+        GameObject[] rootsObj = scene.GetRootGameObjects();
+        foreach (var root in rootsObj) {
+            SceneSpawnPoint sceneSpawnPoint = root.GetComponent<SceneSpawnPoint>();
+            if (sceneSpawnPoint == null) continue;
+
+            if (sceneSpawnPoint.SpawnId == targetSpawnId)
+                return sceneSpawnPoint;
+
+            // 未找到匹配的id则记录第一个传送点位
+            if (first == null)
+                first = sceneSpawnPoint;
+
+            // 存储带有默认标记的传送点位
+            if (fallback == null && sceneSpawnPoint.IsDefaultFallBack)
+                fallback = sceneSpawnPoint;
+        }
+
+        return fallback ?? first;
+    }
+
+    private void SnapMainCamera(Vector3 delta) {
+        Camera mainCamera = Camera.main;
+
+        // 移动主相机
+        mainCamera.transform.position += delta;
+
+        // 遍历调整虚拟相机
+        foreach (var vcam in FindObjectsOfType<CinemachineCamera>()) {
+            // 将上一帧状态标记为无效，防止慢慢过渡
+            vcam.PreviousStateIsValid = false;
+            // 通知位移量，对齐跟随目标
+            vcam.OnTargetObjectWarped(vcam.Follow, delta);
+        }
+
+        // 重启一下brain，清除可能的残留
+        CinemachineBrain brain = mainCamera.GetComponent<CinemachineBrain>();
+        brain.enabled = false;
+        brain.enabled = true;
+    }
+    #endregion
 }
