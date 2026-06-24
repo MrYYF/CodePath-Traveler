@@ -16,6 +16,8 @@ public class BattleCinematicService : MonoBehaviour,
 
     public float KillDissolveStagger => cinematicConfig.KillDissolveStagger;
 
+    private bool _isPlaying = false;
+
     #region 生命周期
     private void OnEnable() {
         EventBus.Subscribe<KillCinematicRequestedEvent>(this);
@@ -45,7 +47,6 @@ public class BattleCinematicService : MonoBehaviour,
         if (!cinematicConfig.EnableBreakCinematic) {
             yield break;
         }
-
         yield return PlayImpactCinematic(cinematicConfig.Break);
     }
 
@@ -54,9 +55,7 @@ public class BattleCinematicService : MonoBehaviour,
         if (!cinematicConfig.EnableKillCinematic) {
             yield break;
         }
-
         yield return PlayImpactCinematic(cinematicConfig.Kill);
-
     }
 
     /// <summary>
@@ -65,6 +64,11 @@ public class BattleCinematicService : MonoBehaviour,
     /// <param name="settings">演出配置</param>
     /// <returns></returns>
     private IEnumerator PlayImpactCinematic(BattleImpactCinematicSettings settings) {
+        if (_isPlaying) {
+            yield break;
+        }
+        _isPlaying = true;
+
         // 相机偏移
         Tween cameraTween = PlayCamera(settings);
 
@@ -90,7 +94,7 @@ public class BattleCinematicService : MonoBehaviour,
 
         // 退出慢动作
         yield return PlayTimeScale(settings.SloMoScale, previousTimeScale, settings.SlowMoOutDuration);
-
+        _isPlaying = false;
     }
 
     #endregion

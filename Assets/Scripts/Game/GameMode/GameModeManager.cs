@@ -4,6 +4,7 @@ public class GameModeManager : Singleton<GameModeManager> {
     public GameMode CurrentGameMode;
     [SerializeField] private GameMode defaultGamemode = GameMode.Explore;
 
+    #region ÉúÃüÖÜÆÚ
     protected override void Awake() {
         base.Awake();
         CurrentGameMode = defaultGamemode;
@@ -13,6 +14,7 @@ public class GameModeManager : Singleton<GameModeManager> {
     private void Start() {
         ApplyMode(CurrentGameMode);
     }
+    #endregion
 
     private void ApplyMode(GameMode newMode) {
         CurrentGameMode = newMode;
@@ -28,10 +30,10 @@ public class GameModeManager : Singleton<GameModeManager> {
     }
 
     public bool CanSwitchMode(GameMode newMode) {
-        if (CurrentGameMode == GameMode.Battle)
-            return false;
+        if (CurrentGameMode != GameMode.Battle || newMode != GameMode.Explore)
+            return true;
 
-        return true;
+        return false;
     }
     #endregion
 }

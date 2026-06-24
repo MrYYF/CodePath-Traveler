@@ -5,7 +5,8 @@ using Framework.Event;
 /// </summary>
 public class BattleHUDController : MonoBehaviour,
     IEventReceiver<BattleStartedEvent>,
-    IEventReceiver<GameModeChangedEvent> {
+    IEventReceiver<GameModeChangedEvent>,
+    IEventReceiver<BattleResultViewEnterEvent> {
 
     [Header("HUD Panels")]
     [SerializeField] private GameObject ctbPanel;
@@ -15,10 +16,12 @@ public class BattleHUDController : MonoBehaviour,
     private void OnEnable() {
         EventBus.Subscribe<BattleStartedEvent>(this);
         EventBus.Subscribe<GameModeChangedEvent>(this);
+        EventBus.Subscribe<BattleResultViewEnterEvent>(this);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<BattleStartedEvent>(this);
         EventBus.Unsubscribe<GameModeChangedEvent>(this);
+        EventBus.Unsubscribe<BattleResultViewEnterEvent>(this);
     }
     #endregion
 
@@ -34,6 +37,10 @@ public class BattleHUDController : MonoBehaviour,
     }
 
     public void OnEvent(GameModeChangedEvent evt) {
+        SetHUDVisible(false);
+    }
+
+    public void OnEvent(BattleResultViewEnterEvent evt) {
         SetHUDVisible(false);
     }
 

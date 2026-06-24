@@ -135,7 +135,7 @@ public class AttackSkillExecutionEngine {
                     yield return PlayHitVfx(target);
                     hasPlayedVfx = true;
                 }
-                
+
                 if (!hasPlayedVfx) {
                     yield return PlayAttackWithWindup();
                     yield return PlayHitVfx(target);
@@ -228,7 +228,7 @@ public class AttackSkillExecutionEngine {
     private void ApplyDamageHit(BattleEntity target, int damage) {
         // 判断是否会造成击杀
         bool willKill = !target.IsPlayer && target.CurrentHP - damage <= 0;
-        if(willKill) {
+        if (willKill) {
             _killedTargets.Add(target);
         }
 
@@ -268,11 +268,12 @@ public class AttackSkillExecutionEngine {
 
         _controller.NotifyEntityBrokenOrDead(target);
 
-        if (_breakCinematicRequested) {
+        if (!_breakCinematicRequested) {
+            _breakCinematicRequested = true;
+            EventBus.Publish(new BreakCinematicRequestedEvent());
             return;
         }
-        _breakCinematicRequested = true;
-        EventBus.Publish(new BreakCinematicRequestedEvent());
+
     }
     #endregion
 

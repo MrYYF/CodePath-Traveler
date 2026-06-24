@@ -90,11 +90,13 @@ public class BattleFieldManager : MonoBehaviour {
     /// </summary>
     private void ClearAllUnits() {
         foreach (var unit in _spawnedAllyUnits) {
-            Destroy(unit.gameObject);
+            if (unit != null)
+                Destroy(unit.gameObject);
         }
         _spawnedAllyUnits.Clear();
         foreach (var unit in _spawnedEnemyUnits) {
-            Destroy(unit.gameObject);
+            if (unit != null)
+                Destroy(unit.gameObject);
         }
         _spawnedEnemyUnits.Clear();
 
@@ -102,8 +104,10 @@ public class BattleFieldManager : MonoBehaviour {
     }
 
     public Vector3 GetHomePos(BattleUnit unit) => _homePos[unit];
-    public Vector3 GetActionPos(BattleUnit unit) => layout.actionTrans.position;
+    public Vector3 GetActionPos() => layout.actionTrans.position;
+    public Vector3 GetInitPos() => layout.initTrans.position;
     public Vector3 GetSideCenter(bool isAlly) => isAlly ? layout.GetAllyGroupCenter() : layout.GetEnemyGroupCenter(_currentFomation);
+
 
 
     #region boost VFX

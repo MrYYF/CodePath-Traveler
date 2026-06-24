@@ -1,10 +1,12 @@
+using Framework.Event;
 using UnityEngine.AddressableAssets;
 
 
 /// <summary>
 /// 战斗服务，负责管理战斗的开始和结束流程，包括场景切换、战斗数据准备等。
 /// </summary>
-public class BattleService : Singleton<BattleService> {
+public class BattleService : Singleton<BattleService>,
+    IEventReceiver<BattleResultConfirmedEvent> {
     // 战斗结束后返回的场景地址引用
     private AssetReference _returnSceneAfterBattle;
     // 战斗开始预加载数据，包含战斗开始前需要准备的角色数据和敌人布阵信息
@@ -12,6 +14,19 @@ public class BattleService : Singleton<BattleService> {
     // 是否有待处理的战斗预加载数据
     public bool HasPendingPreload => _pendingPreload != null;
 
+    #region 生命周期
+    private void OnEnable() {
+        EventBus.Subscribe<BattleResultConfirmedEvent>(this);
+    }
+    private void OnDisable() {
+        EventBus.Subscribe<BattleResultConfirmedEvent>(this);
+    }
+    #endregion
+
+    /// <summary>
+    /// 消费战斗开始预加载数据
+    /// </summary>
+    /// <returns></returns>
     public BattleStartPreload ConsumeStartPreload() {
         var preload = _pendingPreload;
         _pendingPreload = null;
@@ -78,5 +93,31 @@ public class BattleService : Singleton<BattleService> {
                 member.CurrentHP = 1;
             }
         }
+    }
+
+
+    #region 事件相关
+    public void OnEvent(BattleResultConfirmedEvent evt) {
+        ReturnToPreviousScene();
+    }
+    #endregion
+
+    /// <summary>
+    /// 战斗离场/逃离 回到之前的场景
+    /// </summary>
+    public void ReturnToPreviousScene() {
+        // 请求返回上一个场景
+        SceneLoadManager.Instance.RequestLoad(
+            new SceneLoadRequest(
+                _returnSceneAfterBattle,
+                FadeStyle.WipeMask,
+                GameMode.Explore));
+
+        // 清除本次战斗缓存
+        _pendingPreload = null;
+        _returnSceneAfterBattle = null;
+
+        // 重置战斗会话状态
+        NormalizeBattleSessionState(PartyManager.Instance.PartyMembers);
     }
 }

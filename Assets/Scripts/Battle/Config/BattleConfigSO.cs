@@ -20,5 +20,7 @@ public class BattleConfigSO : ScriptableObject {
     public float AttackWindupTime = 0.4f; // 攻击前摇时长
     public float AttackRecoveryTime = 0.8f; // 攻击后摇时长
     public float DefendPoseDuration = 0.5f; // 防御姿态保持时间
+    public float EscapeRunDuration = 1.2f; // 角色逃跑动作时长
+    public float EscapeExitDelay = 0.35f; // 退出战斗场景延迟
 
 }

@@ -12,6 +12,11 @@ public class RecruitAction : ActionBase
         CurrentCharacter = GetComponent<CharacterIdentity>().CharacterDefinitionSO;
     }
 
+    private void Start() {
+        if (PartyManager.Instance.HasMember(CurrentCharacter))
+            HideSceneNPC();
+    }
+
     public override void TriggerAction(AllyDefinitionSO inteactor) {
         EventBus.Publish(new PanelRequestEvent(this));
     }

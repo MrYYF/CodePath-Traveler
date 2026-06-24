@@ -75,7 +75,7 @@ public class PlayerInputState : BattleState {
     /// <returns></returns>
     private IEnumerator MoveCurrentEntityToActionPosition() {
         BattleUnit unit = _controller.CurrentEntity.Unit;
-        Vector3 actionPos = _controller.FieldManager.GetActionPos(unit);
+        Vector3 actionPos = _controller.FieldManager.GetActionPos();
         float distance = Vector3.Distance(unit.transform.position, actionPos);
         if (distance > 0.1f) {
             yield return unit.MoveToPosition(actionPos);

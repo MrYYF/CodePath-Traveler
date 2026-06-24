@@ -119,6 +119,10 @@ public class PartyFieldController : MonoBehaviour {
     /// </summary>
     private void RebuildTrailsAndSnapFollowers() {
         trail.Clear();
+        if (playerTrans == null) {
+            return;
+        }
+
         for (int i = 0; i < fieldFollowers.Count; i++) {
             fieldFollowers[i].SnapTo(ApplyFollowerOffset(playerTrans.position, i));
         }
@@ -132,6 +136,9 @@ public class PartyFieldController : MonoBehaviour {
     /// <param name="active"></param>
     public void SetPlayerActive(bool active) {
         playerTrans.gameObject.SetActive(active);
+        // 修复重新显示时人物会卡进地里
+        Vector3 position = playerTrans.transform.position;
+        playerTrans.transform.position = new Vector3(position.x, position.y + 1f, position.z);
     }
 
     /// <summary>
@@ -142,7 +149,7 @@ public class PartyFieldController : MonoBehaviour {
             if (follower != null) {
                 Destroy(follower.gameObject);
             }
-            
+
         }
         fieldFollowers.Clear();
         trail.Clear();

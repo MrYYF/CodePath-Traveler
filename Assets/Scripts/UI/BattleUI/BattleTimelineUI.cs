@@ -1,5 +1,6 @@
 
 using DG.Tweening;
+using Framework.Event;
 using TMPro;
 using UnityEngine.Pool;
 using UnityEngine.UI;
@@ -7,7 +8,8 @@ using UnityEngine.UI;
 /// <summary>
 /// 控制战斗CTB时间轴UI层的类
 /// </summary>
-public class BattleTimelineUI : MonoBehaviour {
+public class BattleTimelineUI : MonoBehaviour,
+    IEventReceiver<BattleEndedEvent> {
     [SerializeField] private TimelineIcon timelineIconPrefab;
     [Header("Containers")]
     [SerializeField] private RectTransform currentRoundContainer;
@@ -44,6 +46,10 @@ public class BattleTimelineUI : MonoBehaviour {
             defaultCapacity: 10,
             maxSize: 16
         );
+    }
+
+    private void OnEnable() {
+        ClearActiveUnitFrame();
     }
 
     #region 时间轴刷新主流程
@@ -139,6 +145,7 @@ public class BattleTimelineUI : MonoBehaviour {
     /// 清除当前行动者UI
     /// </summary>
     private void ClearActiveUnitFrame() {
+        activeUnitPortrait.sprite = null;
         activeUnitPortrait.enabled = false;
         activeUnitName.text = string.Empty;
     }
@@ -182,6 +189,14 @@ public class BattleTimelineUI : MonoBehaviour {
         activeUnitPortrait.transform.DOKill();
         activeUnitPortrait.transform.localScale = Vector3.one * 0.5f;
         activeUnitPortrait.transform.DOScale(1f, 0.4f).SetEase(Ease.OutBack);
+    }
+
+    public void OnEvent(BattleEndedEvent evt) {
+        foreach (var item in _activeIconMaps) {
+            _pool.Release(item.Value);
+        }
+
+        _activeIconMaps.Clear();
     }
     #endregion
 }

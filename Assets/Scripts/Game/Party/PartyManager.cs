@@ -19,6 +19,7 @@ public class PartyManager : Singleton<PartyManager>,
 
     private bool fieldActorsHidden = false; // 用于跟踪探索模式下的跟随者是否被隐藏
 
+    #region 生命周期
     protected override void Awake() {
         base.Awake();
         fieldController = GetComponent<PartyFieldController>();
@@ -34,6 +35,7 @@ public class PartyManager : Singleton<PartyManager>,
     private void OnDisable() {
         EventBus.Unsubscribe<GameModeChangedEvent>(this);
     }
+    #endregion
 
     /// <summary>
     /// 初始化队伍成员数据，如果没有预设的玩家角色定义，则创建一个默认的玩家角色实例，并将其添加到队伍成员列表中
@@ -51,6 +53,20 @@ public class PartyManager : Singleton<PartyManager>,
     private void AddMember(CharacterDefinitionSO characterDefinition) {
         partyMembers.Add(new CharacterRuntimeData(characterDefinition));
         RefreshFieldFollowers();
+    }
+
+    /// <summary>
+    /// 查询队伍中是否包含某角色定义
+    /// </summary>
+    /// <param name="definition">角色定义</param>
+    /// <returns>是否包含</returns>
+    public bool HasMember(CharacterDefinitionSO definition) {
+        foreach (var member in partyMembers) {
+            if(member.Definition == definition) 
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>

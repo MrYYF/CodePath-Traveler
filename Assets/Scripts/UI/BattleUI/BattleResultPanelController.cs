@@ -23,7 +23,7 @@ public class BattleResultPanelController : MonoBehaviour,
 
     [Header("Aciton")]
     [SerializeField] private Button confirmButton;
-    [SerializeField] private bool hideOnConfirm = true;
+    [SerializeField] private bool hideOnConfirm = true; //点击按钮后是否隐藏面板
 
     [Header("Exp Animation")]
     [SerializeField] private float expTweenStagger = 0.08f;
@@ -34,11 +34,16 @@ public class BattleResultPanelController : MonoBehaviour,
     #endregion
 
     #region 生命周期
+    private void Awake() {
+        HideImmediate();
+    }
     private void OnEnable() {
         EventBus.Subscribe<BattleResultViewEnterEvent>(this);
+        confirmButton.onClick.AddListener(OnConfirmClicked);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<BattleResultViewEnterEvent>(this);
+        confirmButton.onClick.RemoveListener(OnConfirmClicked);
     }
     #endregion
 
@@ -140,6 +145,16 @@ public class BattleResultPanelController : MonoBehaviour,
         LayoutRebuilder.ForceRebuildLayoutImmediate(lootItemRoot);
     }
 
+    /// <summary>
+    /// 点击确认按钮后
+    /// </summary>
+    private void OnConfirmClicked() {
+        EventBus.Publish(new BattleResultConfirmedEvent());
+
+        if (hideOnConfirm) {
+            HideImmediate();
+        }
+    }
     #region 工具函数
     private IEnumerator FadeInRoutine() {
         canvasGroup.alpha = 0f;

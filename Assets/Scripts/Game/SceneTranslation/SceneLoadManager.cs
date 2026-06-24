@@ -87,7 +87,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager> {
             _currentSceneHandle = loadHandle;
             activeScene = request.Scene;
             SceneManager.SetActiveScene(loadHandle.Result.Scene);
-            //TODO: 定位出生点，广播场景加载完成事件
+            // 定位出生点，广播场景加载完成事件
             EventBus.Publish(new SceneLoadCompleteEvent(loadHandle.Result.Scene, request.ModeAfterLoad));
 
             // 如果是回到探索场景
