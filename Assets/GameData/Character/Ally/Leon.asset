@@ -19,7 +19,7 @@ MonoBehaviour:
   BaseLevel: 1
   BaseStats:
     MaxHP: 100
-    MaxSP: 100
+    MaxSP: 50
     PAtk: 10
     PDef: 5
     MAtk: 5
@@ -29,7 +29,7 @@ MonoBehaviour:
     Evasion: 5
   BasicAttack: {fileID: 11400000, guid: b5c315acdb675374c908f93993785d85, type: 2}
   InitialSkills:
-  - {fileID: 11400000, guid: 166c8947caba7e24ea7e98fa58faba3d, type: 2}
+  - {fileID: 11400000, guid: fc8c1ea7e7ef7374dad114a317bbb16b, type: 2}
   FieldAnimator: {fileID: 22100000, guid: 09a31225350e49b4890d1a59e2ad5f78, type: 2}
   BattleAnimator: {fileID: 22100000, guid: 71d41a30080d76949a4211140e3b423c, type: 2}
   globalGrowthConfigSO: {fileID: 11400000, guid: 2a22ed6ff1be6be46b207d84a466b190,
@@ -44,3 +44,6 @@ MonoBehaviour:
     Speed: 0
   EquipableWeaponTypes: 01000000
   InitialEquipment: []
+  ExpToNextLevelAtLv1: 100
+  ExpGrowthPerLevel: 1.15
+  MaxLevel: 99

@@ -19,4 +19,4 @@ MonoBehaviour:
   BuyPrice: 100
   MaxStack: 99
   RarityWeight: 75
-  restoreAmount: 50
+  restoreAmount: 25
