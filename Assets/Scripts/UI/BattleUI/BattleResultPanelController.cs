@@ -3,11 +3,14 @@ using TMPro;
 using UnityEngine.UI;
 
 public class BattleResultPanelController : MonoBehaviour,
-    IEventReceiver<BattleResultViewEnterEvent> {
+    IEventReceiver<BattleResultViewEnterEvent>,
+    IEventReceiver<BattleLoseViewEnterEvent> {
     #region 结算面板配置
     [Header("Panel Root")]
-    [SerializeField] private GameObject panelRoot;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private GameObject winPanelRoot;
+    [SerializeField] private CanvasGroup winCanvasGroup;
+    [SerializeField] private GameObject losePanelRoot;
+    [SerializeField] private CanvasGroup loseCanvasGroup;
     [SerializeField] private float fadeInDuration = 0.3f;
     [SerializeField] private RectTransform infoHUDRoot;
     [SerializeField] private RectTransform lootItemRoot;
@@ -23,6 +26,7 @@ public class BattleResultPanelController : MonoBehaviour,
 
     [Header("Aciton")]
     [SerializeField] private Button confirmButton;
+    [SerializeField] private Button loseConfirmButton;
     [SerializeField] private bool hideOnConfirm = true; //点击按钮后是否隐藏面板
 
     [Header("Exp Animation")]
@@ -39,17 +43,21 @@ public class BattleResultPanelController : MonoBehaviour,
     }
     private void OnEnable() {
         EventBus.Subscribe<BattleResultViewEnterEvent>(this);
+        EventBus.Subscribe<BattleLoseViewEnterEvent>(this);
         confirmButton.onClick.AddListener(OnConfirmClicked);
+        loseConfirmButton.onClick.AddListener(OnLoseConfirmClicked);
     }
     private void OnDisable() {
         EventBus.Unsubscribe<BattleResultViewEnterEvent>(this);
+        EventBus.Unsubscribe<BattleLoseViewEnterEvent>(this);
         confirmButton.onClick.RemoveListener(OnConfirmClicked);
+        loseConfirmButton.onClick.RemoveListener(OnLoseConfirmClicked);
     }
     #endregion
 
     #region 事件相关
     public void OnEvent(BattleResultViewEnterEvent evt) {
-        panelRoot.SetActive(true);
+        winPanelRoot.SetActive(true);
         // 添加战利品到库存
         ApplyInventoryRewards(evt);
         // 刷新文本
@@ -60,7 +68,15 @@ public class BattleResultPanelController : MonoBehaviour,
         RebuildLootItems(evt);
         // 打开结算面板
         StopFadeRoutine();
-        _fadeRoutine = StartCoroutine(FadeInRoutine());
+        _fadeRoutine = StartCoroutine(FadeInRoutine(winCanvasGroup));
+    }
+
+    public void OnEvent(BattleLoseViewEnterEvent evt) {
+        winPanelRoot.SetActive(false);
+        losePanelRoot.SetActive(true);
+        loseConfirmButton.Select();
+        StopFadeRoutine();
+        _fadeRoutine = StartCoroutine(FadeInRoutine(loseCanvasGroup));
     }
     #endregion
 
@@ -155,8 +171,15 @@ public class BattleResultPanelController : MonoBehaviour,
             HideImmediate();
         }
     }
+    private void OnLoseConfirmClicked() {
+        BattleService.Instance.EnterMenuForGameOver();
+        if (hideOnConfirm) {
+            HideImmediate();
+        }
+    }
+
     #region 工具函数
-    private IEnumerator FadeInRoutine() {
+    private IEnumerator FadeInRoutine(CanvasGroup canvasGroup) {
         canvasGroup.alpha = 0f;
         float t = 0f;
         while (t < fadeInDuration) {
@@ -196,10 +219,12 @@ public class BattleResultPanelController : MonoBehaviour,
     /// </summary>
     private void HideImmediate() {
         StopFadeRoutine();
-        canvasGroup.alpha = 0;
+        winCanvasGroup.alpha = 0;
+        loseCanvasGroup.alpha = 0;
         ClearChildren(infoHUDRoot);
         ClearChildren(lootItemRoot);
-        panelRoot.SetActive(false);
+        winPanelRoot.SetActive(false);
+        losePanelRoot.SetActive(false);
     }
     #endregion
 }

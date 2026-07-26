@@ -120,4 +120,23 @@ public class BattleService : Singleton<BattleService>,
         // 重置战斗会话状态
         NormalizeBattleSessionState(PartyManager.Instance.PartyMembers);
     }
+
+    /// <summary>
+    /// 游戏结束切换回menu场景
+    /// </summary>
+    public void EnterMenuForGameOver() {
+        SceneLoadManager sceneLoadManager = SceneLoadManager.Instance;
+
+        // 切换回menu场景
+        sceneLoadManager.RequestLoad(new SceneLoadRequest(
+            sceneLoadManager.MenuScene,
+            FadeStyle.PanelFade,
+            GameMode.InteractionMenu,
+            null
+            ));
+
+        // 情况战斗缓存数据
+        _pendingPreload = null;
+        _returnSceneAfterBattle = null;
+    }
 }

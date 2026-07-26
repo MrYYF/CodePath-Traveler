@@ -35,12 +35,12 @@ public class CameraModeController : MonoBehaviour,
     }
 
     public void OnEvent(BattleEndedEvent evt) {
+        SetCameraView(CameraView.BattleResult);
         if (!evt.IsWin) {
-            SetCameraView(CameraView.Explore);
+            //SetCameraView(CameraView.Explore);
+            EventBus.Publish(new BattleLoseViewEnterEvent());
             return;
         }
-
-        SetCameraView(CameraView.BattleResult);
 
         EventBus.Publish(new BattleResultViewEnterEvent(evt.ExpReward, evt.MoneyReward, evt.dropRewards));
     }

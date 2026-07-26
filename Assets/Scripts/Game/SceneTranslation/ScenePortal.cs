@@ -1,5 +1,6 @@
 
 
+using Unity.VisualScripting;
 using UnityEngine.AddressableAssets;
 
 public class ScenePortal : MonoBehaviour {
@@ -49,6 +50,11 @@ public class ScenePortal : MonoBehaviour {
         // 正在传送
         if(sceneLoadManager.IsLoading)
             return;
+
+        if (targetScene.IsUnityNull())
+            return;
+
+        Debug.Log(targetScene);
 
         // 构建场景切换请求并请求切换
         sceneLoadManager.RequestLoad(new SceneLoadRequest(

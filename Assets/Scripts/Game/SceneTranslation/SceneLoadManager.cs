@@ -9,31 +9,44 @@ using UnityEngine.SceneManagement;
 /// 场景加载管理器，负责处理游戏中的场景切换流程，包括淡入淡出效果、资源管理和游戏模式切换等。
 /// </summary>
 public class SceneLoadManager : Singleton<SceneLoadManager> {
-    // 当前活动场景的地址引用
-    public AssetReference activeScene;
-
+    [Header("场景引用")]
+    public AssetReference activeScene; // 当前活动场景的地址引用
     [SerializeField] private AssetReference menuScene;
-    //[SerializeField] private bool loadMenuSceneOnStart = true;
-    // 场景加载完成后黑屏持续时间，确保场景资源完全就绪
+    public AssetReference MenuScene => menuScene; // 主菜单场景
+    [SerializeField] private AssetReference _startupGameplayScene; // 进入游戏时的场景
+    public AssetReference StartupGameplayScene => _startupGameplayScene;
+    [SerializeField] private bool loadMenuSceneOnStart = true; // 开始时是否加载菜单场景
+
+    [Header("场景转换参数")]
+    // 场景加载完成后黑屏持续时间
     [SerializeField, Range(0f, 2f)] private float postLoadBlackScreenDuration = 0.35f;
+
     // 是否正处于场景加载过程中
     private bool isLoading;
     public bool IsLoading => isLoading;
     // 当前加载的场景句柄，用于卸载和资源管理
     private AsyncOperationHandle<SceneInstance>? _currentSceneHandle;
+    
+
 
     protected override void Awake() {
         base.Awake();
-        var loadHandle = Addressables.LoadSceneAsync(activeScene, LoadSceneMode.Additive);
+        // 确定第一个加载的场景
+        _startupGameplayScene = activeScene;
+        var firstScene = loadMenuSceneOnStart ? menuScene : activeScene;
+
+        // 异步加载场景
+        var loadHandle = Addressables.LoadSceneAsync(firstScene, LoadSceneMode.Additive);
         _currentSceneHandle = loadHandle;
 
         // 设置加载完成回调，确保在场景加载完成后将其设置为活动场景
         loadHandle.Completed += (handle) => {
-            if (handle.Status != AsyncOperationStatus.Succeeded) {
+            if (handle.Status != AsyncOperationStatus.Succeeded) 
                 return;
-            }
             SceneManager.SetActiveScene(handle.Result.Scene);
-            EventBus.Publish(new SceneLoadCompleteEvent(handle.Result.Scene, GameModeManager.Instance.CurrentGameMode));
+            if (loadMenuSceneOnStart) {
+                GameModeManager.Instance.RequestChangeGameMode(GameMode.InteractionMenu);
+            }
         };
     }
 

@@ -177,3 +177,5 @@ public readonly struct BattleDropReward {
 /// 结算面板点击确认事件
 /// </summary>
 public readonly struct BattleResultConfirmedEvent : IEvent { }
+
+public readonly struct BattleLoseViewEnterEvent : IEvent { }
