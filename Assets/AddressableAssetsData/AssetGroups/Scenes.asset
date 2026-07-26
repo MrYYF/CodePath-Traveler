@@ -18,22 +18,27 @@ MonoBehaviour:
   m_GUID: 9610a58aba796f24aabf6d451c6c7da2
   m_SerializeEntries:
   - m_GUID: 99c9720ab356a0642a771bea13969a05
-    m_Address: Assets/Scenes/Persistent.unity
+    m_Address: Persistent
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b17fb10f55fbea742a048b2df42031ec
-    m_Address: Assets/Scenes/Town01.unity
+    m_Address: Town01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 18639fbc1a905a24f82ec9836689828c
-    m_Address: Assets/Scenes/Battle01.unity
+    m_Address: Battle01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5280e46178f317e478b4f1115a003f49
-    m_Address: Assets/Scenes/Field01.unity
+    m_Address: Field01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e4c3be1537cf981428512f63d3c1dc4c
+    m_Address: Menu
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
