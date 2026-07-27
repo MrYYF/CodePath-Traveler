@@ -75,7 +75,7 @@
 
 ### ScriptableObject 数据驱动
 
-<img src=".\docs\process\ScriptableObject .png" alt="ScriptableObject " style="zoom: 80%;" />
+<img src=".\docs\process\ScriptableObject.png" alt="ScriptableObject " style="zoom: 80%;" />
 
 游戏中存在大量配置数据，ScriptableObject可以通过不修改代码的方式修改游戏配置，同时便于游戏策划后续的维护与调整。
 
@@ -105,7 +105,7 @@ public class SkillDataSO : ScriptableObject {}
 
 ### EventBus事件总线管理
 
-![EventBus](.\docs\process\EventBus.png)
+<img src=".\docs\process\EventBus.png" alt="EventBus"/>
 
 使用事件总线的方式可以降低系统之间的直接依赖，避免模块之间互相耦合。同时实现模块之间只需通过监听事件而非直接引用的方式来进行数据与信息的传递。
 
@@ -178,7 +178,7 @@ EventBus.Publish(new GameModeChangedEvent(CurrentGameMode));
 
 ### FSM有限状态机
 
-![FSM](.\docs\process\FSM.png)
+<img src=".\docs\process\FSM.png" alt="FSM"/>
 
 通过State Pattern将每一个状态单独设置为一个类，负责Enter、Update、Exit等不同阶段的状态处理。
 
@@ -247,7 +247,7 @@ private IEnumerator BattleLoopRoutine() {
 
 ### ActionBase
 
-![ActionBase](.\docs\process\ActionBase.png)
+<img src=".\docs\process\ActionBase.png" alt="ActionBase"/>
 
 通过ActionBase来定义不同的交互命令，所有对象只需要挂载不同的Action即可实现对应的交互命令，便于后续命令增多后的维护与拓展。
 
@@ -277,7 +277,7 @@ public abstract class ActionBase : MonoBehaviour
 
 ### CTB行动顺序调度算法
 
-![CTB](.\docs\process\CTB.png)
+<img src=".\docs\process\CTB.png" alt="CTB"/>
 
 根据单位的速度构建单位行动顺序条，同时引入回合机制，角色下回合的行动顺序会受到当前状态影响实时改变
 
